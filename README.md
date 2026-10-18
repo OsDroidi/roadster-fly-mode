@@ -46,4 +46,4 @@ To play it online, turn on GitHub Pages (steps below).
 
 ## How it's built
 
-Everything lives in one self-contained `index.html`: cartoon art drawn with canvas paths at full screen resolution, a Web Audio synthesizer with a small step sequencer for the music, and no external assets apart from two optional Google Fonts (Lilita One and Fredoka). If a device can't keep up, the game lowers its canvas resolution automatically.
+Everything lives in one self-contained `index.html`: cartoon art drawn with canvas paths at full screen resolution, a Web Audio synthesizer with a small step sequencer for the music, and no external assets apart from an optional Google Font (Montserrat). If a device can't keep up, the game lowers its canvas resolution automatically.

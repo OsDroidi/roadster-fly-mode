@@ -120,7 +120,9 @@ body{
   touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
   -webkit-tap-highlight-color:transparent;
 }
-#game{position:absolute;inset:0;width:100%;height:100%;display:block}
+#game{position:absolute;inset:0;width:100%;height:100%;display:block;-webkit-user-drag:none}
+/* no text selection, callouts or drag on long press anywhere in the game */
+#app,#app *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 
 /* ---------- shared glass ---------- */
 .ibtn,.slab-in,.btn,.stats div{-webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%)}
@@ -4267,7 +4269,11 @@ app.addEventListener('pointerup', endPointer);
 app.addEventListener('pointercancel', endPointer);
 app.addEventListener('lostpointercapture', endPointer);
 window.addEventListener('pointerup', endPointer);
-app.addEventListener('contextmenu', e => { if (!isUI(e.target)) e.preventDefault(); });
+app.addEventListener('contextmenu', e => e.preventDefault());
+// a long press on the play area must not start selection, a callout or a drag (menus keep scrolling and clicking)
+app.addEventListener('touchstart', e => { if (!isUI(e.target)) e.preventDefault(); }, { passive: false });
+document.addEventListener('selectstart', e => e.preventDefault());
+app.addEventListener('dragstart', e => e.preventDefault());
 const THRUST_KEYS = new Set(['Space', 'ArrowUp', 'KeyW']);
 window.addEventListener('keydown', e => {
   if (e.code === 'KeyM' && !e.repeat && !e.ctrlKey && !e.metaKey && !e.altKey) { toggleMute(); return; }

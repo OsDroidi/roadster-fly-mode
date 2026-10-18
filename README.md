@@ -1,10 +1,10 @@
 # Roadster: Fly Mode
 
-A pixel-art browser game inspired by the new Tesla Roadster's flying demo. Fire the cold-gas thrusters, hop gas cars, stomp monsters, beat two bosses and make it to Mars.
+A cartoon browser game inspired by the new Tesla Roadster's flying demo and by Jetpack Joyride. Fire the cold-gas thrusters, dodge zappers and missiles, hop gas cars, stomp monsters, beat two bosses and make it to Mars.
 
-> Unofficial fan game. Not affiliated with Tesla, Inc.
+> Unofficial fan game. Not affiliated with Tesla, Inc. or Halfbrick.
 
-![The Roadster flying at night with its shield up](gameplay.png)
+![The Roadster flying past a zapper at night with its shield up](gameplay.png)
 
 ![Boss fight against the Smog King](boss.png)
 
@@ -26,7 +26,9 @@ To play it online, turn on GitHub Pages (steps below).
 
 ## What's in it
 
-- Cold-gas thrusters, a loop-the-loop and Superchargers to keep the battery alive
+- Cold-gas thrusters that spray the road, a loop-the-loop and Superchargers to keep the battery alive
+- Tesla-coil zappers (standing, hanging, diagonal and spinning) and missiles that track your height before they fire
+- Battery cells laid out in hearts, stars, arrows and words
 - Monsters you stomp by landing on them or blast with the thrusters
 - Two boss fights, the Smog King and the Mothership, won by grabbing blue coil orbs
 - A Mars zone with its own monsters, scenery and music
@@ -44,4 +46,4 @@ To play it online, turn on GitHub Pages (steps below).
 
 ## How it's built
 
-Everything lives in one self-contained `index.html`: canvas rendering, procedurally drawn pixel art, a Web Audio synthesizer with a small step sequencer for the music, and no external assets apart from an optional Google Font.
+Everything lives in one self-contained `index.html`: cartoon art drawn with canvas paths at full screen resolution, a Web Audio synthesizer with a small step sequencer for the music, and no external assets apart from two optional Google Fonts (Lilita One and Fredoka). If a device can't keep up, the game lowers its canvas resolution automatically.

@@ -2,13 +2,15 @@
 
 A cartoon browser game inspired by the new Tesla Roadster's flying demo and by Jetpack Joyride. Fire the cold-gas thrusters, dodge zappers and missiles, hop gas cars, stomp monsters, beat two bosses and make it to Mars.
 
-The game opens in Arabic, with an English switch on the title screen, and you can drive through Saudi Arabia or the original Texas launch site.
+The game opens in Arabic, with an English switch on the title screen, and you can drive through Saudi Arabia or the original Texas launch site. The menus and dashboard are styled after Tesla's own screens, and you can install the game on your home screen and play it offline.
 
-لعبة متصفح كرتونية: شغّل دافعات الغاز البارد، وتفادَ الصواعق والصواريخ، وادعس الوحوش، واهزم الزعماء، واوصل إلى المريخ. اللعبة بالعربية افتراضيًا مع زر للإنجليزية، ويمكنك اختيار عالم السعودية أو تكساس ومستوى الصعوبة.
+لعبة متصفح كرتونية: شغّل دافعات الغاز البارد، وتفادَ الصواعق والصواريخ، وادعس الوحوش، واهزم الزعماء، واوصل إلى المريخ. اللعبة بالعربية افتراضيًا مع زر للإنجليزية، ويمكنك اختيار عالم السعودية أو تكساس ومستوى الصعوبة، وتثبيتها على الشاشة الرئيسية واللعب بدون إنترنت.
 
 > Unofficial fan game. Not affiliated with Tesla, Inc. or Halfbrick.
 
-![The Roadster flying past a zapper at night with its shield up](gameplay.png)
+![The title screen: a Tesla-style panel with the Drive button, world and difficulty pickers, and the Roadster flying beside it](title.png)
+
+![The Roadster flying past a zapper at night with its shield up, under a Tesla-style dashboard](gameplay.png)
 
 ![Boss fight against the Smog King](boss.png)
 
@@ -16,9 +18,18 @@ The game opens in Arabic, with an English switch on the title screen, and you ca
 
 ## Play
 
-Open `index.html` in any modern browser on a phone or computer. There is nothing to install and no build step.
+Open `index.html` in any modern browser on a phone or computer. There is no build step.
 
 To play it online, turn on GitHub Pages (steps below).
+
+## Install it and play offline
+
+Once the game is online (GitHub Pages or any web server), it installs like an app and keeps working without a connection:
+
+- **Android, or Chrome and Edge on a computer:** tap **Install app** at the bottom of the title panel, or choose **Install** from the browser menu.
+- **iPhone and iPad:** tap the **Share** button, then **Add to Home Screen**. The **Install app** button on the title panel shows the same tip.
+
+The game opens full screen from its icon. After the first visit everything it needs, including the fonts, is saved on the device, so it plays offline. When you're online it picks up new versions on its own. Opening `index.html` straight from your files plays fine but can't be installed, because browsers only allow that for web pages.
 
 ## Controls
 
@@ -31,9 +42,12 @@ To play it online, turn on GitHub Pages (steps below).
 | Mute everything | Speaker button | M |
 | Switch language | EN / ع button on the title screen | Same |
 | Choose world and difficulty | Pickers on the title screen | Same |
+| Install to the home screen | Install app button on the title screen | Same, or the browser menu |
 
 ## What's in it
 
+- A Tesla-style interface: a configurator-like title panel with Tesla blue buttons and segmented pickers, and an in-car dashboard with the gear (P R N D), speed, a speed limit sign, battery and the way to the next Supercharger, which goes light by day and dark by night like Tesla's Auto display
+- Installs to the home screen and plays offline
 - Two worlds for Earth: Saudi Arabia (Riyadh's Kingdom Centre and Al Faisaliah, Najdi mud-brick from Diriyah, palms, dunes, camels, Bedouin tents, AlUla's Elephant Rock and NEOM's The Line, with a Dust King boss) and the Texas launch site
 - Arabic (right to left, km/h and km) and English, switchable on the title screen
 - Easy, Normal and Hard difficulty: speed, obstacle spacing, battery drain, missiles, zappers and boss toughness all change, and harder levels score more
@@ -57,4 +71,6 @@ To play it online, turn on GitHub Pages (steps below).
 
 ## How it's built
 
-Everything lives in one self-contained `index.html`: cartoon art drawn with canvas paths at full screen resolution, a Web Audio synthesizer with a small step sequencer for the music, and no external assets apart from optional Google Fonts (Montserrat for English, Cairo for Arabic). If a device can't keep up, the game lowers its canvas resolution automatically.
+The game lives in one self-contained `index.html`: cartoon art drawn with canvas paths at full screen resolution, a Web Audio synthesizer with a small step sequencer for the music, and no external assets apart from optional Google Fonts (Montserrat for English, Cairo for Arabic). If a device can't keep up, the game lowers its canvas resolution automatically.
+
+Three small extras make it an installable app: `manifest.webmanifest` (name, icons, full-screen display), `sw.js` (a service worker that saves the game and its fonts for offline play) and the icons in `icons/`, drawn from the game's own Roadster.

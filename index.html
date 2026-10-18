@@ -6,8 +6,8 @@
 <title>Roadster: Fly Mode</title>
 <meta name="description" content="A cartoon flying-car browser game: fire the Roadster's cold-gas thrusters, dodge zappers and missiles, stomp monsters, beat two bosses and make it to Mars. Unofficial fan game.">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#dfe4ea" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#05060a" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f4f4f4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <meta name="application-name" content="Roadster: Fly Mode">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -28,6 +28,8 @@
 <meta name="twitter:image" content="https://osdroidi.github.io/roadster-fly-mode/gameplay.png">
 <meta name="twitter:image:alt" content="The cartoon Roadster flying past a zapper at night with its shield up">
 <link rel="canonical" href="https://osdroidi.github.io/roadster-fly-mode/">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231a1530'/%3E%3Cpath d='M8.5 21c-1.6 3.4-1 6.4 0 8 1-1.6 1.6-4.6 0-8zM20.5 21c-1.6 3.4-1 6.4 0 8 1-1.6 1.6-4.6 0-8z' fill='%234cc3ff'/%3E%3Cpath d='M2.6 16.4c3.4-2.6 6.6-3.8 10.4-4.4 3.6-.6 6.4.4 8.6 2.6 3.2.4 5.8 1.2 7.6 2.6.6.8.4 2.2-.4 3H3.6c-1.4-.6-1.6-2.4-1-3.8z' fill='%23f2f5fa' stroke='%23000' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cpath d='M10.4 14.6c2.6-1.4 6-1.8 8.6-.2l1 1.6h-9.6z' fill='%232c4778'/%3E%3Ccircle cx='8.5' cy='19.6' r='3' fill='%231f1d29' stroke='%23000'/%3E%3Ccircle cx='22.6' cy='19.6' r='3' fill='%231f1d29' stroke='%23000'/%3E%3Ccircle cx='8.5' cy='19.6' r='1.4' fill='%23d9dfe8'/%3E%3Ccircle cx='22.6' cy='19.6' r='1.4' fill='%23d9dfe8'/%3E%3Crect x='2.4' y='15.8' width='1.6' height='1.4' rx='.5' fill='%23ff2a3d'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,73 +40,62 @@
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
   --font:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --page:#dfe8f3;
-  --text:#0d1220;
-  --text-dim:#5a6478;
-  --glass:rgba(255,255,255,.58);
-  --glass-strong:rgba(250,252,255,.84);
-  --edge:rgba(13,18,32,.09);
-  --edge-hi:rgba(255,255,255,.75);
-  --well:rgba(13,18,32,.045);
-  --well-hover:rgba(13,18,32,.08);
-  --track:rgba(13,18,32,.1);
-  --scrim-top:rgba(238,244,251,.9);
-  --scrim-mid:rgba(238,244,251,.5);
-  --scrim-bot:rgba(238,244,251,0);
-  --backdrop:rgba(10,14,24,.38);
-  --shadow:0 24px 60px -18px rgba(20,30,60,.35);
-  --red:#e82127;
-  --red-hi:#ff4a50;
-  --blue:#2f8cf0;
-  --blue-hi:#5fb2ff;
-  --charge:#17b862;
-  --plume:#1673c4;
-  --gold:#f2b705;
-  --focus:#2f8cf0;
+  /* Tesla's palette: near-black ink, cool greys and one blue for the main action */
+  --page:#f4f4f4;
+  --text:#171a20;
+  --text-dim:#5c5e62;
+  --surface:rgba(255,255,255,.95);
+  --surface-2:#f4f4f4;
+  --surface-3:#e6e7e8;
+  --thumb:#ffffff;
+  --track:rgba(23,26,32,.12);
+  --line:rgba(23,26,32,.09);
+  --float:rgba(255,255,255,.84);
+  --float-text:#171a20;
+  --backdrop:rgba(23,26,32,.3);
+  --shadow:0 12px 40px -12px rgba(0,0,0,.3);
+  --blue:#3e6ae1;
+  --blue-hover:#3457b1;
+  --charge:#1ea65a;
+  --focus:#3e6ae1;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --page:#070a12;
-    --text:#f2f5fa;
-    --text-dim:#97a1b5;
-    --glass:rgba(18,22,34,.5);
-    --glass-strong:rgba(16,20,31,.8);
-    --edge:rgba(255,255,255,.09);
-    --edge-hi:rgba(255,255,255,.14);
-    --well:rgba(255,255,255,.05);
-    --well-hover:rgba(255,255,255,.09);
-    --track:rgba(255,255,255,.1);
-    --scrim-top:rgba(6,8,15,.88);
-    --scrim-mid:rgba(6,8,15,.5);
-    --scrim-bot:rgba(6,8,15,0);
-    --backdrop:rgba(3,5,10,.5);
-    --shadow:0 30px 80px -20px rgba(0,0,0,.7);
-    --charge:#3ddc84;
-    --plume:#6cc7ff;
-    --focus:#6cc7ff;
+    --page:#000;
+    --text:#eeeeee;
+    --text-dim:#a2a3a5;
+    --surface:rgba(23,24,27,.94);
+    --surface-2:#26272b;
+    --surface-3:#323338;
+    --thumb:#4a4c52;
+    --track:rgba(255,255,255,.14);
+    --line:rgba(255,255,255,.08);
+    --float:rgba(23,24,27,.74);
+    --float-text:#eeeeee;
+    --backdrop:rgba(0,0,0,.55);
+    --shadow:0 16px 50px -12px rgba(0,0,0,.85);
+    --charge:#3cd67a;
+    --focus:#7d9eff;
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --page:#070a12;
-  --text:#f2f5fa;
-  --text-dim:#97a1b5;
-  --glass:rgba(18,22,34,.5);
-  --glass-strong:rgba(16,20,31,.8);
-  --edge:rgba(255,255,255,.09);
-  --edge-hi:rgba(255,255,255,.14);
-  --well:rgba(255,255,255,.05);
-  --well-hover:rgba(255,255,255,.09);
-  --track:rgba(255,255,255,.1);
-  --scrim-top:rgba(6,8,15,.88);
-  --scrim-mid:rgba(6,8,15,.5);
-  --scrim-bot:rgba(6,8,15,0);
-  --backdrop:rgba(3,5,10,.5);
-  --shadow:0 30px 80px -20px rgba(0,0,0,.7);
-  --charge:#3ddc84;
-  --plume:#6cc7ff;
-  --focus:#6cc7ff;
+  --page:#000;
+  --text:#eeeeee;
+  --text-dim:#a2a3a5;
+  --surface:rgba(23,24,27,.94);
+  --surface-2:#26272b;
+  --surface-3:#323338;
+  --thumb:#4a4c52;
+  --track:rgba(255,255,255,.14);
+  --line:rgba(255,255,255,.08);
+  --float:rgba(23,24,27,.74);
+  --float-text:#eeeeee;
+  --backdrop:rgba(0,0,0,.55);
+  --shadow:0 16px 50px -12px rgba(0,0,0,.85);
+  --charge:#3cd67a;
+  --focus:#7d9eff;
   color-scheme:dark;
 }
 *,*::before,*::after{box-sizing:inherit}
@@ -112,7 +103,7 @@
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);background:var(--page)}
 body{
   height:100%;margin:0;background:var(--page);color:var(--text);
-  font-family:var(--font);font-size:15px;line-height:1.4;overflow:hidden;overscroll-behavior:none;
+  font-family:var(--font);font-size:15px;line-height:1.45;overflow:hidden;overscroll-behavior:none;
   -webkit-font-smoothing:antialiased;
 }
 #app{
@@ -124,33 +115,30 @@ body{
 /* Arabic: Cairo for the letters, and no letter spacing or capitals, which break joined script */
 html[lang="ar"]{--font:"Cairo","Montserrat",system-ui,sans-serif}
 html[lang="ar"] body *{letter-spacing:0 !important;text-transform:none !important}
-html[lang="ar"] .logo-word,html[lang="ar"] .logo-sub,html[lang="ar"] .btn.primary{margin-right:0}
-html[lang="ar"] .logo-word{font-size:clamp(2.8rem,11vw,4.4rem);line-height:1.15}
-html[lang="ar"] .logo-sub{font-size:1rem}
 /* no text selection, callouts or drag on long press anywhere in the game */
 #app,#app *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.card,.ibtn{-webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%)}
 
-/* ---------- shared glass ---------- */
-.ibtn,.slab-in,.btn,.stats div{-webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%)}
-
-/* ---------- icon buttons over the HUD ---------- */
+/* ---------- round icon buttons over the game ---------- */
 .hudbtns{
   position:absolute;top:10px;right:max(10px,env(safe-area-inset-right,0px));
   display:flex;gap:8px;z-index:6;
 }
 .ibtn{
-  width:42px;height:42px;padding:0;cursor:pointer;border-radius:50%;
-  display:grid;place-items:center;color:#fff;background:rgba(14,18,30,.42);
-  border:1px solid rgba(255,255,255,.16);box-shadow:0 6px 18px -8px rgba(0,0,0,.6);
-  transition:background .15s,transform .15s;
+  width:40px;height:40px;padding:0;cursor:pointer;border-radius:50%;border:0;
+  display:grid;place-items:center;color:var(--float-text);background:var(--float);
+  box-shadow:0 4px 14px -6px rgba(0,0,0,.4);
+  transition:background .4s,color .4s,transform .15s;
 }
-.ibtn svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.ibtn:hover{background:rgba(14,18,30,.62)}
+.ibtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.ibtn:hover{transform:scale(1.06)}
 .ibtn:active{transform:scale(.94)}
 .ibtn:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
-.ibtn[hidden]{display:none}
-.ibtn.lang span{font-family:"Montserrat","Cairo",system-ui,sans-serif;font-weight:700;font-size:.82rem}
+.ibtn.lang span{font-family:"Montserrat","Cairo",system-ui,sans-serif;font-weight:600;font-size:.8rem}
 html[lang="en"] .ibtn.lang span{font-family:"Cairo",system-ui,sans-serif;font-size:1rem}
+/* while driving, the buttons follow the dashboard, which goes light or dark with the sky */
+#app[data-hud="light"] .ibtn{background:rgba(255,255,255,.88);color:#171a20}
+#app[data-hud="dark"] .ibtn{background:rgba(22,23,26,.8);color:#f2f2f2}
 #btnMute .off{display:none}
 #btnMusic .slash{display:none}
 #btnMusic[aria-pressed="false"] .slash{display:inline}
@@ -160,167 +148,179 @@ html[lang="en"] .ibtn.lang span{font-family:"Cairo",system-ui,sans-serif;font-si
 /* ---------- screens ---------- */
 .screen{
   position:absolute;inset:0;z-index:5;display:none;overflow-y:auto;overscroll-behavior:contain;
-  padding:18px max(16px,env(safe-area-inset-right,0px)) 22px max(16px,env(safe-area-inset-left,0px));
+  padding:12px max(12px,env(safe-area-inset-right,0px)) 16px max(12px,env(safe-area-inset-left,0px));
   touch-action:pan-y;
 }
 .screen.on{display:flex;flex-direction:column;align-items:center;animation:fade .22s ease-out}
 .screen.modal{background:var(--backdrop)}
-@media (max-width:600px){.screen.modal{padding-top:64px}}
-.screen.modal>.slab{margin:auto 0;animation:rise .28s cubic-bezier(.2,.8,.2,1)}
+@media (max-width:600px){.screen.modal{padding-top:60px}}
+.screen.modal>.card{margin:auto 0;animation:rise .3s cubic-bezier(.2,.8,.2,1)}
 @keyframes fade{from{opacity:0}}
-@keyframes rise{from{opacity:0;transform:translateY(14px) scale(.98)}}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}}
 
-#scrTitle{background:linear-gradient(var(--scrim-top) 0,var(--scrim-mid) 50%,var(--scrim-bot) 72%);pointer-events:none}
-#scrTitle .title-wrap{pointer-events:auto}
-.title-wrap{
-  width:min(100%,440px);display:grid;gap:18px;justify-items:center;text-align:center;
-  margin-top:clamp(6px,5vh,56px);
+/* ---------- cards ---------- */
+.card{
+  width:min(100%,480px);background:var(--surface);border-radius:16px;box-shadow:var(--shadow);
+  padding:22px 20px 20px;display:grid;gap:16px;align-content:start;
 }
-.brand{display:grid;gap:12px;justify-items:center}
-.logo{margin:0;display:grid;justify-items:center;gap:6px;line-height:1}
-.logo-word{
-  font-weight:800;font-size:clamp(2.6rem,10vw,4rem);letter-spacing:.16em;margin-right:-.16em;text-transform:uppercase;
-  background:linear-gradient(180deg,var(--text) 30%,color-mix(in srgb,var(--text) 55%,transparent));-webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.logo-sub{
-  display:flex;align-items:center;gap:12px;font-weight:600;font-size:.8rem;letter-spacing:.55em;margin-right:-.55em;text-transform:uppercase;color:var(--red);
-}
-.logo-sub::before,.logo-sub::after{content:"";width:28px;height:1px;background:currentColor;opacity:.6}
-.logo-sub::after{margin-left:-.55em}
-.tagline{margin:0;max-width:36ch;color:var(--text);font-size:.98rem;font-weight:500}
-.meme{margin:0;max-width:36ch;font-size:.88rem;font-weight:500;color:var(--plume);min-height:2.6em}
-.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
-.controls{display:grid;gap:10px;width:100%}
-.opts{display:grid;gap:8px;width:100%}
-.opt{display:grid;grid-template-columns:76px 1fr;align-items:center;gap:10px}
-.opt-l{font-size:.66rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);text-align:start}
-html[lang="ar"] .opt-l{font-size:.85rem}
-.seg{display:flex;gap:3px;padding:3px;border-radius:13px;background:var(--glass);border:1px solid var(--edge);-webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%)}
-.seg button{flex:1 1 auto;white-space:nowrap;appearance:none;border:0;background:transparent;color:var(--text-dim);font:inherit;font-weight:600;font-size:.84rem;min-height:36px;padding:4px 10px;border-radius:10px;cursor:pointer;transition:background .15s,color .15s}
-.seg button:hover{color:var(--text);background:var(--well)}
-.seg button[aria-checked="true"]{background:var(--text);color:var(--page);box-shadow:0 4px 12px -6px rgba(0,0,0,.5)}
-.seg button:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
-html[dir="rtl"] [data-back] .ico{transform:scaleX(-1)}
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:4px 0 0;width:100%}
-.stats div{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0;padding:9px 6px;border-radius:14px;background:var(--glass);border:1px solid var(--edge)}
-.stats dt{font-size:.66rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim)}
-.stats dd{margin:0;font-weight:700;font-size:1.15rem;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
-.stats dd.wrap{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:normal;word-break:keep-all;font-size:.8rem;line-height:1.2;text-align:center}
-.title-wrap .stats{grid-template-columns:1fr 1fr 1.5fr}
-.fine{margin:0;font-size:.72rem;color:var(--text-dim)}
-.rotate-tip{display:none;margin:0;font-size:.85rem;color:var(--text-dim)}
-@media (orientation:portrait) and (max-width:600px){.rotate-tip{display:block}}
-
-@media (orientation:landscape) and (max-height:560px){
-  .title-wrap{width:min(100%,860px);grid-template-columns:1.1fr 1fr;align-items:center;text-align:start;justify-items:stretch;gap:14px 36px;margin-top:8px;padding-right:110px}
-  .title-wrap .brand{justify-items:start}
-  .logo{justify-items:start}
-  .logo-sub::before{display:none}
-  .title-wrap .tagline{max-width:40ch}
-}
-
-/* ---------- panels ---------- */
-.slab{width:min(100%,500px)}
-.slab-in{
-  background:var(--glass-strong);padding:22px 20px 20px;display:grid;gap:14px;
-  border:1px solid var(--edge);border-radius:26px;box-shadow:var(--shadow),inset 0 1px 0 var(--edge-hi);
-}
-.slab h2{margin:0;font-weight:700;font-size:1.5rem;letter-spacing:-.01em;line-height:1.1}
-.slab h3{margin:6px 0 0;font-weight:600;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim)}
-.slab-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.bank{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:.9rem;font-variant-numeric:tabular-nums;padding:6px 12px;border-radius:999px;background:var(--well);border:1px solid var(--edge)}
-.chip-label{font-size:.78rem;font-weight:600;padding:6px 12px;border-radius:999px;background:var(--well);border:1px solid var(--edge);color:var(--text-dim)}
+.card h2{margin:0;font-weight:500;font-size:1.5rem;letter-spacing:-.01em;line-height:1.15}
+.card h3{margin:2px 0 -6px;font-weight:500;font-size:.82rem;color:var(--text-dim)}
+.card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:.84rem;font-variant-numeric:tabular-nums;padding:6px 12px;border-radius:999px;background:var(--surface-2);color:var(--text)}
+.pill.dim{color:var(--text-dim)}
 .cellico{display:inline-block;width:8px;height:13px;border-radius:2.5px;border:1.5px solid currentColor;flex:none;position:relative;color:var(--charge);background:linear-gradient(to top,var(--charge) 0 70%,transparent 70%)}
 .cellico::before{content:"";position:absolute;left:50%;top:-3.5px;width:4px;height:2px;margin-left:-2px;background:currentColor;border-radius:1px 1px 0 0}
 .dim{color:var(--text-dim)}
 .small{font-size:.8rem}
 p{margin:0}
+.rule{height:1px;background:var(--line);margin:0 -20px}
+
+/* ---------- title: a panel like Tesla's car card, the road on show beside it ---------- */
+#scrTitle{pointer-events:none;padding-top:60px}
+#scrTitle .card{pointer-events:auto;width:min(100%,440px);gap:16px}
+.brand{display:grid;gap:8px}
+.logo{margin:0;display:grid;gap:0;line-height:1.1}
+.logo-word{font-weight:500;font-size:clamp(2rem,8vw,2.5rem);letter-spacing:-.015em}
+.logo-sub{font-weight:500;font-size:1rem;color:var(--text-dim)}
+html[lang="ar"] .logo-word{font-weight:600;line-height:1.3}
+.status{display:flex;align-items:center;gap:8px;font-size:.84rem;font-weight:500;color:var(--text-dim)}
+.batt{display:inline-block;position:relative;width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;color:var(--text);flex:none}
+.batt::before{content:"";position:absolute;inset:1.5px;border-radius:1px;background:var(--charge)}
+.batt::after{content:"";position:absolute;top:50%;right:-4px;width:2px;height:5px;margin-top:-2.5px;border-radius:0 1px 1px 0;background:currentColor}
+.status b{font-weight:500;color:var(--text)}
+.tagline{font-size:.86rem;color:var(--text-dim);line-height:1.5}
+.meme{font-size:.84rem;font-weight:500;color:var(--blue);min-height:2.5em}
+html[data-theme="dark"] .meme{color:#7d9eff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .meme{color:#7d9eff}}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
+.opts{display:grid;gap:10px;width:100%}
+.opt{display:grid;grid-template-columns:minmax(70px,auto) 1fr;align-items:center;gap:12px}
+.opt-l{font-size:.84rem;font-weight:500;color:var(--text-dim)}
+/* Tesla's segmented control: a grey track with the choice raised on it */
+.seg{display:flex;gap:2px;padding:3px;border-radius:6px;background:var(--surface-2)}
+.seg button{flex:1 1 0;min-width:0;white-space:nowrap;appearance:none;border:0;background:transparent;color:var(--text-dim);font:inherit;font-weight:500;font-size:.82rem;min-height:34px;padding:4px 8px;border-radius:4px;cursor:pointer;transition:background .2s,color .2s,box-shadow .2s}
+.seg button:hover{color:var(--text)}
+.seg button[aria-checked="true"]{background:var(--thumb);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.14)}
+.seg button:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+.fine{font-size:.7rem;color:var(--text-dim)}
+.foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.foot .fine{flex:1 1 160px}
+.foot .tip{flex-basis:100%;font-size:.8rem;color:var(--text)}
+#btnInstall{background:var(--surface-2)}
+#btnInstall:hover{background:var(--surface-3)}
+html[dir="rtl"] [data-back] .ico{transform:scaleX(-1)}
+
+/* specs, the way Tesla lists range and top speed: the figure big, the label small beneath */
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0;width:100%}
+.stats div{display:flex;flex-direction:column-reverse;justify-content:flex-start;gap:2px;min-width:0}
+.stats dt{font-size:.74rem;font-weight:500;color:var(--text-dim)}
+.stats dd{margin:0;font-weight:500;font-size:1.45rem;line-height:1.15;letter-spacing:-.01em;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.stats dd.wrap{white-space:normal;overflow:visible;text-overflow:clip;word-break:keep-all;font-size:.95rem;line-height:1.25}
+#scrTitle .stats{grid-template-columns:1fr 1fr 1.4fr}
+
+/* on a wide screen the panel sits on the right, like Tesla's configurator, and the car drives on the left */
+@media (orientation:landscape) and (min-width:560px){
+  #app{--tw:clamp(300px,36vw,400px)}
+  #scrTitle{padding:60px max(10px,env(safe-area-inset-right,0px)) 10px max(10px,env(safe-area-inset-left,0px))}
+  #scrTitle .card{width:var(--tw);max-height:100%;overflow-y:auto;overscroll-behavior:contain;margin:auto 0 auto auto}
+}
+/* a short landscape screen, like a phone on its side: the panel goes wide with two columns so nothing scrolls */
+@media (orientation:landscape) and (max-height:700px) and (min-width:560px){
+  #app{--tw:min(70vw,620px)}
+  #scrTitle{padding-top:10px}
+  #app.on-title .hudbtns{right:calc(var(--tw) + 20px + env(safe-area-inset-right,0px))}
+  #scrTitle .card{grid-template-columns:1fr 1fr;grid-template-areas:"brand drive" "brand row" "brand opts" "stats opts" "fine fine";gap:12px 20px;padding:16px 18px}
+  #scrTitle .brand{grid-area:brand;gap:6px}
+  #scrTitle .stats{grid-area:stats;align-self:end}
+  #btnDrive{grid-area:drive}
+  #scrTitle .btn-row{grid-area:row}
+  #scrTitle .opts{grid-area:opts;align-self:start}
+  #scrTitle .opt{grid-template-columns:1fr;gap:4px}
+  #scrTitle .rule,#scrTitle .meme{display:none}
+  #scrTitle .foot{grid-area:fine}
+  .logo-word{font-size:1.8rem}
+  #scrTitle .stats dd{font-size:1.2rem}
+  #scrTitle .stats dd.wrap{font-size:.85rem}
+  #scrTitle .stats{grid-template-columns:auto auto minmax(0,1fr);gap:16px}
+  .tagline{font-size:.8rem;line-height:1.45}
+}
 
 /* ---------- buttons ---------- */
 .btn{
-  appearance:none;margin:0;font:inherit;font-weight:600;font-size:.95rem;letter-spacing:.02em;line-height:1.1;
-  color:var(--text);background:var(--glass);min-height:50px;padding:12px 18px;width:100%;
-  cursor:pointer;position:relative;display:inline-flex;align-items:center;justify-content:center;gap:9px;
-  border:1px solid var(--edge);border-radius:14px;box-shadow:inset 0 1px 0 var(--edge-hi);
-  transition:transform .15s ease,background .15s ease,box-shadow .15s ease,filter .15s ease;
+  appearance:none;margin:0;font:inherit;font-weight:500;font-size:.92rem;line-height:1.2;
+  color:var(--text);background:var(--surface-2);min-height:44px;padding:10px 16px;width:100%;
+  cursor:pointer;position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:0;border-radius:4px;transition:background .2s,color .2s,transform .12s;
 }
-.btn .ico{width:19px;height:19px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn .ico{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
 .btn .ico.fill{fill:currentColor;stroke:none}
-.btn:hover{background:var(--well-hover);transform:translateY(-1px)}
-.btn:active{transform:translateY(0) scale(.98)}
-.btn:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
-.btn[disabled]{cursor:not-allowed;opacity:.45;transform:none}
-.btn.primary{
-  color:#fff;border:0;min-height:56px;font-size:1rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-  background:linear-gradient(180deg,var(--red-hi),var(--red) 55%,#c4151b);
-  box-shadow:0 14px 30px -12px rgba(232,33,39,.75),inset 0 1px 0 rgba(255,255,255,.3);
-}
-.btn.primary:hover{filter:brightness(1.07);background:linear-gradient(180deg,var(--red-hi),var(--red) 55%,#c4151b)}
-.btn.accent{
-  color:#fff;border:0;font-weight:700;
-  background:linear-gradient(180deg,var(--blue-hi),var(--blue) 60%,#1f6fd0);
-  box-shadow:0 14px 30px -12px rgba(47,140,240,.7),inset 0 1px 0 rgba(255,255,255,.3);
-}
-.btn.accent:hover{filter:brightness(1.07);background:linear-gradient(180deg,var(--blue-hi),var(--blue) 60%,#1f6fd0)}
-.btn.small{min-height:38px;font-size:.82rem;padding:8px 14px;width:auto;border-radius:11px}
-.btn .cellico{color:inherit}
-.btn.accent .cellico,.btn.primary .cellico{color:#fff;background:linear-gradient(to top,#fff 0 70%,transparent 70%)}
+.btn:hover{background:var(--surface-3)}
+.btn:active{transform:scale(.98)}
+.btn:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.btn[disabled]{cursor:not-allowed;opacity:.4;transform:none}
+.btn.primary{color:#fff;background:var(--blue);min-height:48px;font-size:.95rem}
+.btn.primary:hover{background:var(--blue-hover)}
+.btn.accent{color:var(--page);background:var(--text)}
+.btn.accent:hover{background:var(--text-dim)}
+.btn.small{min-height:36px;font-size:.82rem;padding:8px 14px;width:auto;background:var(--thumb)}
+.btn.small:hover{background:var(--surface-3)}
+.btn .cellico{color:inherit;background:linear-gradient(to top,currentColor 0 70%,transparent 70%)}
+
+/* ---------- grouped lists, like Tesla's settings ---------- */
+.group{list-style:none;margin:0;padding:0;display:grid;border-radius:12px;background:var(--surface-2);overflow:hidden}
+.group>li{padding:12px 14px}
+.group>li+li{border-top:1px solid var(--line)}
 
 /* ---------- garage ---------- */
-.studio{border-radius:20px;overflow:hidden;border:1px solid var(--edge);
-  background:radial-gradient(120% 90% at 50% 105%,rgba(255,255,255,.22),transparent 60%),radial-gradient(80% 70% at 50% 0%,rgba(110,170,255,.18),transparent 70%),var(--well)}
+.studio{border-radius:12px;overflow:hidden;background:radial-gradient(70% 55% at 50% 100%,var(--surface-3),transparent 70%),linear-gradient(var(--surface-2),var(--surface-2))}
 #garageCar{display:block;width:100%;height:auto}
-.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:8px}
+.swatches{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 6px}
 .sw{
-  appearance:none;font:inherit;color:var(--text);background:var(--well);cursor:pointer;
-  display:grid;justify-items:center;align-content:start;gap:6px;padding:12px 6px 10px;text-align:center;min-height:50px;
-  border:1px solid var(--edge);border-radius:16px;transition:background .15s,transform .15s,border-color .15s;
+  appearance:none;font:inherit;color:var(--text);background:none;border:0;cursor:pointer;
+  display:grid;justify-items:center;align-content:start;gap:5px;padding:4px 2px;text-align:center;border-radius:8px;
 }
-.sw:hover{background:var(--well-hover);transform:translateY(-1px)}
-.sw .chip{width:34px;height:34px;border-radius:50%;box-shadow:inset 0 -6px 10px rgba(0,0,0,.28),inset 0 4px 8px rgba(255,255,255,.4),0 0 0 3px var(--glass-strong),0 0 0 4px var(--edge)}
-.sw .nm{font-weight:600;font-size:.76rem;line-height:1.15}
-.sw .pr{font-size:.72rem;color:var(--text-dim);display:flex;align-items:center;gap:4px;justify-content:center}
-.sw[aria-checked="true"]{border-color:var(--red);background:color-mix(in srgb,var(--red) 10%,transparent)}
-.sw[aria-checked="true"] .chip{box-shadow:inset 0 -6px 10px rgba(0,0,0,.28),inset 0 4px 8px rgba(255,255,255,.4),0 0 0 3px var(--glass-strong),0 0 0 5px var(--red)}
+.sw .chip{width:38px;height:38px;border-radius:50%;transition:transform .15s,box-shadow .2s;
+  box-shadow:inset 0 -5px 9px rgba(0,0,0,.25),inset 0 3px 6px rgba(255,255,255,.35),0 0 0 1px var(--line)}
+.sw:hover .chip{transform:scale(1.06)}
+.sw[aria-checked="true"] .chip{box-shadow:inset 0 -5px 9px rgba(0,0,0,.25),inset 0 3px 6px rgba(255,255,255,.35),0 0 0 3px var(--surface-2),0 0 0 5px var(--blue)}
+.sw .nm{font-weight:500;font-size:.74rem;line-height:1.2}
+.sw .pr{font-size:.7rem;color:var(--text-dim);display:flex;align-items:center;gap:4px;justify-content:center}
 .sw:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
 .sw.locked .nm{color:var(--text-dim)}
-.ups{list-style:none;margin:0;padding:0;display:grid;gap:8px}
-.up{background:var(--well);padding:12px 14px;display:grid;grid-template-columns:1fr auto;gap:5px 12px;align-items:center;border-radius:16px;border:1px solid var(--edge)}
-.up .nm{font-weight:600;font-size:.92rem}
-.up .ds{font-size:.8rem;color:var(--text-dim)}
-.pips{display:flex;gap:4px;margin-top:3px}
-.pips i{width:20px;height:4px;border-radius:2px;background:var(--track)}
-.pips i.on{background:var(--charge)}
+.sw.locked .chip{opacity:.7}
+.up{display:grid;grid-template-columns:1fr auto;gap:3px 12px;align-items:center}
+.up .nm{font-weight:500;font-size:.9rem}
+.up .ds{font-size:.78rem;color:var(--text-dim)}
+.pips{display:flex;gap:3px;margin-top:4px}
+.pips i{width:18px;height:3px;border-radius:2px;background:var(--track)}
+.pips i.on{background:var(--blue)}
 .up .btn{grid-row:1 / span 3;grid-column:2}
 
 /* ---------- missions ---------- */
-.missions{list-style:none;margin:0;padding:0;display:grid;gap:8px}
-.ms{background:var(--well);padding:12px 14px;display:grid;gap:8px;border-radius:16px;border:1px solid var(--edge)}
+.ms{display:grid;gap:8px}
 .ms .row{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
-.ms .tx{font-weight:500;font-size:.9rem}
-.ms .rw{font-size:.78rem;font-weight:600;color:var(--text-dim);white-space:nowrap;display:flex;align-items:center;gap:5px}
-.bar{height:5px;background:var(--track);position:relative;overflow:hidden;border-radius:3px}
-.bar b{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--blue),var(--blue-hi));border-radius:3px}
-.ms.done{border-color:color-mix(in srgb,var(--charge) 45%,transparent)}
+.ms .tx{font-weight:500;font-size:.88rem}
+.ms .rw{font-size:.78rem;font-weight:500;color:var(--text-dim);white-space:nowrap;display:flex;align-items:center;gap:5px}
+.bar{height:4px;background:var(--track);position:relative;overflow:hidden;border-radius:2px}
+.bar b{position:absolute;inset:0 auto 0 0;background:var(--blue);border-radius:2px;transition:width .4s}
+html[dir="rtl"] .bar b{inset:0 0 0 auto}
 .ms.done .bar b{background:var(--charge)}
 .ms.done .rw{color:var(--charge)}
 .rankline{display:grid;gap:8px}
 
 /* ---------- game over ---------- */
-.cause{font-size:.92rem;font-weight:500;color:var(--text-dim)}
+.cause{font-size:.9rem;font-weight:500;color:var(--text-dim)}
 .scoreline{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.scoreline .big{font-weight:800;font-size:clamp(2.6rem,10vw,3.6rem);letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
-.newbest{color:#fff;background:linear-gradient(180deg,var(--red-hi),var(--red));border-radius:999px;padding:6px 12px;font-weight:700;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;box-shadow:0 8px 20px -8px rgba(232,33,39,.8)}
-.newbest[hidden]{display:none}
-.slab .stats div{align-items:flex-start;padding:10px 12px;background:var(--well)}
+.scoreline .big{font-weight:500;font-size:clamp(2.6rem,10vw,3.4rem);letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
+.newbest{color:#fff;background:var(--blue);border-radius:4px;padding:5px 10px;font-weight:500;font-size:.78rem}
 
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 @media (max-height:430px){
-  .slab-in{padding:16px 16px 16px;gap:10px}
-  .btn.primary{min-height:50px}
+  .card{padding:16px;gap:12px}
+  .btn.primary{min-height:44px}
 }
-@media (prefers-reduced-motion:reduce){.btn,.sw,.ibtn{transition:none}.screen.on,.screen.modal>.slab{animation:none}}
+@media (prefers-reduced-motion:reduce){.btn,.sw .chip,.ibtn,.seg button{transition:none}.screen.on,.screen.modal>.card{animation:none}}
 </style>
 </head>
 <body>
@@ -341,80 +341,84 @@ p{margin:0}
   </div>
 
   <section class="screen" id="scrTitle" aria-labelledby="titleH">
-    <div class="title-wrap">
+    <div class="card">
       <div class="brand">
         <h1 id="titleH" class="logo"><span class="logo-word" data-t="logoWord">Roadster</span> <span class="logo-sub" data-t="logoSub">Fly Mode</span></h1>
+        <p class="status"><i class="batt" aria-hidden="true"></i><b>100%</b><span aria-hidden="true">·</span><span data-t="parked">Parked</span></p>
         <p class="tagline" id="tagline"></p>
         <p class="meme" id="meme"></p>
       </div>
-      <div class="controls">
-        <div class="opts">
-          <div class="opt"><span class="opt-l" id="worldL" data-t="world">World</span>
-            <div class="seg" id="segWorld" role="radiogroup" aria-labelledby="worldL">
-              <button type="button" role="radio" data-world="saudi" data-t="saudi">Saudi Arabia</button><button type="button" role="radio" data-world="texas" data-t="texas">Texas</button>
-            </div></div>
-          <div class="opt"><span class="opt-l" id="diffL" data-t="difficulty">Difficulty</span>
-            <div class="seg" id="segDiff" role="radiogroup" aria-labelledby="diffL">
-              <button type="button" role="radio" data-diff="easy" data-t="easy">Easy</button><button type="button" role="radio" data-diff="normal" data-t="normal">Normal</button><button type="button" role="radio" data-diff="hard" data-t="hard">Hard</button>
-            </div></div>
-        </div>
-        <button class="btn primary" id="btnDrive" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2.2"/><path d="M3.8 11h6M14.2 11h6M12 14.2v6.3"/></svg><span data-t="drive">Drive</span></button>
-        <div class="btn-row">
-          <button class="btn" id="btnGarage" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 15.5l1.7-4.4A2.2 2.2 0 0 1 7.2 9.6h9.6a2.2 2.2 0 0 1 2 1.5l1.7 4.4"/><path d="M3.5 15.5h17v2.8h-17z"/><circle cx="7.5" cy="18.3" r="1.6"/><circle cx="16.5" cy="18.3" r="1.6"/></svg><span data-t="garage">Garage</span></button>
-          <button class="btn" id="btnMissions" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 21V4"/><path d="M5.5 4.5h11.5l-2.4 4.2 2.4 4.3H5.5"/></svg><span data-t="missions">Missions</span></button>
-        </div>
-        <dl class="stats">
-          <div><dt data-t="best">Best</dt><dd id="tBest">0</dd></div>
-          <div><dt data-t="cells">Cells</dt><dd id="tBank">0</dd></div>
-          <div><dt data-t="rank">Rank</dt><dd id="tRank" class="wrap">Test driver</dd></div>
-        </dl>
+      <dl class="stats">
+        <div><dt data-t="best">Best</dt><dd id="tBest">0</dd></div>
+        <div><dt data-t="cells">Cells</dt><dd id="tBank">0</dd></div>
+        <div><dt data-t="rank">Rank</dt><dd id="tRank" class="wrap">Test driver</dd></div>
+      </dl>
+      <button class="btn primary" id="btnDrive" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2.2"/><path d="M3.8 11h6M14.2 11h6M12 14.2v6.3"/></svg><span data-t="drive">Drive</span></button>
+      <div class="btn-row">
+        <button class="btn" id="btnGarage" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 15.5l1.7-4.4A2.2 2.2 0 0 1 7.2 9.6h9.6a2.2 2.2 0 0 1 2 1.5l1.7 4.4"/><path d="M3.5 15.5h17v2.8h-17z"/><circle cx="7.5" cy="18.3" r="1.6"/><circle cx="16.5" cy="18.3" r="1.6"/></svg><span data-t="garage">Garage</span></button>
+        <button class="btn" id="btnMissions" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 21V4"/><path d="M5.5 4.5h11.5l-2.4 4.2 2.4 4.3H5.5"/></svg><span data-t="missions">Missions</span></button>
+      </div>
+      <div class="rule" aria-hidden="true"></div>
+      <div class="opts">
+        <div class="opt"><span class="opt-l" id="worldL" data-t="world">World</span>
+          <div class="seg" id="segWorld" role="radiogroup" aria-labelledby="worldL">
+            <button type="button" role="radio" data-world="saudi" data-t="saudi">Saudi Arabia</button><button type="button" role="radio" data-world="texas" data-t="texas">Texas</button>
+          </div></div>
+        <div class="opt"><span class="opt-l" id="diffL" data-t="difficulty">Difficulty</span>
+          <div class="seg" id="segDiff" role="radiogroup" aria-labelledby="diffL">
+            <button type="button" role="radio" data-diff="easy" data-t="easy">Easy</button><button type="button" role="radio" data-diff="normal" data-t="normal">Normal</button><button type="button" role="radio" data-diff="hard" data-t="hard">Hard</button>
+          </div></div>
+      </div>
+      <div class="foot">
+        <button class="btn small" id="btnInstall" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="M7.5 10.5L12 15l4.5-4.5"/><path d="M5 19.5h14"/></svg><span data-t="install">Install app</span></button>
         <p class="fine" data-t="fine">Unofficial fan game. Not affiliated with Tesla, Inc.</p>
+        <p class="fine tip" id="installTip" data-t="installTip" aria-live="polite" hidden>Tap Share, then Add to Home Screen.</p>
       </div>
     </div>
   </section>
 
   <section class="screen modal" id="scrGarage" aria-labelledby="garageH">
-    <div class="slab"><div class="slab-in">
-      <div class="slab-head"><h2 id="garageH" data-t="garage">Garage</h2><span class="bank"><i class="cellico" aria-hidden="true"></i><span><b id="gBank">0</b> <span data-t="cellsWord">cells</span></span></span></div>
+    <div class="card">
+      <div class="card-head"><h2 id="garageH" data-t="garage">Garage</h2><span class="pill"><i class="cellico" aria-hidden="true"></i><span><b id="gBank">0</b> <span data-t="cellsWord">cells</span></span></span></div>
       <div class="studio"><canvas id="garageCar" width="864" height="240" aria-hidden="true"></canvas></div>
       <h3 id="paintH" data-t="paint">Paint</h3>
       <div class="swatches" id="paints" role="radiogroup" aria-labelledby="paintH"></div>
-      <p class="dim" id="gMsg" aria-live="polite"></p>
+      <p class="dim small" id="gMsg" aria-live="polite"></p>
       <h3 data-t="upgrades">Upgrades</h3>
-      <ul class="ups" id="ups"></ul>
+      <ul class="group ups" id="ups"></ul>
       <h3 data-t="eggs">Easter eggs</h3>
-      <ul class="ups" id="eggs"></ul>
+      <ul class="group ups" id="eggs"></ul>
       <button class="btn" type="button" data-back><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5"/></svg><span data-t="back">Back</span></button>
-    </div></div>
+    </div>
   </section>
 
   <section class="screen modal" id="scrMissions" aria-labelledby="missionsH">
-    <div class="slab"><div class="slab-in">
-      <div class="slab-head"><h2 id="missionsH" data-t="missions">Missions</h2><span class="chip-label" id="mRank">Test driver</span></div>
+    <div class="card">
+      <div class="card-head"><h2 id="missionsH" data-t="missions">Missions</h2><span class="pill dim" id="mRank">Test driver</span></div>
       <div class="rankline">
-        <p class="dim" id="mRankNote">Finish 3 missions to rank up.</p>
+        <p class="dim small" id="mRankNote">Finish 3 missions to rank up.</p>
         <div class="bar" aria-hidden="true"><b id="mRankBar" style="width:0%"></b></div>
       </div>
-      <ul class="missions" id="mList"></ul>
+      <ul class="group missions" id="mList"></ul>
       <p class="dim small" data-t="missionsNote">Missions carry over between runs. Rewards land in your cell bank the moment you finish one.</p>
       <button class="btn" type="button" data-back><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5"/></svg><span data-t="back">Back</span></button>
-    </div></div>
+    </div>
   </section>
 
   <section class="screen modal" id="scrPause" aria-labelledby="pauseH">
-    <div class="slab"><div class="slab-in">
+    <div class="card">
       <h2 id="pauseH" data-t="paused">Paused</h2>
-      <ul class="missions" id="pList"></ul>
+      <ul class="group missions" id="pList"></ul>
       <button class="btn primary" id="btnResume" type="button"><svg class="ico fill" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><span data-t="resume">Resume</span></button>
       <div class="btn-row">
         <button class="btn" id="btnRestart" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 4.5v4.2h4.2"/></svg><span data-t="restart">Restart</span></button>
         <button class="btn" id="btnQuit" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6.8 8 6.8"/><path d="M6.2 9.4V20h11.6V9.4"/></svg><span data-t="home">Home</span></button>
       </div>
-    </div></div>
+    </div>
   </section>
 
   <section class="screen modal" id="scrOver" aria-labelledby="overH">
-    <div class="slab"><div class="slab-in">
+    <div class="card">
       <h2 id="overH" class="sr-only" data-t="runOver">Run over</h2>
       <p class="cause" id="oCause">You hit a gas car.</p>
       <div class="scoreline"><span class="big" id="oScore">0</span><span class="newbest" id="oNew" data-t="newBest" hidden>New best</span></div>
@@ -423,14 +427,14 @@ p{margin:0}
         <div><dt data-t="cells">Cells</dt><dd id="oCells">0</dd></div>
         <div><dt data-t="best">Best</dt><dd id="oBest">0</dd></div>
       </dl>
-      <ul class="missions" id="oList"></ul>
+      <ul class="group missions" id="oList"></ul>
       <button class="btn accent" id="btnRevive" type="button">Revive</button>
       <button class="btn primary" id="btnAgain" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 4.5v4.2h4.2"/></svg><span data-t="driveAgain">Drive again</span></button>
       <div class="btn-row">
         <button class="btn" id="btnOverGarage" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 15.5l1.7-4.4A2.2 2.2 0 0 1 7.2 9.6h9.6a2.2 2.2 0 0 1 2 1.5l1.7 4.4"/><path d="M3.5 15.5h17v2.8h-17z"/><circle cx="7.5" cy="18.3" r="1.6"/><circle cx="16.5" cy="18.3" r="1.6"/></svg><span data-t="garage">Garage</span></button>
         <button class="btn" id="btnHome" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6.8 8 6.8"/><path d="M6.2 9.4V20h11.6V9.4"/></svg><span data-t="home">Home</span></button>
       </div>
-    </div></div>
+    </div>
   </section>
 
   <div id="live" class="sr-only" aria-live="polite"></div>
@@ -498,7 +502,8 @@ const STR = {
     logoWord: 'Roadster', logoSub: 'Fly Mode', pause: 'Pause', music: 'Music', mute: 'Mute sound', unmute: 'Unmute sound',
     langBtn: 'ع', langAria: 'التبديل إلى العربية',
     tagline: coarse => `${coarse ? 'Hold anywhere' : 'Hold Space or the mouse button'} to fire the cold-gas thrusters. Dodge zappers and missiles, stomp the monsters, beat the bosses and make it to Mars.`,
-    drive: 'Drive', garage: 'Garage', missions: 'Missions', best: 'Best', cells: 'Cells', rank: 'Rank',
+    install: 'Install app', installTip: 'Tap the Share button, then Add to Home Screen.',
+    drive: 'Drive', parked: 'Parked', garage: 'Garage', missions: 'Missions', best: 'Best', cells: 'Cells', rank: 'Rank',
     fine: 'Unofficial fan game. Not affiliated with Tesla, Inc.',
     world: 'World', saudi: 'Saudi Arabia', texas: 'Texas', difficulty: 'Difficulty', easy: 'Easy', normal: 'Normal', hard: 'Hard',
     cellsWord: 'cells', paint: 'Paint', upgrades: 'Upgrades', eggs: 'Easter eggs', back: 'Back',
@@ -515,26 +520,26 @@ const STR = {
     crashed: 'You crashed.', runAnnounce: (s, nb) => `Run over. Score ${s}.${nb ? ' New best.' : ''}`,
     missionAnnounce: (txt, rw) => `Mission complete: ${txt}. ${rw} cells added.`,
     // HUD
-    bestHud: 'BEST', unit: 'MPH', toCharge: d => `${d} MI TO CHARGE`, charging: 'CHARGING', t060: s => `0–60 MPH IN ${s} S`,
-    launchOn: 'LAUNCH ON GREEN', goGo: 'GO!', holdPrompt: 'HOLD ANYWHERE TO FIRE THRUSTERS', distUnit: 'mi', gasLabel: 'GAS',
-    // banners, toasts and floating scores
-    plaid: 'PLAID MODE', coil: 'TESLA COIL', shield: 'BIOWEAPON DEFENSE MODE', fly: 'FLY MODE', flame: 'NOT A FLAMETHROWER',
-    shieldDown: 'SHIELD DOWN', lowBattery: 'LOW BATTERY', outOfCharge: 'OUT OF CHARGE', ludicrous: 'LUDICROUS SPEED', funded: 'FUNDING SECURED',
-    warning: 'WARNING', defeated: n => `${n} DEFEATED`, incoming: n => `${n} INCOMING`, down: n => `${n} DOWN`,
-    toMars: 'NEXT STOP: MARS', toEarth: 'BACK TO EARTH', toSaudi: 'BACK TO SAUDI ARABIA', backInRace: 'BACK IN THE RACE',
-    go: 'GO', jumpStart: 'JUMP START', perfectLaunch: 'PERFECT LAUNCH', goodLaunch: 'GOOD LAUNCH',
-    boosterLanded: 'THE BOOSTER STUCK THE LANDING', spaceSpotted: 'SPACE ROADSTER SPOTTED +500',
-    missionDone: n => `MISSION DONE +${n} CELLS`, rankUp: (r, n) => `RANK UP: ${r.toUpperCase()} +${n}`,
+    bestHud: 'Best', unit: 'mph', toCharge: d => `${d} mi to Supercharger`, charging: 'Supercharging', t060: s => `0-60 mph in ${s} s`,
+    launchOn: 'Launch on green', goGo: 'Go!', holdPrompt: 'Hold anywhere to fire thrusters', distUnit: 'mi', gasLabel: 'GAS',
+    // banners and toasts (sentence case, like Tesla's alerts); floating scores stay in capitals
+    plaid: 'Plaid mode', coil: 'Tesla coil', shield: 'Bioweapon Defense Mode', fly: 'Fly mode', flame: 'Not a Flamethrower',
+    shieldDown: 'Shield down', lowBattery: 'Low battery', outOfCharge: 'Out of charge', ludicrous: 'Ludicrous speed', funded: 'Funding secured',
+    warning: 'Warning', defeated: n => `${n} defeated`, incoming: n => `${n} incoming`, down: n => `${n.toUpperCase()} DOWN`,
+    toMars: 'Next stop: Mars', toEarth: 'Back to Earth', toSaudi: 'Back to Saudi Arabia', backInRace: 'Back in the race',
+    go: 'Go', jumpStart: 'Jump start', perfectLaunch: 'Perfect launch', goodLaunch: 'Good launch',
+    boosterLanded: 'The booster stuck the landing', spaceSpotted: 'Space Roadster spotted +500',
+    missionDone: n => `Mission done +${n} cells`, rankUp: (r, n) => `Rank up: ${r} +${n}`,
     roofSurf: 'ROOF SURF', hop: 'HOP', closeCall: 'CLOSE CALL', smash: 'SMASH', coneHit: 'CONE -6%', rockHit: 'ROCK -6%', loop: 'LOOP',
     supercharged: 'SUPERCHARGED', stomp: 'STOMP', stompN: n => `STOMP ×${n}`, blast: 'BLAST', torched: 'TORCHED', pop: 'POP', zapF: 'ZAP',
     // hints
-    hBattery: 'GRAB GREEN CELLS TO RECHARGE', hCharger: 'STAY ON THE ROAD THROUGH THE SUPERCHARGER', hGas: 'HOP GAS CARS, OR LAND ON THEIR ROOFS',
-    hHold: 'HOLD TO FIRE THE THRUSTERS. LET GO TO DROP.', hLaunch: c => c ? 'TAP THE MOMENT THE LIGHT TURNS GREEN' : 'PRESS SPACE OR CLICK THE MOMENT THE LIGHT TURNS GREEN',
-    hLoop: 'FAN GRIP ON: THE ROADSTER STICKS TO THE TRACK', hBoss: 'GRAB THE BLUE COIL ORBS TO ZAP THE BOSS',
-    hMissile: 'MISSILE! MOVE AWAY FROM ITS HEIGHT BEFORE IT LOCKS ON', hMonster: 'LAND ON MONSTERS OR BLAST THEM WITH YOUR THRUSTERS',
-    hWorm: 'SANDWORM! FLY HIGH OVER IT', hZapper: 'ZAPPER! STEER CLEAR OF THE ELECTRIC ARC',
+    hBattery: 'Grab green cells to recharge', hCharger: 'Stay on the road through the Supercharger', hGas: 'Hop gas cars, or land on their roofs',
+    hHold: 'Hold to fire the thrusters. Let go to drop.', hLaunch: c => c ? 'Tap the moment the light turns green' : 'Press Space or click the moment the light turns green',
+    hLoop: 'Fan grip on: the Roadster sticks to the track', hBoss: 'Grab the blue coil orbs to zap the boss',
+    hMissile: 'Missile! Move away from its height before it locks on', hMonster: 'Land on monsters or blast them with your thrusters',
+    hWorm: 'Sandworm! Fly high over it', hZapper: 'Zapper! Steer clear of the electric arc',
     // bosses
-    boss_smog: 'SMOG KING', boss_dust: 'DUST KING', boss_mother: 'MOTHERSHIP',
+    boss_smog: 'Smog King', boss_dust: 'Dust King', boss_mother: 'Mothership',
     // paints
     paint_pearl: 'Pearl white', paint_red: 'Ultra red', paint_blue: 'Deep blue', paint_silver: 'Quicksilver', paint_grey: 'Stealth grey',
     paint_green: 'Saudi green', paint_cherry: 'Midnight cherry', paint_black: 'Diamond black',
@@ -584,7 +589,8 @@ const STR = {
     logoWord: 'رودستر', logoSub: 'وضع الطيران', pause: 'إيقاف مؤقت', music: 'الموسيقى', mute: 'كتم الصوت', unmute: 'تشغيل الصوت',
     langBtn: 'EN', langAria: 'Switch to English',
     tagline: coarse => `${coarse ? 'اضغط على الشاشة مطوّلًا' : 'اضغط مطوّلًا على المسافة أو زر الفأرة'} لتشغيل دافعات الغاز البارد. تفادَ الصواعق والصواريخ، وادعس الوحوش، واهزم الزعماء، واوصل إلى المريخ.`,
-    drive: 'انطلق', garage: 'الكراج', missions: 'المهام', best: 'الأفضل', cells: 'الخلايا', rank: 'الرتبة',
+    install: 'ثبّت اللعبة', installTip: 'اضغط زر المشاركة، ثم «إضافة إلى الشاشة الرئيسية».',
+    drive: 'انطلق', parked: 'متوقفة', garage: 'الكراج', missions: 'المهام', best: 'الأفضل', cells: 'الخلايا', rank: 'الرتبة',
     fine: 'لعبة غير رسمية من المعجبين، ولا علاقة لها بشركة تسلا.',
     world: 'العالم', saudi: 'السعودية', texas: 'تكساس', difficulty: 'الصعوبة', easy: 'سهل', normal: 'عادي', hard: 'صعب',
     cellsWord: 'خلية', paint: 'اللون', upgrades: 'التطويرات', eggs: 'مفاجآت مخفية', back: 'رجوع',
@@ -4140,12 +4146,12 @@ function drawSpeedLines() {
 }
 const easeBack = t => { const c = 1.6; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); };
 const easeOut = t => 1 - Math.pow(1 - t, 3);
-// HUD text: clean type with a soft shadow; o.w weight, o.ls letter spacing (CSS px), o.base baseline
+// HUD text; o.w weight, o.ls letter spacing (CSS px), o.base baseline, o.shadow a drop shadow for text over the world
 function txt(s, x, y, size, col, align, o) {
   o = o || {};
   g.font = font(size, o.w); g.textAlign = align || 'left'; g.textBaseline = o.base || 'top'; g.direction = isAr() ? 'rtl' : 'ltr';
   if ('letterSpacing' in g) g.letterSpacing = o.ls && !isAr() ? U(o.ls) + 'px' : '0px';
-  if (o.shadow !== false) { g.fillStyle = 'rgba(4,6,14,0.45)'; g.fillText(s, x, y + size * 0.07); }
+  if (o.shadow) { g.fillStyle = 'rgba(4,6,14,0.45)'; g.fillText(s, x, y + size * 0.07); }
   g.fillStyle = col; g.fillText(s, x, y);
   const w = g.measureText(s).width;
   if ('letterSpacing' in g) g.letterSpacing = '0px';
@@ -4158,31 +4164,77 @@ function measureLS(s, size, w, ls) {
   if ('letterSpacing' in g) g.letterSpacing = '0px';
   return m;
 }
-// a frosted dark chip behind HUD groups
-function chip(x, y, w, h, r, a) {
-  rrect(g, x, y, w, h, r === undefined ? h / 2 : r); g.fillStyle = `rgba(10,13,24,${a === undefined ? 0.42 : a})`; g.fill();
-  g.lineWidth = U(1); g.strokeStyle = 'rgba(255,255,255,0.13)'; g.stroke();
-}
-// centred text in its own chip, so it reads on a bright sky; returns the chip's bottom
-function label(s, y, size, col, w, ls) {
-  const tw = measureLS(s, size, w, ls), h = size * 2.1;
-  chip(IW / 2 - tw / 2 - U(14), y, tw + U(28), h, h / 2, 0.45);
-  txt(s, IW / 2, y + h / 2 + U(0.5), size, col, 'center', { w, ls, base: 'middle', shadow: false });
-  return y + h;
-}
 function drawFloats() {
   const fs = U(13);
   for (const f of floats) {
     const age = f.max - f.t, k = 0.85 + 0.15 * easeBack(Math.min(1, age * 7)), w = measure(f.text, fs, 800);
     g.globalAlpha = Math.min(1, f.t * 2.5);
     g.save(); g.translate(clamp(f.x, w / 2 + 2, IW - w / 2 - 2), f.y - fs * 0.5); g.scale(k, k);
-    txt(f.text, 0, 0, fs, f.col, 'center', { base: 'middle', w: 800 });
+    txt(f.text, 0, 0, fs, f.col, 'center', { base: 'middle', w: 800, shadow: true });
     g.restore();
   }
   g.globalAlpha = 1;
 }
 
-/* ---------- HUD ---------- */
+/* ---------- HUD: Tesla-style cards that turn dark at night, like the car's Auto display ---------- */
+const HT = { dark: false, k: 0, set: false, last: 0 };
+const hudMix = new Map();
+// a colour between its light-display and dark-display versions, at the current blend
+function hc(l, d) {
+  const q = Math.round(HT.k * 16), key = l + d + q;
+  let c = hudMix.get(key);
+  if (!c) { c = rgbStr(mixC(hex2rgb(l), hex2rgb(d), q / 16)); hudMix.set(key, c); }
+  return c;
+}
+const toHex = v => '#' + v.map(n => clamp(Math.round(n), 0, 255).toString(16).padStart(2, '0')).join('');
+// accent colours are tuned for the night; by day they are deepened so they read on a white card
+function accent(col) {
+  if (!/^#[0-9a-f]{6}$/i.test(col) || col.toLowerCase() === '#ffffff') col = '#7d9eff';
+  return hc(toHex(mixC(hex2rgb(col), [23, 26, 32], 0.32)), col);
+}
+const inkH = () => hc('#171a20', '#f2f2f2'), dimH = () => hc('#5c5e62', '#a2a3a5');
+const greenH = () => hc('#17924d', '#3cd67a'), redH = () => hc('#e31937', '#ff5a6a'), blueH = () => hc('#3e6ae1', '#7d9eff');
+// switches between the light and dark display when the sky crosses dusk or dawn, with a short fade
+function hudTheme(N) {
+  const now = performance.now();
+  if (!HT.set) { HT.dark = N > 0.5; HT.k = HT.dark ? 1 : 0; HT.set = true; }
+  else {
+    if (!HT.dark && N > 0.58) HT.dark = true; else if (HT.dark && N < 0.42) HT.dark = false;
+    const step = reduceMotion ? 1 : Math.min(0.1, (now - HT.last) / 1000) * 2.5;
+    HT.k = HT.dark ? Math.min(1, HT.k + step) : Math.max(0, HT.k - step);
+  }
+  HT.last = now;
+  const want = HT.dark ? 'dark' : 'light';
+  if (app.dataset.hud !== want) app.dataset.hud = want;
+}
+// a dashboard card: a faint drop shadow, then the panel
+function card(x, y, w, h, r) {
+  r = r === undefined ? U(12) : r;
+  const k = HT.k;
+  rrect(g, x, y + U(1.5), w, h, r); g.fillStyle = `rgba(0,0,0,${(0.08 + 0.12 * k).toFixed(3)})`; g.fill();
+  rrect(g, x, y, w, h, r);
+  g.fillStyle = `rgba(${lerp(255, 22, k) | 0},${lerp(255, 23, k) | 0},${lerp(255, 26, k) | 0},${(0.9 - 0.08 * k).toFixed(3)})`; g.fill();
+}
+// a centred card holding one line of text, with an optional coloured dot in front; returns its bottom
+function alertCard(s, y, size, w8, dot, maxW) {
+  const lines = wrapText(s, maxW - U(dot ? 56 : 36), size, w8), lh = size * 1.4;
+  let tw = 0; for (const ln of lines) tw = Math.max(tw, measure(ln, size, w8));
+  const pad = U(16), dw = dot ? U(18) : 0, w = tw + dw + pad * 2, h = lines.length * lh + U(18), x = IW / 2 - w / 2;
+  card(x, y, w, h, Math.min(U(12), h / 2));
+  const ar = isAr();
+  if (dot) {
+    const dx = ar ? x + w - pad - U(5) : x + pad + U(5), dy = y + U(9) + lh / 2;
+    circ(g, dx, dy, U(7)); g.fillStyle = dot; g.globalAlpha *= 0.22; g.fill(); g.globalAlpha /= 0.22;
+    circ(g, dx, dy, U(4)); g.fill();
+  }
+  let ly = y + U(9) + lh / 2;
+  for (const ln of lines) {
+    const lw = measure(ln, size, w8);
+    txt(ln, ar ? x + w - pad - dw - (tw - lw) / 2 : x + pad + dw + (tw - lw) / 2, ly + U(0.5), size, inkH(), ar ? 'right' : 'left', { w: w8, base: 'middle' });
+    ly += lh;
+  }
+  return y + h;
+}
 function wrapText(text, maxW, size, w) {
   if (measure(text, size, w) <= maxW) return [text];
   const words = text.split(' '), lines = []; let cur = '';
@@ -4206,155 +4258,179 @@ function boltIcon(x, y, s, col) {
   poly(g, [1.4, -5, -3.4, 1, -0.4, 1, -1.4, 5, 3.4, -1, 0.4, -1]); g.fillStyle = col; g.fill();
   g.restore();
 }
-function drawHUD() {
-  if (!(mode === 'run' || mode === 'launch' || mode === 'crash')) return;
-  const m = HUD.m, ml = HUD.ml, dim = 'rgba(214,222,238,0.78)';
-  // score, best and cells (left)
-  const s1 = U(24), pad = U(12);
-  const sw = measure(fmt(RUN.score), s1, 800), mw = RUN.mult > 1 ? measure('×' + RUN.mult, U(12), 800) + U(12) : 0;
-  const bestS = t('bestHud') + ' ' + fmt(Math.max(save.best, RUN.score)), bw = measureLS(bestS, U(10), 600, 1.4);
-  const cellS = fmt(RUN.cells), cw = measure(cellS, U(15), 700) + U(20) + (RUN.chain >= 5 ? measure('×' + RUN.chain, U(11), 700) + U(6) : 0);
-  const lw = Math.max(sw + (mw ? mw + U(8) : 0), bw, cw), lh = U(80);
-  chip(ml, m, lw + pad * 2, lh, U(18));
-  let x0 = ml + pad, y0 = m + U(9);
-  txt(fmt(RUN.score), x0, y0, s1, '#ffffff', 'left', { w: 800 });
-  if (RUN.mult > 1) {
-    const bx = x0 + sw + U(8), by = y0 + U(3);
-    rrect(g, bx, by, mw, U(18), U(9)); g.fillStyle = '#f2b705'; g.fill();
-    txt('×' + RUN.mult, bx + mw / 2, by + U(9.5), U(12), '#1a1405', 'center', { w: 800, base: 'middle', shadow: false });
-    pill(bx + U(3), by + U(21), mw - U(6), U(3), '#f2b705', 1 - RUN.multT / 5);
+// the speed limit sign Tesla shows beside the speed: a European disc for km/h (Saudi highways top out at 140),
+// a US plate for mph (85 on Texas SH 130, the fastest road in the US)
+function limitSign(cx, cy) {
+  if (isAr()) {
+    const r = U(15);
+    circ(g, cx, cy, r); g.fillStyle = '#ffffff'; g.fill();
+    circ(g, cx, cy, r - U(1.7)); g.lineWidth = U(3.2); g.strokeStyle = '#e31937'; g.stroke();
+    g.font = font(U(11), 700); g.textAlign = 'center'; g.textBaseline = 'middle'; g.direction = 'ltr';
+    g.fillStyle = '#171a20'; g.fillText('140', cx, cy + U(0.5));
+  } else {
+    const w = U(25), h = U(32), x = cx - w / 2, y = cy - h / 2;
+    rrect(g, x, y, w, h, U(3.5)); g.fillStyle = '#ffffff'; g.fill(); g.lineWidth = U(1); g.strokeStyle = 'rgba(23,26,32,0.25)'; g.stroke();
+    rrect(g, x + U(1.8), y + U(1.8), w - U(3.6), h - U(3.6), U(2.2)); g.lineWidth = U(1.1); g.strokeStyle = '#171a20'; g.stroke();
+    g.textAlign = 'center'; g.textBaseline = 'middle'; g.direction = 'ltr'; g.fillStyle = '#171a20';
+    g.font = font(U(4.6), 700); g.fillText('SPEED', cx, y + U(7.5)); g.fillText('LIMIT', cx, y + U(12.5));
+    g.font = font(U(12), 700); g.fillText('85', cx, y + U(22.5));
   }
-  txt(bestS, x0, y0 + s1 + U(4), U(10), dim, 'left', { w: 600, ls: 1.4 });
-  const cy = y0 + s1 + U(22), bump = 1 + (RUN.bump || 0) * 0.3, c = cellSpr();
-  g.save(); g.translate(x0 + U(6), cy + U(9)); g.scale(bump, bump); g.drawImage(c, -U(6), -U(9.5), U(12), U(19)); g.restore();
-  const cnw = txt(cellS, x0 + U(18), cy + U(1), U(15), '#8dffbc', 'left', { w: 700 });
-  if (RUN.chain >= 5) txt('×' + RUN.chain, x0 + U(24) + cnw, cy + U(4), U(11), '#ffd34d', 'left', { w: 700 });
-  // power-ups: icons with a ring that runs down
-  let px = ml + U(4);
-  const py = m + lh + U(8), pr = U(15);
+}
+// the driver's card: gear, battery, speed with its unit and the limit sign, and the way to the next Supercharger
+function drawCluster(x, y) {
+  const pad = U(14), ink = inkH(), dim = dimH(), kmh = isAr(), charging = P.charging;
+  const spd = String(Math.round(W.speed * PX2MPH * (kmh ? 1.609 : 1))), ss = U(40);
+  const foot = charging ? t('charging') : t('toCharge', (nextChargerFt() / 5280 * (kmh ? 1.609 : 1)).toFixed(1));
+  const fw = measure(foot, U(11), 500) + U(15), pctW = measure('100%', U(12), 600);
+  const w = Math.max(U(17) * 4 + U(14) + pctW + U(32), measure('888', ss, 500) + U(48), fw) + pad * 2, h = U(118);
+  card(x, y, w, h);
+  // the gear selector: parked on the line, in drive once launched
+  const gear = mode === 'run' ? 'D' : 'P', gy = y + U(19);
+  let gx = x + pad;
+  for (const ch of 'PRND') {
+    const on = ch === gear;
+    g.globalAlpha = on ? 1 : 0.5;
+    gx += txt(ch, gx, gy, U(12), on ? ink : dim, 'left', { w: on ? 700 : 500, base: 'middle' }) + U(9);
+  }
+  g.globalAlpha = 1;
+  // battery: the icon, then the charge
+  const low = P.battery < 25, flash = low && !charging && Math.floor(W.time * 4) % 2 === 0, right = x + w - pad;
+  const pw = txt(Math.max(0, Math.ceil(P.battery)) + '%', right, gy, U(12), low ? redH() : ink, 'right', { w: 600, base: 'middle' });
+  const iw = U(22), ih = U(11), ix = right - pw - U(9) - iw, iy = gy - ih / 2, f = clamp(P.battery / 100, 0, 1);
+  rrect(g, ix, iy, iw, ih, U(3)); g.lineWidth = U(1.3); g.strokeStyle = flash ? redH() : dim; g.stroke();
+  rrect(g, ix + iw + U(1.2), iy + ih * 0.3, U(2), ih * 0.4, U(1)); g.fillStyle = dim; g.fill();
+  if (f > 0) { rrect(g, ix + U(2.2), iy + U(2.2), Math.max(U(2), (iw - U(4.4)) * f), ih - U(4.4), U(1.5)); g.fillStyle = low && !charging ? redH() : greenH(); g.fill(); }
+  if (charging) boltIcon(ix + iw / 2, gy, U(0.95), Math.floor(W.time * 6) % 2 ? '#ffffff' : ink);
+  // speed and unit, with the limit sign beside them
+  txt(spd, x + pad - U(1), y + U(68), ss, P.plaid > 0 ? redH() : ink, 'left', { w: 500, base: 'alphabetic' });
+  txt(t('unit'), x + pad, y + U(84), U(11), dim, 'left', { w: 500, base: 'alphabetic' });
+  limitSign(right - U(15), y + U(60));
+  // a hairline, then the distance to the next Supercharger
+  g.fillStyle = hc('#dcdddf', '#34363b'); g.fillRect(x + pad, y + U(94), w - pad * 2, U(1));
+  const fy = y + U(106);
+  boltIcon(x + pad + U(4), fy, U(0.95), greenH());
+  txt(foot, x + pad + U(15), fy, U(11), charging ? greenH() : dim, 'left', { w: 500, base: 'middle' });
+  return { w, h };
+}
+// score card: the score with any multiplier, then cells and best
+function scoreSize() {
+  const sw = measure(fmt(RUN.score), U(24), 600), mw = RUN.mult > 1 ? measure('×' + RUN.mult, U(11), 600) + U(12) : 0;
+  const cellS = fmt(RUN.cells), chainS = RUN.chain >= 5 ? '×' + RUN.chain : '', bestS = t('bestHud') + ' ' + fmt(Math.max(save.best, RUN.score));
+  const l2 = U(14) + measure(cellS, U(12), 600) + (chainS ? U(4) + measure(chainS, U(11), 600) : 0) + U(16) + measure(bestS, U(11), 500);
+  return { w: Math.max(sw + (mw ? mw + U(8) : 0), l2) + U(32), h: U(64), sw, mw, cellS, chainS, bestS, l2 };
+}
+function drawScore(x, y, S) {
+  const ink = inkH(), dim = dimH(), cx = x + S.w / 2, top = S.sw + (S.mw ? S.mw + U(8) : 0);
+  card(x, y, S.w, S.h);
+  const sx = cx - top / 2;
+  txt(fmt(RUN.score), sx, y + U(28), U(24), ink, 'left', { w: 600, base: 'alphabetic' });
+  if (S.mw) {
+    const bx = sx + S.sw + U(8), by = y + U(10);
+    rrect(g, bx, by, S.mw, U(17), U(4)); g.fillStyle = blueH(); g.fill();
+    txt('×' + RUN.mult, bx + S.mw / 2, by + U(9), U(11), '#ffffff', 'center', { w: 600, base: 'middle' });
+    pill(bx + U(2), by + U(20), S.mw - U(4), U(2.5), blueH(), 1 - RUN.multT / 5, hc('#e3e4e6', '#3a3c42'));
+  }
+  // cells, chain and best on one line
+  const ly = y + U(46);
+  let lx = cx - S.l2 / 2;
+  const bump = 1 + (RUN.bump || 0) * 0.3, c = cellSpr();
+  g.save(); g.translate(lx + U(4.5), ly); g.scale(bump, bump); g.drawImage(c, -U(4.5), -U(7), U(9), U(14)); g.restore();
+  lx += U(14);
+  lx += txt(S.cellS, lx, ly, U(12), greenH(), 'left', { w: 600, base: 'middle' });
+  if (S.chainS) { lx += U(4); lx += txt(S.chainS, lx, ly, U(11), accent('#ffd23f'), 'left', { w: 600, base: 'middle' }); }
+  circ(g, lx + U(8), ly, U(1.3)); g.fillStyle = dim; g.fill();
+  lx += U(16);
+  txt(S.bestS, isAr() ? lx + measure(S.bestS, U(11), 500) : lx, ly, U(11), dim, isAr() ? 'right' : 'left', { w: 500, base: 'middle' });
+}
+function drawHUD(N) {
+  if (!(mode === 'run' || mode === 'launch' || mode === 'crash')) return;
+  hudTheme(N);
+  const m = HUD.m, ml = HUD.ml;
+  const C = drawCluster(ml, m), cRight = ml + C.w, cBottom = m + C.h;
+  // power-ups under the driver's card: icons with a ring that runs down
+  let px = ml;
+  const py = cBottom + U(8), pr = U(15);
   for (const [k, v, mx] of [['plaid', P.plaid, P.plaidMax], ['coil', P.coil, P.coilMax], ['fly', P.fly, P.flyMax], ['flame', P.flame, P.flameMax], ['shield', P.shield ? 1 : 0, 1]]) {
     if (v <= 0) continue;
     const cxp = px + pr, cyp = py + pr, f = clamp(v / mx, 0, 1);
-    circ(g, cxp, cyp, pr); g.fillStyle = 'rgba(10,13,24,0.55)'; g.fill();
-    g.beginPath(); g.arc(cxp, cyp, pr - U(1.5), -Math.PI / 2, -Math.PI / 2 + TAU * f); g.strokeStyle = POWER[k].col; g.lineWidth = U(3); g.lineCap = 'round'; g.stroke();
-    g.save(); g.translate(cxp, cyp); g.scale(U(15) / 9, U(15) / 9); powerIcon(g, k); g.restore();
+    card(px, py, pr * 2, pr * 2, pr);
+    g.beginPath(); g.arc(cxp, cyp, pr - U(2), 0, TAU); g.strokeStyle = hc('#e3e4e6', '#3a3c42'); g.lineWidth = U(2.5); g.stroke();
+    g.beginPath(); g.arc(cxp, cyp, pr - U(2), -Math.PI / 2, -Math.PI / 2 + TAU * f); g.strokeStyle = POWER[k].col; g.lineCap = 'round'; g.stroke();
+    g.save(); g.translate(cxp, cyp); g.scale(U(14) / 9, U(14) / 9); powerIcon(g, k); g.restore();
     px += pr * 2 + U(8);
   }
-  // speed in the middle and the battery on the right, kept clear of the left chip and the buttons
-  const mph = String(Math.round(W.speed * PX2MPH * (isAr() ? 1.609 : 1))), unit = t('unit'), ss = U(26), nw = measure(mph, ss, 800), uw = measureLS(unit, U(9), 700, 1.6);
-  const sw2 = nw + uw + U(8) + pad * 2, sh = U(44), leftEnd = ml + lw + pad * 2, rightStart = IW - HUD.mr - HUD.reserve;
-  const row2 = Math.max(m + U(52), HUD.btnBottom);
-  let sx = IW / 2 - sw2 / 2, sy = m;
-  if (sx < leftEnd + U(8) || sx + sw2 > rightStart - U(8)) {
-    if (rightStart - leftEnd - U(16) >= sw2) sx = (leftEnd + rightStart) / 2 - sw2 / 2; else sy = row2;
+  // the score sits top centre when there is room, otherwise under the buttons on the right
+  const S = scoreSize(), rightStart = IW - HUD.mr - HUD.reserve;
+  let sx = IW / 2 - S.w / 2, sy = m, row1 = true;
+  if (sx < cRight + U(10) || sx + S.w > rightStart - U(6)) {
+    const gl = cRight + U(10), gr = rightStart - U(6);
+    if (gr - gl >= S.w) sx = (gl + gr) / 2 - S.w / 2;
+    else { sx = IW - HUD.mr - S.w; sy = HUD.btnBottom + U(8); row1 = false; if (sx < cRight + U(8)) { sx = ml; sy = cBottom + U(54); } }
   }
-  const bwid = batteryWidth();
-  let bx = rightStart - bwid, by = m;
-  if (bx < (sy === m ? sx + sw2 : leftEnd) + U(10)) { bx = IW - HUD.mr - bwid; by = row2; }
-  if (by === sy && sx + sw2 > bx - U(8)) sx = Math.max(leftEnd + U(8), bx - U(8) - sw2);
-  chip(sx, sy, sw2, sh);
-  // the unit reads after the number: to its right in English, to its left in Arabic
-  const nx = isAr() ? sx + pad + uw + U(8) : sx + pad, ux = isAr() ? sx + pad : sx + pad + nw + U(6);
-  txt(mph, nx, sy + sh / 2 + U(1), ss, P.plaid > 0 ? '#ff8a96' : '#ffffff', 'left', { w: 800, base: 'middle' });
-  txt(unit, ux, sy + sh / 2 + U(isAr() ? 1 : 4), U(9), dim, 'left', { w: 700, ls: 1.6, base: 'middle' });
-  const batBottom = drawBattery(bx, by, bwid);
-  // centre message stack, below whatever sits on the second row
-  let y = Math.max(sy + sh, batBottom) + U(12);
-  if (W.boss) y = drawBossBar(y) + U(8);
-  const wrapW = Math.max(150, IW - 2 * (ml + U(110)));
+  drawScore(sx, sy, S);
+  // centre message stack: beside the driver's card when the score is up top, below everything otherwise
+  let y = row1 ? sy + S.h + U(10) : Math.max(sy + S.h, cBottom) + U(10);
+  const side = y < cBottom ? cRight + U(10) : ml;
+  const wrapW = Math.max(U(150), IW - 2 * side);
+  if (W.boss) y = drawBossBar(y, wrapW) + U(8);
   if (mode === 'launch') y = drawLaunchLights(y);
   for (const b of banners) {
-    const age = b.max - b.t, a = Math.min(1, b.t * 3, age * 8), sz = U(19), k = 0.9 + 0.1 * easeBack(Math.min(1, age * 5));
+    const age = b.max - b.t, a = Math.min(1, b.t * 3, age * 8), k = 0.9 + 0.1 * easeBack(Math.min(1, age * 5));
     g.globalAlpha = a;
-    for (const ln of wrapText(b.text, wrapW, sz, 800)) {
-      const w = measureLS(ln, sz, 800, 1.5);
-      g.save(); g.translate(IW / 2, y + U(19)); g.scale(k, k);
-      chip(-w / 2 - U(18), -U(19), w + U(36), U(38), U(19), 0.5);
-      rrect(g, -w / 2 - U(18), U(16), w + U(36), U(3), U(1.5)); g.fillStyle = b.col; g.globalAlpha = a * 0.9; g.fill(); g.globalAlpha = a;
-      txt(ln, 0, U(1), sz, b.col, 'center', { w: 800, ls: 1.5, base: 'middle' }); g.restore();
-      y += U(44);
-    }
-    g.globalAlpha = 1; y += U(4);
+    g.save(); g.translate(IW / 2, y); g.scale(k, k); g.translate(-IW / 2, -y);
+    const b2 = alertCard(b.text, y, U(15), 600, accent(b.col), wrapW);
+    g.restore(); g.globalAlpha = 1; y = b2 + U(8);
   }
   const fs = U(12);
   if (RUN.t060Show > 0 && mode === 'run') {
     g.globalAlpha = Math.min(1, RUN.t060Show * 2);
-    y = label(t('t060', RUN.t060.toFixed(2)), y, fs, '#ffffff', 700, 1.2) + U(8);
+    y = alertCard(t('t060', RUN.t060.toFixed(2)), y, fs, 500, null, wrapW) + U(8);
     g.globalAlpha = 1;
   }
   if (toasts.length) {
-    const t = toasts[0], a = Math.min(1, t.t * 3, (t.max - t.t) * 8), age = t.max - t.t;
-    const lines = wrapText(t.text, wrapW, fs, 700), lh2 = fs * 1.35, h = lines.length * lh2 + U(16);
-    let wmax = 0; for (const ln of lines) wmax = Math.max(wmax, measureLS(ln, fs, 700, 0.8));
-    const bw2 = wmax + U(40), bx = IW / 2 - bw2 / 2, slide = (1 - easeOut(Math.min(1, age * 5))) * U(-12);
+    const tt = toasts[0], a = Math.min(1, tt.t * 3, (tt.max - tt.t) * 8), age = tt.max - tt.t, slide = (1 - easeOut(Math.min(1, age * 5))) * U(-12);
     g.globalAlpha = a;
-    chip(bx, y + slide, bw2, h, Math.min(h / 2, U(16)), 0.62);
-    circ(g, bx + U(14), y + slide + h / 2, U(4)); g.fillStyle = t.col; g.fill();
-    let ly = y + slide + U(8); for (const ln of lines) { txt(ln, IW / 2 + U(6), ly, fs, '#ffffff', 'center', { w: 700, ls: 0.8, shadow: false }); ly += lh2; }
-    g.globalAlpha = 1; y += h + U(8);
+    y = alertCard(tt.text, y + slide, fs, 500, accent(tt.col), wrapW) - slide + U(8);
+    g.globalAlpha = 1;
   }
   if (hints.length && mode !== 'crash') {
     const h = hints[0], a = Math.min(1, h.t * 2, (h.max - h.t) * 6);
     g.globalAlpha = a;
-    for (const ln of wrapText(h.text, wrapW - U(28), fs, 600)) y = label(ln, y, fs, '#ffe7a3', 600, 0.8) + U(4);
+    y = alertCard(h.text, y, fs, 500, blueH(), wrapW) + U(4);
     g.globalAlpha = 1;
   }
 }
-const batteryWidth = () => U(24) + measure('100%', U(14), 700) + U(42);
-// the battery chip at (x0, y), with the distance to the next Supercharger underneath; returns its bottom
-function drawBattery(x0, y, cwid) {
-  const w = U(30), h = U(15), ptxt = Math.max(0, Math.ceil(P.battery)) + '%', fs = U(14), pad = U(12);
-  const tw = measure('100%', fs, 700), ch = U(44), right = x0 + cwid;
-  chip(x0, y, cwid, ch);
-  const low = P.battery < 25, flash = low && Math.floor(W.time * 4) % 2 === 0;
-  const col = P.battery > 50 ? '#3ddc84' : P.battery > 25 ? '#f2c94c' : '#ff4757';
-  txt(ptxt, x0 + pad + tw, y + ch / 2 + U(1), fs, low ? '#ff9aa5' : '#ffffff', 'right', { w: 700, base: 'middle' });
-  const bx = x0 + pad + tw + U(8), by = y + ch / 2 - h / 2;
-  rrect(g, bx, by, w, h, U(4)); g.lineWidth = U(1.6); g.strokeStyle = flash ? '#ff4757' : 'rgba(255,255,255,0.85)'; g.stroke();
-  rrect(g, bx + w + U(1.2), by + h * 0.3, U(2.4), h * 0.4, U(1)); g.fillStyle = 'rgba(255,255,255,0.85)'; g.fill();
-  const f = clamp(P.battery / 100, 0, 1);
-  if (f > 0) { rrect(g, bx + U(2.5), by + U(2.5), (w - U(5)) * f, h - U(5), U(2)); g.fillStyle = P.charging && Math.floor(W.time * 8) % 2 ? '#b6ffd2' : col; g.fill(); }
-  if (P.charging) boltIcon(bx + w / 2, by + h / 2, U(1.1), '#ffffff');
-  const ft = nextChargerFt(), lab = P.charging ? t('charging') : t('toCharge', (ft / 5280 * (isAr() ? 1.609 : 1)).toFixed(1));
-  const lw = measureLS(lab, U(10), 700, 1), ry = y + ch + U(5), rh = U(22), rw = lw + U(P.charging ? 20 : 32);
-  chip(right - rw, ry, rw, rh, rh / 2, 0.45);
-  txt(lab, right - U(10), ry + rh / 2 + U(0.5), U(10), '#8dffbc', 'right', { w: 700, ls: 1, base: 'middle', shadow: false });
-  if (!P.charging) boltIcon(right - U(10) - lw - U(8), ry + rh / 2, U(1), '#8dffbc');
-  return ry + rh;
-}
 function drawLaunchLights(y) {
   const r = U(8), gap = r * 2 + U(10), x0 = IW / 2 - gap * 1.5, w = gap * 3 + 2 * r + U(28), h = 2 * r + U(16);
-  chip(IW / 2 - w / 2, y, w, h, h / 2, 0.55);
+  card(IW / 2 - w / 2, y, w, h, h / 2);
   for (let i = 0; i < 4; i++) {
     const on = i < 3 ? (L.lights > i && !L.green) : L.green;
-    const col = i < 3 ? (on ? '#ff3b46' : 'rgba(255,59,70,0.18)') : (on ? '#3ddc84' : 'rgba(61,220,132,0.18)');
+    const col = i < 3 ? (on ? '#ff3b46' : hc('#f6d3d6', '#4a2a2e')) : (on ? '#2fd673' : hc('#cfeedb', '#244233'));
     const cx = x0 + i * gap, cy = y + h / 2;
     if (on) glowAt(cx, cy, r * 3, i < 3 ? 'rgba(255,46,70,0.7)' : 'rgba(61,255,122,0.7)');
     circ(g, cx, cy, r); g.fillStyle = col; g.fill();
   }
-  return label(L.green ? t('goGo') : t('launchOn'), y + h + U(6), U(11), L.green ? '#3ddc84' : '#ffffff', 800, 2) + U(8);
+  return alertCard(L.green ? t('goGo') : t('launchOn'), y + h + U(6), U(12), 600, L.green ? greenH() : null, IW) + U(8);
 }
-function drawBossBar(y) {
+function drawBossBar(y, maxW) {
   const B = W.boss; if (!B) return y;
-  const bw = Math.min(IW - 2 * (HUD.ml + U(110)), U(260)), bx = IW / 2 - bw / 2;
-  chip(bx - U(14), y, bw + U(28), U(40), U(14), 0.5);
-  txt(B.name, IW / 2, y + U(8), U(10), '#ff9aa5', 'center', { w: 800, ls: 2.4 });
-  const seg = bw / B.max, by = y + U(25);
+  const bw = Math.min(maxW - U(28), U(260)), bx = IW / 2 - bw / 2;
+  card(bx - U(14), y, bw + U(28), U(42));
+  txt(B.name, IW / 2, y + U(14), U(11), inkH(), 'center', { w: 600, base: 'middle' });
+  const seg = bw / B.max, by = y + U(27);
   for (let i = 0; i < B.max; i++) {
-    rrect(g, bx + i * seg + U(1), by, Math.max(U(2), seg - U(2)), U(6), U(3));
-    g.fillStyle = i < B.hp ? (B.flash > 0 ? '#ffffff' : '#ff3b46') : 'rgba(255,255,255,0.14)'; g.fill();
+    rrect(g, bx + i * seg + U(1), by, Math.max(U(2), seg - U(2)), U(5), U(2.5));
+    g.fillStyle = i < B.hp ? (B.flash > 0 ? hc('#ff9aa5', '#ffffff') : redH()) : hc('#e3e4e6', '#3a3c42'); g.fill();
   }
-  return y + U(46);
+  return y + U(42);
 }
 function drawPrompt() {
-  if (!(mode === 'attract' || mode === 'launch' || (mode === 'run' && RUN.time < 8))) return;
-  if (mode === 'attract' && !$('scrTitle').classList.contains('on')) return;
+  if (!(mode === 'launch' || (mode === 'run' && RUN.time < 8))) return;
   const msg = t('holdPrompt');
-  let sz = U(11); const mw0 = measureLS(msg, sz, 700, 1.8); if (mw0 > IW - U(60)) sz *= (IW - U(60)) / mw0;
-  const w = measureLS(msg, sz, 700, 1.8) + U(36), h = U(34), y = IH - HUD.m - h - U(4);
-  g.globalAlpha = 0.75 + 0.25 * Math.sin(W.time * 3);
-  chip(IW / 2 - w / 2, y, w, h, h / 2, 0.45);
-  txt(msg, IW / 2, y + h / 2 + U(1), sz, '#ffffff', 'center', { w: 700, ls: 1.8, base: 'middle', shadow: false });
+  let sz = U(12); const mw0 = measure(msg, sz, 500); if (mw0 > IW - U(70)) sz *= (IW - U(70)) / mw0;
+  const h = U(34), y = IH - HUD.m - h - U(4);
+  g.globalAlpha = 0.8 + 0.2 * Math.sin(W.time * 3);
+  alertCard(msg, y, sz, 500, null, IW);
   g.globalAlpha = 1;
 }
 
@@ -4382,7 +4458,7 @@ function render() {
   drawWarpAndWarning();
   camera();
   if (W.flash > 0 && !reduceMotion) { g.fillStyle = `rgba(255,255,255,${(W.flash * 0.75).toFixed(3)})`; g.fillRect(-12, -12, IW + 24, IH + 24); }
-  drawHUD();
+  drawHUD(N);
   drawPrompt();
 }
 
@@ -4471,11 +4547,12 @@ const SCREENS = ['scrTitle', 'scrGarage', 'scrMissions', 'scrPause', 'scrOver'];
 let backTo = 'scrTitle';
 function show(id) {
   for (const s of SCREENS) $(s).classList.toggle('on', s === id);
+  app.classList.toggle('on-title', id === 'scrTitle');
   const el = $(id); el.scrollTop = 0;
   const f = el.querySelector('.btn.primary:not([hidden]):not([disabled])') || el.querySelector('.btn:not([hidden]):not([disabled])');
   if (f) requestAnimationFrame(() => { try { f.focus({ preventScroll: true }); } catch (e) { f.focus(); } });
 }
-function hideAll() { for (const s of SCREENS) $(s).classList.remove('on'); }
+function hideAll() { for (const s of SCREENS) $(s).classList.remove('on'); app.classList.remove('on-title'); }
 function announce(t) { live.textContent = ''; setTimeout(() => { live.textContent = t; }, 40); }
 function cellAmount(n) { return `<i class="cellico" aria-hidden="true"></i>${fmt(n)}`; }
 
@@ -4508,7 +4585,7 @@ function goTitle() {
   resetPlayer(); resetRun(); newWorld(true);
   btnPause.hidden = true;
   refreshTitle(); syncOpts();
-  btnLang.hidden = false;
+  btnLang.hidden = false; HT.set = false; delete app.dataset.hud;
   show('scrTitle');
 }
 function startRun() {
@@ -4518,7 +4595,7 @@ function startRun() {
   resetPlayer(); resetRun(); newWorld(false);
   mode = 'launch'; paused = false; holding = false; latch = false; keys.clear(); pointers.clear();
   L.t = 0; L.greenAt = 1.65 + rand(0.1, 0.8); L.lights = 0; L.green = false; L.done = false;
-  btnPause.hidden = false; btnLang.hidden = true;
+  btnPause.hidden = false; btnLang.hidden = true; HT.set = false;
   if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
   if (save.runs < 2) hint('launch', t('hLaunch', coarse));
 }
@@ -4698,7 +4775,7 @@ setInterval(() => { if ($('scrTitle').classList.contains('on') && !document.hidd
 /* =========================================================
    Input
    ========================================================= */
-function isUI(t) { return !!(t && t.closest && t.closest('button, .slab, .title-wrap, .hudbtns, a, input')); }
+function isUI(t) { return !!(t && t.closest && t.closest('button, .card, .hudbtns, a, input')); }
 function press() {
   if (paused) return;
   if (mode === 'launch') { launchPress(); holding = true; latch = true; return; }
@@ -4769,6 +4846,23 @@ for (const b of document.querySelectorAll('[data-world]')) b.addEventListener('c
 });
 for (const b of document.querySelectorAll('[data-diff]')) b.addEventListener('click', () => { SFX.click(); save.diff = b.dataset.diff; persist(); syncOpts(); });
 document.querySelectorAll('[data-back]').forEach(b => b.addEventListener('click', goBack));
+
+/* ---------- install to the home screen, and play offline ---------- */
+const btnInstall = $('btnInstall'), installTip = $('installTip'), web = /^https?:$/.test(location.protocol);
+let installEvt = null;
+const installed = () => (window.matchMedia && (matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: fullscreen)').matches)) || navigator.standalone === true;
+// iPhone and iPad browsers have no install prompt, so there the button points to the Share menu instead
+const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+if (iOS && web && !installed()) btnInstall.hidden = false;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; btnInstall.hidden = false; });
+window.addEventListener('appinstalled', () => { installEvt = null; btnInstall.hidden = true; installTip.hidden = true; });
+btnInstall.addEventListener('click', () => {
+  SFX.click();
+  if (installEvt) { const e = installEvt; installEvt = null; btnInstall.hidden = true; e.prompt(); }
+  else { installTip.hidden = !installTip.hidden; if (!installTip.hidden) installTip.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' }); }
+});
+// the service worker keeps the game on the device after the first visit
+if ('serviceWorker' in navigator && web) window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
 
 /* =========================================================
    Main loop & boot

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -31,7 +31,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231a1530'/%3E%3Cpath d='M8.5 21c-1.6 3.4-1 6.4 0 8 1-1.6 1.6-4.6 0-8zM20.5 21c-1.6 3.4-1 6.4 0 8 1-1.6 1.6-4.6 0-8z' fill='%234cc3ff'/%3E%3Cpath d='M2.6 16.4c3.4-2.6 6.6-3.8 10.4-4.4 3.6-.6 6.4.4 8.6 2.6 3.2.4 5.8 1.2 7.6 2.6.6.8.4 2.2-.4 3H3.6c-1.4-.6-1.6-2.4-1-3.8z' fill='%23f2f5fa' stroke='%23000' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cpath d='M10.4 14.6c2.6-1.4 6-1.8 8.6-.2l1 1.6h-9.6z' fill='%232c4778'/%3E%3Ccircle cx='8.5' cy='19.6' r='3' fill='%231f1d29' stroke='%23000'/%3E%3Ccircle cx='22.6' cy='19.6' r='3' fill='%231f1d29' stroke='%23000'/%3E%3Ccircle cx='8.5' cy='19.6' r='1.4' fill='%23d9dfe8'/%3E%3Ccircle cx='22.6' cy='19.6' r='1.4' fill='%23d9dfe8'/%3E%3Crect x='2.4' y='15.8' width='1.6' height='1.4' rx='.5' fill='%23ff2a3d'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400..800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400..800&family=Montserrat:wght@400..800&display=swap">
 <style>
 :root{
   box-sizing:border-box;
@@ -121,6 +121,12 @@ body{
   -webkit-tap-highlight-color:transparent;
 }
 #game{position:absolute;inset:0;width:100%;height:100%;display:block;-webkit-user-drag:none}
+/* Arabic: Cairo for the letters, and no letter spacing or capitals, which break joined script */
+html[lang="ar"]{--font:"Cairo","Montserrat",system-ui,sans-serif}
+html[lang="ar"] body *{letter-spacing:0 !important;text-transform:none !important}
+html[lang="ar"] .logo-word,html[lang="ar"] .logo-sub,html[lang="ar"] .btn.primary{margin-right:0}
+html[lang="ar"] .logo-word{font-size:clamp(2.8rem,11vw,4.4rem);line-height:1.15}
+html[lang="ar"] .logo-sub{font-size:1rem}
 /* no text selection, callouts or drag on long press anywhere in the game */
 #app,#app *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 
@@ -143,6 +149,8 @@ body{
 .ibtn:active{transform:scale(.94)}
 .ibtn:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
 .ibtn[hidden]{display:none}
+.ibtn.lang span{font-family:"Montserrat","Cairo",system-ui,sans-serif;font-weight:700;font-size:.82rem}
+html[lang="en"] .ibtn.lang span{font-family:"Cairo",system-ui,sans-serif;font-size:1rem}
 #btnMute .off{display:none}
 #btnMusic .slash{display:none}
 #btnMusic[aria-pressed="false"] .slash{display:inline}
@@ -183,6 +191,16 @@ body{
 .meme{margin:0;max-width:36ch;font-size:.88rem;font-weight:500;color:var(--plume);min-height:2.6em}
 .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
 .controls{display:grid;gap:10px;width:100%}
+.opts{display:grid;gap:8px;width:100%}
+.opt{display:grid;grid-template-columns:76px 1fr;align-items:center;gap:10px}
+.opt-l{font-size:.66rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);text-align:start}
+html[lang="ar"] .opt-l{font-size:.85rem}
+.seg{display:flex;gap:3px;padding:3px;border-radius:13px;background:var(--glass);border:1px solid var(--edge);-webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%)}
+.seg button{flex:1 1 auto;white-space:nowrap;appearance:none;border:0;background:transparent;color:var(--text-dim);font:inherit;font-weight:600;font-size:.84rem;min-height:36px;padding:4px 10px;border-radius:10px;cursor:pointer;transition:background .15s,color .15s}
+.seg button:hover{color:var(--text);background:var(--well)}
+.seg button[aria-checked="true"]{background:var(--text);color:var(--page);box-shadow:0 4px 12px -6px rgba(0,0,0,.5)}
+.seg button:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+html[dir="rtl"] [data-back] .ico{transform:scaleX(-1)}
 .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:4px 0 0;width:100%}
 .stats div{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0;padding:9px 6px;border-radius:14px;background:var(--glass);border:1px solid var(--edge)}
 .stats dt{font-size:.66rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim)}
@@ -194,7 +212,7 @@ body{
 @media (orientation:portrait) and (max-width:600px){.rotate-tip{display:block}}
 
 @media (orientation:landscape) and (max-height:560px){
-  .title-wrap{width:min(100%,860px);grid-template-columns:1.1fr 1fr;align-items:center;text-align:left;justify-items:stretch;gap:14px 36px;margin-top:8px;padding-right:110px}
+  .title-wrap{width:min(100%,860px);grid-template-columns:1.1fr 1fr;align-items:center;text-align:start;justify-items:stretch;gap:14px 36px;margin-top:8px;padding-right:110px}
   .title-wrap .brand{justify-items:start}
   .logo{justify-items:start}
   .logo-sub::before{display:none}
@@ -307,13 +325,14 @@ p{margin:0}
 </head>
 <body>
 <div id="app">
-  <canvas id="game" role="img" aria-label="Roadster: Fly Mode. A side-scrolling cartoon flying car game."></canvas>
+  <canvas id="game" role="img" data-ta="canvas" aria-label="Roadster: Fly Mode. A side-scrolling cartoon flying car game."></canvas>
 
   <div class="hudbtns">
-    <button class="ibtn" id="btnPause" type="button" aria-label="Pause" hidden>
+    <button class="ibtn lang" id="btnLang" type="button" aria-label="Switch to English"><span>EN</span></button>
+    <button class="ibtn" id="btnPause" type="button" data-ta="pause" aria-label="Pause" hidden>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg>
     </button>
-    <button class="ibtn" id="btnMusic" type="button" aria-label="Music" aria-pressed="true">
+    <button class="ibtn" id="btnMusic" type="button" data-ta="music" aria-label="Music" aria-pressed="true">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 17.5V6.5l9-2v11"/><circle cx="7" cy="17.5" r="2.5"/><circle cx="16" cy="15.5" r="2.5"/><path class="slash" d="M3.5 3.5l17 17"/></svg>
     </button>
     <button class="ibtn" id="btnMute" type="button" aria-label="Mute sound" aria-pressed="false">
@@ -324,82 +343,92 @@ p{margin:0}
   <section class="screen" id="scrTitle" aria-labelledby="titleH">
     <div class="title-wrap">
       <div class="brand">
-        <h1 id="titleH" class="logo"><span class="logo-word">Roadster</span> <span class="logo-sub">Fly Mode</span></h1>
-        <p class="tagline" id="tagline">Hold to fire the cold-gas thrusters. Stomp the monsters, beat the bosses and make it to Mars.</p>
+        <h1 id="titleH" class="logo"><span class="logo-word" data-t="logoWord">Roadster</span> <span class="logo-sub" data-t="logoSub">Fly Mode</span></h1>
+        <p class="tagline" id="tagline"></p>
         <p class="meme" id="meme"></p>
       </div>
       <div class="controls">
-        <button class="btn primary" id="btnDrive" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2.2"/><path d="M3.8 11h6M14.2 11h6M12 14.2v6.3"/></svg>Drive</button>
+        <div class="opts">
+          <div class="opt"><span class="opt-l" id="worldL" data-t="world">World</span>
+            <div class="seg" id="segWorld" role="radiogroup" aria-labelledby="worldL">
+              <button type="button" role="radio" data-world="saudi" data-t="saudi">Saudi Arabia</button><button type="button" role="radio" data-world="texas" data-t="texas">Texas</button>
+            </div></div>
+          <div class="opt"><span class="opt-l" id="diffL" data-t="difficulty">Difficulty</span>
+            <div class="seg" id="segDiff" role="radiogroup" aria-labelledby="diffL">
+              <button type="button" role="radio" data-diff="easy" data-t="easy">Easy</button><button type="button" role="radio" data-diff="normal" data-t="normal">Normal</button><button type="button" role="radio" data-diff="hard" data-t="hard">Hard</button>
+            </div></div>
+        </div>
+        <button class="btn primary" id="btnDrive" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2.2"/><path d="M3.8 11h6M14.2 11h6M12 14.2v6.3"/></svg><span data-t="drive">Drive</span></button>
         <div class="btn-row">
-          <button class="btn" id="btnGarage" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 15.5l1.7-4.4A2.2 2.2 0 0 1 7.2 9.6h9.6a2.2 2.2 0 0 1 2 1.5l1.7 4.4"/><path d="M3.5 15.5h17v2.8h-17z"/><circle cx="7.5" cy="18.3" r="1.6"/><circle cx="16.5" cy="18.3" r="1.6"/></svg>Garage</button>
-          <button class="btn" id="btnMissions" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 21V4"/><path d="M5.5 4.5h11.5l-2.4 4.2 2.4 4.3H5.5"/></svg>Missions</button>
+          <button class="btn" id="btnGarage" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 15.5l1.7-4.4A2.2 2.2 0 0 1 7.2 9.6h9.6a2.2 2.2 0 0 1 2 1.5l1.7 4.4"/><path d="M3.5 15.5h17v2.8h-17z"/><circle cx="7.5" cy="18.3" r="1.6"/><circle cx="16.5" cy="18.3" r="1.6"/></svg><span data-t="garage">Garage</span></button>
+          <button class="btn" id="btnMissions" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 21V4"/><path d="M5.5 4.5h11.5l-2.4 4.2 2.4 4.3H5.5"/></svg><span data-t="missions">Missions</span></button>
         </div>
         <dl class="stats">
-          <div><dt>Best</dt><dd id="tBest">0</dd></div>
-          <div><dt>Cells</dt><dd id="tBank">0</dd></div>
-          <div><dt>Rank</dt><dd id="tRank" class="wrap">Test driver</dd></div>
+          <div><dt data-t="best">Best</dt><dd id="tBest">0</dd></div>
+          <div><dt data-t="cells">Cells</dt><dd id="tBank">0</dd></div>
+          <div><dt data-t="rank">Rank</dt><dd id="tRank" class="wrap">Test driver</dd></div>
         </dl>
-        <p class="fine">Unofficial fan game. Not affiliated with Tesla, Inc.</p>
+        <p class="fine" data-t="fine">Unofficial fan game. Not affiliated with Tesla, Inc.</p>
       </div>
     </div>
   </section>
 
   <section class="screen modal" id="scrGarage" aria-labelledby="garageH">
     <div class="slab"><div class="slab-in">
-      <div class="slab-head"><h2 id="garageH">Garage</h2><span class="bank"><i class="cellico" aria-hidden="true"></i><span><b id="gBank">0</b> cells</span></span></div>
+      <div class="slab-head"><h2 id="garageH" data-t="garage">Garage</h2><span class="bank"><i class="cellico" aria-hidden="true"></i><span><b id="gBank">0</b> <span data-t="cellsWord">cells</span></span></span></div>
       <div class="studio"><canvas id="garageCar" width="864" height="240" aria-hidden="true"></canvas></div>
-      <h3 id="paintH">Paint</h3>
+      <h3 id="paintH" data-t="paint">Paint</h3>
       <div class="swatches" id="paints" role="radiogroup" aria-labelledby="paintH"></div>
       <p class="dim" id="gMsg" aria-live="polite"></p>
-      <h3>Upgrades</h3>
+      <h3 data-t="upgrades">Upgrades</h3>
       <ul class="ups" id="ups"></ul>
-      <h3>Easter eggs</h3>
+      <h3 data-t="eggs">Easter eggs</h3>
       <ul class="ups" id="eggs"></ul>
-      <button class="btn" type="button" data-back><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5"/></svg>Back</button>
+      <button class="btn" type="button" data-back><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5"/></svg><span data-t="back">Back</span></button>
     </div></div>
   </section>
 
   <section class="screen modal" id="scrMissions" aria-labelledby="missionsH">
     <div class="slab"><div class="slab-in">
-      <div class="slab-head"><h2 id="missionsH">Missions</h2><span class="chip-label" id="mRank">Test driver</span></div>
+      <div class="slab-head"><h2 id="missionsH" data-t="missions">Missions</h2><span class="chip-label" id="mRank">Test driver</span></div>
       <div class="rankline">
         <p class="dim" id="mRankNote">Finish 3 missions to rank up.</p>
         <div class="bar" aria-hidden="true"><b id="mRankBar" style="width:0%"></b></div>
       </div>
       <ul class="missions" id="mList"></ul>
-      <p class="dim small">Missions carry over between runs. Rewards land in your cell bank the moment you finish one.</p>
-      <button class="btn" type="button" data-back><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5"/></svg>Back</button>
+      <p class="dim small" data-t="missionsNote">Missions carry over between runs. Rewards land in your cell bank the moment you finish one.</p>
+      <button class="btn" type="button" data-back><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5"/></svg><span data-t="back">Back</span></button>
     </div></div>
   </section>
 
   <section class="screen modal" id="scrPause" aria-labelledby="pauseH">
     <div class="slab"><div class="slab-in">
-      <h2 id="pauseH">Paused</h2>
+      <h2 id="pauseH" data-t="paused">Paused</h2>
       <ul class="missions" id="pList"></ul>
-      <button class="btn primary" id="btnResume" type="button"><svg class="ico fill" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Resume</button>
+      <button class="btn primary" id="btnResume" type="button"><svg class="ico fill" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><span data-t="resume">Resume</span></button>
       <div class="btn-row">
-        <button class="btn" id="btnRestart" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 4.5v4.2h4.2"/></svg>Restart</button>
-        <button class="btn" id="btnQuit" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6.8 8 6.8"/><path d="M6.2 9.4V20h11.6V9.4"/></svg>Home</button>
+        <button class="btn" id="btnRestart" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 4.5v4.2h4.2"/></svg><span data-t="restart">Restart</span></button>
+        <button class="btn" id="btnQuit" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6.8 8 6.8"/><path d="M6.2 9.4V20h11.6V9.4"/></svg><span data-t="home">Home</span></button>
       </div>
     </div></div>
   </section>
 
   <section class="screen modal" id="scrOver" aria-labelledby="overH">
     <div class="slab"><div class="slab-in">
-      <h2 id="overH" class="sr-only">Run over</h2>
+      <h2 id="overH" class="sr-only" data-t="runOver">Run over</h2>
       <p class="cause" id="oCause">You hit a gas car.</p>
-      <div class="scoreline"><span class="big" id="oScore">0</span><span class="newbest" id="oNew" hidden>New best</span></div>
+      <div class="scoreline"><span class="big" id="oScore">0</span><span class="newbest" id="oNew" data-t="newBest" hidden>New best</span></div>
       <dl class="stats">
-        <div><dt>Distance</dt><dd id="oDist">0 mi</dd></div>
-        <div><dt>Cells</dt><dd id="oCells">0</dd></div>
-        <div><dt>Best</dt><dd id="oBest">0</dd></div>
+        <div><dt data-t="distance">Distance</dt><dd id="oDist">0 mi</dd></div>
+        <div><dt data-t="cells">Cells</dt><dd id="oCells">0</dd></div>
+        <div><dt data-t="best">Best</dt><dd id="oBest">0</dd></div>
       </dl>
       <ul class="missions" id="oList"></ul>
       <button class="btn accent" id="btnRevive" type="button">Revive</button>
-      <button class="btn primary" id="btnAgain" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 4.5v4.2h4.2"/></svg>Drive again</button>
+      <button class="btn primary" id="btnAgain" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 4.5v4.2h4.2"/></svg><span data-t="driveAgain">Drive again</span></button>
       <div class="btn-row">
-        <button class="btn" id="btnOverGarage" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 15.5l1.7-4.4A2.2 2.2 0 0 1 7.2 9.6h9.6a2.2 2.2 0 0 1 2 1.5l1.7 4.4"/><path d="M3.5 15.5h17v2.8h-17z"/><circle cx="7.5" cy="18.3" r="1.6"/><circle cx="16.5" cy="18.3" r="1.6"/></svg>Garage</button>
-        <button class="btn" id="btnHome" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6.8 8 6.8"/><path d="M6.2 9.4V20h11.6V9.4"/></svg>Home</button>
+        <button class="btn" id="btnOverGarage" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 15.5l1.7-4.4A2.2 2.2 0 0 1 7.2 9.6h9.6a2.2 2.2 0 0 1 2 1.5l1.7 4.4"/><path d="M3.5 15.5h17v2.8h-17z"/><circle cx="7.5" cy="18.3" r="1.6"/><circle cx="16.5" cy="18.3" r="1.6"/></svg><span data-t="garage">Garage</span></button>
+        <button class="btn" id="btnHome" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6.8 8 6.8"/><path d="M6.2 9.4V20h11.6V9.4"/></svg><span data-t="home">Home</span></button>
       </div>
     </div></div>
   </section>
@@ -436,7 +465,8 @@ const defaultSave = () => ({
   best: 0, bank: 0, lifetime: 0, runs: 0,
   up: { battery: 0, thrust: 0, coil: 0, plaid: 0 },
   paints: ['pearl'], paint: 'pearl', muted: false,
-  rank: 0, done: 0, missions: null, seen: {}, music: true, toot: false
+  rank: 0, done: 0, missions: null, seen: {}, music: true, toot: false,
+  diff: 'normal', lang: null, world: 'saudi'
 });
 let save = defaultSave();
 try {
@@ -454,6 +484,194 @@ try {
 function persist() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) { /* ignore */ } }
 
 /* =========================================================
+   Language: English and Arabic (Arabic is the default)
+   ========================================================= */
+let LANG = save.lang === 'en' ? 'en' : 'ar';
+const isAr = () => LANG === 'ar';
+// Arabic counted nouns: 1, 2, 3-10 and 11+ take different forms; forms = [one, two, few, many]
+function nAr(n, f) { if (n === 1) return f[0]; if (n === 2) return f[1]; const r = n % 100; return `${n} ${r >= 3 && r <= 10 ? f[2] : f[3]}`; }
+const toKm = mi => Math.round(mi * 16.09) / 10;
+const toKmh = mph => Math.round(mph * 1.609 / 5) * 5;
+const STR = {
+  en: {
+    canvas: 'Roadster: Fly Mode. A side-scrolling cartoon flying car game.',
+    logoWord: 'Roadster', logoSub: 'Fly Mode', pause: 'Pause', music: 'Music', mute: 'Mute sound', unmute: 'Unmute sound',
+    langBtn: 'ع', langAria: 'التبديل إلى العربية',
+    tagline: coarse => `${coarse ? 'Hold anywhere' : 'Hold Space or the mouse button'} to fire the cold-gas thrusters. Dodge zappers and missiles, stomp the monsters, beat the bosses and make it to Mars.`,
+    drive: 'Drive', garage: 'Garage', missions: 'Missions', best: 'Best', cells: 'Cells', rank: 'Rank',
+    fine: 'Unofficial fan game. Not affiliated with Tesla, Inc.',
+    world: 'World', saudi: 'Saudi Arabia', texas: 'Texas', difficulty: 'Difficulty', easy: 'Easy', normal: 'Normal', hard: 'Hard',
+    cellsWord: 'cells', paint: 'Paint', upgrades: 'Upgrades', eggs: 'Easter eggs', back: 'Back',
+    missionsNote: 'Missions carry over between runs. Rewards land in your cell bank the moment you finish one.',
+    paused: 'Paused', resume: 'Resume', restart: 'Restart', home: 'Home', runOver: 'Run over', newBest: 'New best',
+    distance: 'Distance', driveAgain: 'Drive again', reviveFor: 'Revive for', reviveAria: n => `Revive and keep going for ${n} cells`,
+    done: 'Done', owned: 'Owned', equipped: 'Equipped', upgrade: 'Upgrade', maxed: 'Maxed', turnOn: 'Turn on', turnOff: 'Turn off',
+    swatchAria: (name, owned, sel, cost) => `${name}, ${owned ? (sel ? 'equipped' : 'owned') : `unlock for ${cost} cells`}`,
+    upAria: (name, lv, cost) => `Upgrade ${name} to level ${lv} for ${cost} cells`,
+    paintOn: name => `${name} equipped.`, paintNew: name => `${name} unlocked and equipped.`,
+    paintShort: (name, n) => `${name} needs ${n} more cells. Collect them on the road.`, upDone: (name, lv) => `${name} upgraded to level ${lv}.`,
+    eggName: 'Emissions testing mode', eggDesc: 'Your thrusters make a rude noise. Tesla hid the same joke in its cars.',
+    rankNote: (left, next) => `${left} more mission${left === 1 ? '' : 's'} to reach ${next}.`,
+    crashed: 'You crashed.', runAnnounce: (s, nb) => `Run over. Score ${s}.${nb ? ' New best.' : ''}`,
+    missionAnnounce: (txt, rw) => `Mission complete: ${txt}. ${rw} cells added.`,
+    // HUD
+    bestHud: 'BEST', unit: 'MPH', toCharge: d => `${d} MI TO CHARGE`, charging: 'CHARGING', t060: s => `0–60 MPH IN ${s} S`,
+    launchOn: 'LAUNCH ON GREEN', goGo: 'GO!', holdPrompt: 'HOLD ANYWHERE TO FIRE THRUSTERS', distUnit: 'mi', gasLabel: 'GAS',
+    // banners, toasts and floating scores
+    plaid: 'PLAID MODE', coil: 'TESLA COIL', shield: 'BIOWEAPON DEFENSE MODE', fly: 'FLY MODE', flame: 'NOT A FLAMETHROWER',
+    shieldDown: 'SHIELD DOWN', lowBattery: 'LOW BATTERY', outOfCharge: 'OUT OF CHARGE', ludicrous: 'LUDICROUS SPEED', funded: 'FUNDING SECURED',
+    warning: 'WARNING', defeated: n => `${n} DEFEATED`, incoming: n => `${n} INCOMING`, down: n => `${n} DOWN`,
+    toMars: 'NEXT STOP: MARS', toEarth: 'BACK TO EARTH', toSaudi: 'BACK TO SAUDI ARABIA', backInRace: 'BACK IN THE RACE',
+    go: 'GO', jumpStart: 'JUMP START', perfectLaunch: 'PERFECT LAUNCH', goodLaunch: 'GOOD LAUNCH',
+    boosterLanded: 'THE BOOSTER STUCK THE LANDING', spaceSpotted: 'SPACE ROADSTER SPOTTED +500',
+    missionDone: n => `MISSION DONE +${n} CELLS`, rankUp: (r, n) => `RANK UP: ${r.toUpperCase()} +${n}`,
+    roofSurf: 'ROOF SURF', hop: 'HOP', closeCall: 'CLOSE CALL', smash: 'SMASH', coneHit: 'CONE -6%', rockHit: 'ROCK -6%', loop: 'LOOP',
+    supercharged: 'SUPERCHARGED', stomp: 'STOMP', stompN: n => `STOMP ×${n}`, blast: 'BLAST', torched: 'TORCHED', pop: 'POP', zapF: 'ZAP',
+    // hints
+    hBattery: 'GRAB GREEN CELLS TO RECHARGE', hCharger: 'STAY ON THE ROAD THROUGH THE SUPERCHARGER', hGas: 'HOP GAS CARS, OR LAND ON THEIR ROOFS',
+    hHold: 'HOLD TO FIRE THE THRUSTERS. LET GO TO DROP.', hLaunch: c => c ? 'TAP THE MOMENT THE LIGHT TURNS GREEN' : 'PRESS SPACE OR CLICK THE MOMENT THE LIGHT TURNS GREEN',
+    hLoop: 'FAN GRIP ON: THE ROADSTER STICKS TO THE TRACK', hBoss: 'GRAB THE BLUE COIL ORBS TO ZAP THE BOSS',
+    hMissile: 'MISSILE! MOVE AWAY FROM ITS HEIGHT BEFORE IT LOCKS ON', hMonster: 'LAND ON MONSTERS OR BLAST THEM WITH YOUR THRUSTERS',
+    hWorm: 'SANDWORM! FLY HIGH OVER IT', hZapper: 'ZAPPER! STEER CLEAR OF THE ELECTRIC ARC',
+    // bosses
+    boss_smog: 'SMOG KING', boss_dust: 'DUST KING', boss_mother: 'MOTHERSHIP',
+    // paints
+    paint_pearl: 'Pearl white', paint_red: 'Ultra red', paint_blue: 'Deep blue', paint_silver: 'Quicksilver', paint_grey: 'Stealth grey',
+    paint_green: 'Saudi green', paint_cherry: 'Midnight cherry', paint_black: 'Diamond black',
+    // upgrades
+    up_battery: 'Battery pack', up_battery_d: lv => lv ? `Drains ${lv * 10}% slower` : 'Stock pack. Each level drains 10% slower.',
+    up_thrust: 'Cold-gas tanks', up_thrust_d: s => `${s} s of thrust per tank`,
+    up_coil: 'Tesla coil', up_coil_d: s => `Cell magnet lasts ${s} s`,
+    up_plaid: 'Plaid mode', up_plaid_d: s => `Smash-through boost lasts ${s} s`,
+    // missions
+    m_cells: n => `Collect ${n} cells in one run`, m_miles: n => `Drive ${n} mile${n === 1 ? '' : 's'} in one run`,
+    m_hops: n => `Hop over ${n} gas cars in one run`, m_roofs: n => `Land on ${n} gas car roof${n > 1 ? 's' : ''} in one run`,
+    m_loops: n => `Drive ${n} loop${n > 1 ? 's' : ''} in one run`, m_supers: n => `Supercharge ${n} time${n > 1 ? 's' : ''} in one run`,
+    m_smash: n => `Smash ${n} obstacles in Plaid mode`, m_close: n => `Pull off ${n} close call${n > 1 ? 's' : ''} in one run`,
+    m_air: n => `Stay airborne for ${n} seconds in one run`, m_mph: n => `Reach ${n} mph`, m_chain: n => `Chain ${n} cells in a row`,
+    m_perfect: () => 'Nail a perfect launch on green', m_powers: n => `Grab ${n} power-ups in one run`,
+    m_stomps: n => `Stomp ${n} monster${n > 1 ? 's' : ''} in one run`, m_blasts: n => `Blast ${n} monster${n > 1 ? 's' : ''} with your thrusters`,
+    m_bosses: () => 'Defeat a boss', m_mars: () => 'Make it to Mars', m_mult: n => `Build a ×${n} score multiplier`,
+    m_flames: n => `Torch ${n} things with the not-a-flamethrower`, m_spotted: () => 'Spot the Roadster drifting through space',
+    m_ludi: () => 'Hit ludicrous speed (200 mph)', m_dodged: n => `Dodge ${n} missile${n > 1 ? 's' : ''} in one run`,
+    ranks: ['Reservation holder', 'Test driver', 'Funding secured', 'Thruster pilot', 'Loop specialist', 'Plaid pilot', 'Ludicrous', 'Not a flamethrower', 'Occupy Mars', 'Founders series'],
+    rankMore: n => `Mars bound ${n}`,
+    causes: {
+      gas: 'You hit a gas car. Hop it or land on its roof.', barrier: 'You hit a concrete barrier.', drone: 'A camera drone clipped you.',
+      truss: 'You hit the light truss.', trench: 'You dropped into the trench. Should have taken the tunnel.', battery: 'Range anxiety got you. Grab cells and Supercharge to keep going.',
+      'mon:smog': 'A smog monster got you. Land on monsters to stomp them.', 'mon:slime': 'An oil slime ambushed you.', 'mon:bat': 'A smog bat got you.',
+      'mon:truck': 'A monster truck flattened you. Land on its roof next time.', 'mon:crawler': 'A Martian crawler got you.', 'mon:worm': 'A sandworm got you. Fly high when the ground shakes.',
+      'mon:ufo': 'You flew into a UFO.', ball: 'A smog ball hit you.', plasma: 'A plasma bolt hit you.', laser: 'The mothership laser hit you.',
+      bomb: 'An oil bomb hit you.', fire: 'You drove into burning oil.',
+      zap: 'A zapper fried you. Thread the gaps between the coils.', missile: 'A missile got you. Change height when the warning flashes.',
+      'mon:smog@sa': 'A dust devil got you. Land on monsters to stomp them.', 'mon:bat@sa': 'A dust bat got you.', 'ball@sa': 'A dust ball hit you.'
+    },
+    memes: [
+      'Funding secured. Your move.', 'Full self-driving: next year. Fly mode: right now.', 'Roadster deliveries in two weeks. Probably.',
+      'There’s a live audience, so you know it’s not AI.', 'Occupy Mars. Bring a Supercharger.', 'Plaid is the new Ludicrous.',
+      'Not a flamethrower. Definitely not a flamethrower.', 'The booster always sticks the landing.', 'Emissions testing mode is hiding in the Garage.',
+      'Somewhere out there, a Roadster is still orbiting the Sun.', 'From Riyadh to Mars, no gas required.', 'Even the camels make way for the Roadster.',
+      'A dust storm is coming. Shields up.'
+    ],
+    signs: {
+      texas: ['FUNDING SECURED', 'FSD: NEXT YEAR', 'SHIPS IN 2 WEEKS', 'NOT AI, PROMISE', 'ROADSTER: NEXT MONTH', 'PLAID > LUDICROUS', 'NO GAS', 'GIGA TEXAS', 'FLY MODE', '0-60 <1 S'],
+      saudi: ['WELCOME TO RIYADH', 'NEOM', 'ALULA', 'DIRIYAH', 'SAUDI COFFEE?', 'NO GAS, JUST SUN', 'FLY MODE', 'YALLA!', 'RIYADH TO MARS', 'FUNDING SECURED'],
+      mars: ['OCCUPY MARS', 'DON’T PANIC', 'NEXT STOP: EARTH', 'MARS SUPERCHARGER', 'NOW HIRING ON MARS']
+    }
+  },
+  ar: {
+    canvas: 'رودستر: وضع الطيران. لعبة سيارة طائرة كرتونية.',
+    logoWord: 'رودستر', logoSub: 'وضع الطيران', pause: 'إيقاف مؤقت', music: 'الموسيقى', mute: 'كتم الصوت', unmute: 'تشغيل الصوت',
+    langBtn: 'EN', langAria: 'Switch to English',
+    tagline: coarse => `${coarse ? 'اضغط على الشاشة مطوّلًا' : 'اضغط مطوّلًا على المسافة أو زر الفأرة'} لتشغيل دافعات الغاز البارد. تفادَ الصواعق والصواريخ، وادعس الوحوش، واهزم الزعماء، واوصل إلى المريخ.`,
+    drive: 'انطلق', garage: 'الكراج', missions: 'المهام', best: 'الأفضل', cells: 'الخلايا', rank: 'الرتبة',
+    fine: 'لعبة غير رسمية من المعجبين، ولا علاقة لها بشركة تسلا.',
+    world: 'العالم', saudi: 'السعودية', texas: 'تكساس', difficulty: 'الصعوبة', easy: 'سهل', normal: 'عادي', hard: 'صعب',
+    cellsWord: 'خلية', paint: 'اللون', upgrades: 'التطويرات', eggs: 'مفاجآت مخفية', back: 'رجوع',
+    missionsNote: 'المهام تستمر بين الجولات، والمكافأة تُضاف إلى رصيد خلاياك فور إنجاز المهمة.',
+    paused: 'إيقاف مؤقت', resume: 'متابعة', restart: 'إعادة', home: 'الرئيسية', runOver: 'انتهت الجولة', newBest: 'رقم قياسي جديد',
+    distance: 'المسافة', driveAgain: 'جولة جديدة', reviveFor: 'إنعاش مقابل', reviveAria: n => `أكمل الجولة مقابل ${n} خلية`,
+    done: 'تمّت', owned: 'مملوك', equipped: 'مُركّب', upgrade: 'تطوير', maxed: 'مكتمل', turnOn: 'تشغيل', turnOff: 'إيقاف',
+    swatchAria: (name, owned, sel, cost) => `${name}، ${owned ? (sel ? 'مُركّب' : 'مملوك') : `افتحه مقابل ${cost} خلية`}`,
+    upAria: (name, lv, cost) => `طوّر ${name} إلى المستوى ${lv} مقابل ${cost} خلية`,
+    paintOn: name => `تم تركيب ${name}.`, paintNew: name => `تم فتح ${name} وتركيبه.`,
+    paintShort: (name, n) => `${name} يحتاج ${n} خلية إضافية. اجمعها على الطريق.`, upDone: (name, lv) => `تم تطوير ${name} إلى المستوى ${lv}.`,
+    eggName: 'وضع فحص الانبعاثات', eggDesc: 'الدافعات تطلق صوتًا مضحكًا، وتسلا خبّأت النكتة نفسها في سياراتها.',
+    rankNote: (left, next) => `باقي ${nAr(left, ['مهمة واحدة', 'مهمتان', 'مهام', 'مهمة'])} لتصل إلى رتبة «${next}».`,
+    crashed: 'تحطّمت.', runAnnounce: (s, nb) => `انتهت الجولة. النقاط ${s}.${nb ? ' رقم قياسي جديد.' : ''}`,
+    missionAnnounce: (txt, rw) => `أنجزت المهمة: ${txt}. أُضيفت ${rw} خلية.`,
+    bestHud: 'الأفضل', unit: 'كم/س', toCharge: d => `${d} كم للشاحن`, charging: 'يشحن', t060: s => `0-100 كم/س في ${s} ث`,
+    launchOn: 'انطلق مع الأخضر', goGo: 'انطلق!', holdPrompt: 'اضغط مطوّلًا في أي مكان لتشغيل الدافعات', distUnit: 'كم', gasLabel: 'بنزين',
+    plaid: 'وضع بلايد', coil: 'ملف تسلا', shield: 'وضع الدفاع البيولوجي', fly: 'وضع الطيران', flame: 'ليست قاذفة لهب',
+    shieldDown: 'سقط الدرع', lowBattery: 'البطارية ضعيفة', outOfCharge: 'نفدت البطارية', ludicrous: 'سرعة جنونية', funded: 'التمويل مضمون',
+    warning: 'تحذير', defeated: n => `هُزم ${n}`, incoming: n => `${n} قادم`, down: n => `سقط ${n}`,
+    toMars: 'المحطة القادمة: المريخ', toEarth: 'العودة إلى الأرض', toSaudi: 'العودة إلى السعودية', backInRace: 'عدت إلى السباق',
+    go: 'انطلق', jumpStart: 'انطلاقة مبكرة', perfectLaunch: 'انطلاقة مثالية', goodLaunch: 'انطلاقة جيدة',
+    boosterLanded: 'الصاروخ المعزّز هبط بنجاح', spaceSpotted: `رصدت رودستر الفضاء +500`,
+    missionDone: n => `أنجزت مهمة +${n} خلية`, rankUp: (r, n) => `ترقية: ${r} +${n}`,
+    roofSurf: 'تزلّج على السطح', hop: 'قفزة', closeCall: 'نجاة بأعجوبة', smash: 'تحطيم', coneHit: `قمع -6%`, rockHit: `صخرة -6%`, loop: 'حلقة',
+    supercharged: 'شحن فائق', stomp: 'دعسة', stompN: n => `دعسة ×${n}`, blast: 'تفجير', torched: 'احترق', pop: 'فرقعة', zapF: 'صعقة',
+    hBattery: 'اجمع الخلايا الخضراء لتشحن', hCharger: 'ابقَ على الطريق وأنت تعبر الشاحن الفائق', hGas: 'اقفز فوق سيارات البنزين أو اهبط على أسطحها',
+    hHold: 'اضغط مطوّلًا لتشغيل الدافعات، وارفع إصبعك لتهبط', hLaunch: c => c ? 'المس الشاشة لحظة يضيء الأخضر' : 'اضغط المسافة أو انقر لحظة يضيء الأخضر',
+    hLoop: 'قبضة المراوح شغّالة: الرودستر ملتصق بالمسار', hBoss: 'التقط الكرات الزرقاء لتصعق الزعيم',
+    hMissile: 'صاروخ! غيّر ارتفاعك قبل أن يثبّت عليك', hMonster: 'اهبط على الوحوش أو فجّرها بدافعاتك',
+    hWorm: 'دودة الرمال! حلّق عاليًا فوقها', hZapper: 'صاعق! ابتعد عن القوس الكهربائي',
+    boss_smog: 'ملك الدخان', boss_dust: 'ملك العجاج', boss_mother: 'السفينة الأم',
+    paint_pearl: 'أبيض لؤلؤي', paint_red: 'أحمر فائق', paint_blue: 'أزرق عميق', paint_silver: 'فضّي لامع', paint_grey: 'رمادي خفي',
+    paint_green: 'أخضر سعودي', paint_cherry: 'كرزي ليلي', paint_black: 'أسود ماسي',
+    up_battery: 'حزمة البطارية', up_battery_d: lv => lv ? `تستهلك أبطأ بنسبة ${lv * 10}%` : 'الحزمة الأصلية. كل مستوى يبطّئ الاستهلاك 10%.',
+    up_thrust: 'خزانات الغاز البارد', up_thrust_d: s => `${s} ث من الدفع لكل خزان`,
+    up_coil: 'ملف تسلا', up_coil_d: s => `مغناطيس الخلايا يدوم ${s} ث`,
+    up_plaid: 'وضع بلايد', up_plaid_d: s => `اندفاعة التحطيم تدوم ${s} ث`,
+    m_cells: n => `اجمع ${nAr(n, ['خلية واحدة', 'خليتين', 'خلايا', 'خلية'])} في جولة واحدة`,
+    m_miles: n => `اقطع ${toKm(n)} كم في جولة واحدة`,
+    m_hops: n => `اقفز فوق ${nAr(n, ['سيارة بنزين واحدة', 'سيارتي بنزين', 'سيارات بنزين', 'سيارة بنزين'])} في جولة واحدة`,
+    m_roofs: n => `اهبط على سطح ${nAr(n, ['سيارة بنزين واحدة', 'سيارتي بنزين', 'سيارات بنزين', 'سيارة بنزين'])} في جولة واحدة`,
+    m_loops: n => `أكمل ${nAr(n, ['حلقة واحدة', 'حلقتين', 'حلقات', 'حلقة'])} في جولة واحدة`,
+    m_supers: n => `اشحن من الشاحن الفائق ${nAr(n, ['مرة واحدة', 'مرتين', 'مرات', 'مرة'])} في جولة واحدة`,
+    m_smash: n => `حطّم ${nAr(n, ['عائقًا واحدًا', 'عائقين', 'عوائق', 'عائقًا'])} في وضع بلايد`,
+    m_close: n => `انجُ بأعجوبة ${nAr(n, ['مرة واحدة', 'مرتين', 'مرات', 'مرة'])} في جولة واحدة`,
+    m_air: n => `ابقَ في الهواء ${nAr(n, ['ثانية واحدة', 'ثانيتين', 'ثوانٍ', 'ثانية'])} في جولة واحدة`,
+    m_mph: n => `صِل إلى سرعة ${toKmh(n)} كم/س`,
+    m_chain: n => `اجمع ${nAr(n, ['خلية واحدة', 'خليتين', 'خلايا', 'خلية'])} متتالية`,
+    m_perfect: () => 'انطلق انطلاقة مثالية مع الضوء الأخضر',
+    m_powers: n => `التقط ${nAr(n, ['معزّزًا واحدًا', 'معزّزين', 'معزّزات', 'معزّزًا'])} في جولة واحدة`,
+    m_stomps: n => `ادعس ${nAr(n, ['وحشًا واحدًا', 'وحشين', 'وحوش', 'وحشًا'])} في جولة واحدة`,
+    m_blasts: n => `فجّر ${nAr(n, ['وحشًا واحدًا', 'وحشين', 'وحوش', 'وحشًا'])} بدافعاتك`,
+    m_bosses: () => 'اهزم زعيمًا', m_mars: () => 'اوصل إلى المريخ', m_mult: n => `حقّق مضاعف نقاط ×${n}`,
+    m_flames: n => `أحرق ${nAr(n, ['شيئًا واحدًا', 'شيئين', 'أشياء', 'شيئًا'])} بـ«ليست قاذفة لهب»`,
+    m_spotted: () => 'اكتشف الرودستر السابح في الفضاء', m_ludi: () => `بلّغ السرعة الجنونية (${toKmh(200)} كم/س)`,
+    m_dodged: n => `تفادَ ${nAr(n, ['صاروخًا واحدًا', 'صاروخين', 'صواريخ', 'صاروخًا'])} في جولة واحدة`,
+    ranks: ['صاحب حجز', 'سائق تجريبي', 'التمويل مضمون', 'طيّار الدافعات', 'خبير الحلقات', 'طيّار بلايد', 'لوديكروس', 'ليست قاذفة لهب', 'احتلّوا المريخ', 'سلسلة المؤسسين'],
+    rankMore: n => `في الطريق للمريخ ${n}`,
+    causes: {
+      gas: 'اصطدمت بسيارة بنزين. اقفز فوقها أو اهبط على سطحها.', barrier: 'اصطدمت بحاجز خرساني.', drone: 'لمستك طائرة تصوير مسيّرة.',
+      truss: 'اصطدمت بجسر الإضاءة.', trench: 'سقطت في الحفرة. كان النفق أفضل.', battery: 'قلق المدى غلبك. اجمع الخلايا واشحن من الشواحن الفائقة لتكمل.',
+      'mon:smog': 'وحش الدخان أمسك بك. اهبط على الوحوش لتدعسها.', 'mon:slime': 'بقعة زيت كمنت لك.', 'mon:bat': 'خفاش الدخان أصابك.',
+      'mon:truck': 'شاحنة الوحوش سحقتك. اهبط على سقفها المرة الجاية.', 'mon:crawler': 'زاحف مريخي أمسك بك.', 'mon:worm': 'دودة الرمال التهمتك. حلّق عاليًا حين ترتجف الأرض.',
+      'mon:ufo': 'اصطدمت بصحن طائر.', ball: 'أصابتك كرة دخان.', plasma: 'أصابتك قذيفة بلازما.', laser: 'أصابك ليزر السفينة الأم.',
+      bomb: 'أصابتك قنبلة زيت.', fire: 'دخلت في زيت مشتعل.',
+      zap: 'صعقك الصاعق. مرّ من الفجوات بين الملفات.', missile: 'أصابك صاروخ. غيّر ارتفاعك حين يومض التحذير.',
+      'mon:smog@sa': 'عفريت الغبار أمسك بك. اهبط على الوحوش لتدعسها.', 'mon:bat@sa': 'خفاش الغبار أصابك.', 'ball@sa': 'أصابتك كرة غبار.'
+    },
+    memes: [
+      'التمويل مضمون. الدور عليك.', 'القيادة الذاتية: السنة الجاية. وضع الطيران: الحين.', 'تسليم الرودستر خلال أسبوعين. غالبًا.',
+      'فيه جمهور حيّ، يعني أكيد مو ذكاء اصطناعي.', 'احتلّوا المريخ، وخذوا معكم شاحن.', 'بلايد هو لوديكروس الجديد.',
+      'ليست قاذفة لهب. أكيد ليست قاذفة لهب.', 'الصاروخ المعزّز دايم يهبط بنجاح.', 'وضع فحص الانبعاثات مخبّأ في الكراج.',
+      'في مكان ما، فيه رودستر لسه يدور حول الشمس.', 'من الرياض إلى المريخ، بدون بنزين.', 'حتى الجمال تفسح الطريق للرودستر.',
+      'العجاج جاي. شغّل الدرع.'
+    ],
+    signs: {
+      texas: ['التمويل مضمون', 'القيادة الذاتية: السنة الجاية', 'التسليم خلال أسبوعين', 'مو ذكاء اصطناعي، أوعدك', 'الرودستر: الشهر الجاي', 'بلايد > لوديكروس', 'بدون بنزين', 'جيجا تكساس', 'وضع الطيران', '0-100 بأقل من ثانية'],
+      saudi: ['حيّاكم في الرياض', 'نيوم', 'العُلا', 'الدرعية', 'قهوة سعودية؟', 'بدون بنزين، شمس وبس', 'وضع الطيران', 'يلّا!', 'من الرياض للمريخ', 'التمويل مضمون'],
+      mars: ['احتلّوا المريخ', 'لا داعي للذعر', 'المحطة القادمة: الأرض', 'شاحن فائق مريخي', 'نوظّف على المريخ']
+    }
+  }
+};
+function t(k, ...a) { const v = STR[LANG][k] !== undefined ? STR[LANG][k] : STR.en[k]; return typeof v === 'function' ? v(...a) : v; }
+const SAUDI = () => save.world !== 'texas';
+
+/* =========================================================
    Art data: paints, vehicles, power-ups and cell formations
    ========================================================= */
 const CAR_W = 60, CAR_H = 16;
@@ -466,6 +684,7 @@ const PAINTS = [
   { id: 'blue', name: 'Deep blue', cost: 900, h: '#8fb6ff', P: '#2c62e8', p: '#142e86', c: '#1f4ab8' },
   { id: 'silver', name: 'Quicksilver', cost: 1500, h: '#ffffff', P: '#b7bfcb', p: '#6f7886', c: '#959dab' },
   { id: 'grey', name: 'Stealth grey', cost: 2400, h: '#a3a9b4', P: '#5f6672', p: '#33383f', c: '#4d525b' },
+  { id: 'green', name: 'Saudi green', cost: 3000, h: '#4fe39a', P: '#00873e', p: '#00431f', c: '#006c35' },
   { id: 'cherry', name: 'Midnight cherry', cost: 3600, h: '#c45a72', P: '#7a1730', p: '#3c0816', c: '#5a0f21' },
   { id: 'black', name: 'Diamond black', cost: 5000, h: '#7a849c', P: '#2a2f39', p: '#101217', c: '#2b303a' }
 ];
@@ -487,6 +706,14 @@ const GAS_COLORS = [
   { b: '#7d8696', B: '#aab2c0', d: '#4c5361' },
   { b: '#3f5fb0', B: '#6f8fdc', d: '#253a74' },
   { b: '#e3dccb', B: '#fffaf0', d: '#a59d8a' }
+];
+const GAS_COLORS_SA = [
+  { b: '#f2f2ee', B: '#ffffff', d: '#b9bdc4' },
+  { b: '#ecebe4', B: '#ffffff', d: '#aeb0b4' },
+  { b: '#b8bec8', B: '#e2e6ec', d: '#7a818c' },
+  { b: '#d8c39a', B: '#f2e2c0', d: '#9c8862' },
+  { b: '#2d3038', B: '#5a5f6a', d: '#16181e' },
+  { b: '#2f6b4a', B: '#5a9a76', d: '#1c4430' }
 ];
 const POWER = {
   plaid: { name: 'Plaid mode', col: '#ff3149' },
@@ -856,8 +1083,16 @@ function isDark() {
   return mqDark ? mqDark.matches : true;
 }
 const runDist = () => Math.max(0, W.dist - RUN.startDist);
-const diff = () => mode === 'attract' ? 0.1 : clamp(runDist() / 48000, 0, 1);
-function targetSpeed() { return mode === 'attract' ? 175 : 160 + 180 * (1 - Math.exp(-runDist() / 30000)); }
+// difficulty levels: cruising speed, how fast the run ramps up, space between obstacles, battery drain,
+// when missiles start and how often they come, the share of zappers, extra boss hits and a score multiplier
+const DIFFS = {
+  easy: { speed: 0.86, ramp: 0.7, gap: 1.3, drain: 0.7, missileAt: 6000, missile: 1.7, volley: false, zap: 0.5, boss: -2, score: 0.75 },
+  normal: { speed: 1, ramp: 1, gap: 1, drain: 1, missileAt: 2600, missile: 1, volley: true, zap: 1, boss: 0, score: 1 },
+  hard: { speed: 1.12, ramp: 1.45, gap: 0.82, drain: 1.25, missileAt: 1500, missile: 0.65, volley: true, zap: 1.4, boss: 2, score: 1.5 }
+};
+const DF = () => mode === 'attract' ? DIFFS.normal : (DIFFS[save.diff] || DIFFS.normal);
+const diff = () => mode === 'attract' ? 0.1 : clamp(runDist() / 48000 * DF().ramp, 0, 1);
+function targetSpeed() { return mode === 'attract' ? 175 : (160 + 180 * (1 - Math.exp(-runDist() / 30000))) * DF().speed; }
 const plaidDur = () => 4 + save.up.plaid;
 const coilDur = () => 6 + 2 * save.up.coil;
 
@@ -900,9 +1135,9 @@ function hint(key, text) {
 function floatText(text, x, y, col) { floats.push({ text, x, y, col: col || '#ffffff', t: 1.0, max: 1.0 }); if (floats.length > 10) floats.shift(); }
 function addScore(pts, label, col) {
   if (mode !== 'run') return;
-  const v = Math.round(pts * (P.plaid > 0 ? 2 : 1) * (RUN.mult || 1));
+  const v = Math.round(pts * (P.plaid > 0 ? 2 : 1) * (RUN.mult || 1) * DF().score);
   RUN.score += v;
-  if (label) floatText(`${label} +${v}`, carX + 30, groundY - P.alt - CAR_H - 10, col);
+  if (label) floatText(isAr() ? `${label} +${v}` : `${label} +${v}`, carX + 30, groundY - P.alt - CAR_H - 10, col);
 }
 
 /* =========================================================
@@ -959,14 +1194,15 @@ function pop(x, y, col) {
    Parallax scenery
    ========================================================= */
 const LAY = [{ id: 'mid', par: 0.22, items: [], nx: 0 }, { id: 'near', par: 0.55, items: [], nx: 0 }];
-const BILLBOARDS = ['FUNDING SECURED', 'FSD: NEXT YEAR', 'SHIPS IN 2 WEEKS', 'NOT AI, PROMISE', 'ROADSTER: NEXT MONTH', 'PLAID > LUDICROUS', 'NO GAS', 'GIGA TEXAS', 'FLY MODE', '0-60 <1 S'];
-const BILLBOARDS_MARS = ['OCCUPY MARS', 'DON’T PANIC', 'NEXT STOP: EARTH', 'MARS SUPERCHARGER', 'NOW HIRING ON MARS'];
 function biomeAt(wx) { return ((Math.floor(wx / 16000) % 3) + 3) % 3; }
 function spawnDecor(ly) {
   const bio = biomeAt(ly.nx / ly.par);
   const mid = ly.id === 'mid';
   const k = W.zone === 1
     ? pick(mid ? ['dome', 'lander', 'dish', 'gap', 'dome', 'rockD'] : ['rockD', 'rover', 'beacon', 'gap', 'rockD', 'sign'])
+    : SAUDI() ? pick(mid   // Riyadh, then the desert and AlUla, then NEOM
+    ? (bio === 0 ? ['kingdom', 'tower', 'tower', 'faisaliah', 'tower', 'najdi', 'gap'] : bio === 1 ? ['dune', 'alula', 'dune', 'najdi', 'dune', 'gap'] : ['theline', 'turbine', 'solar', 'turbine', 'gap'])
+    : (bio === 0 ? ['palm', 'lamp', 'crowd', 'sign', 'palm', 'najdi', 'flood', 'palm'] : bio === 1 ? ['palm', 'camel', 'tent', 'camel', 'sign', 'palm', 'gap', 'najdi'] : ['palm', 'megapack', 'sign', 'robot', 'flood', 'solar', 'palm']))
     : pick(mid
     ? (bio === 0 ? ['stand', 'stand', 'rocket', 'tank', 'gap'] : bio === 1 ? ['turbine', 'turbine', 'solar', 'megapack', 'gap'] : ['factory', 'turbine', 'factory', 'tank', 'gap'])
     : (bio === 0 ? ['flood', 'crowd', 'crowd', 'fence', 'sign', 'flood', 'crowd', 'robot', 'cyber'] : bio === 1 ? ['flood', 'megapack', 'fence', 'sign', 'gap', 'megapack', 'cyber'] : ['flood', 'container', 'fence', 'sign', 'container', 'flood', 'robot']));
@@ -982,7 +1218,7 @@ function spawnDecor(ly) {
     case 'flood': it.w = 12; it.h = randi(62, 86); it.beam = chance(0.55); break;
     case 'crowd': it.w = randi(46, 104); it.h = 14; break;
     case 'fence': it.w = randi(36, 90); it.h = 8; break;
-    case 'sign': it.text = pick(W.zone === 1 ? BILLBOARDS_MARS : BILLBOARDS); it.w = Math.ceil(measure(it.text, 6.4, 800)) + 12; it.h = 30; break;
+    case 'sign': it.text = pick(t('signs')[W.zone === 1 ? 'mars' : SAUDI() ? 'saudi' : 'texas']); it.w = Math.ceil(measure(it.text, 6.4, 800)) + 12; it.h = 30; break;
     case 'robot': it.w = 12; it.h = 19; break;
     case 'cyber': it.w = 36; it.h = 13; break;
     case 'container': it.w = 26; it.h = 11; it.col = pick(['#b5473a', '#3a6db5', '#c9a03c', '#4a8a5a', '#8a8f99']); break;
@@ -993,6 +1229,17 @@ function spawnDecor(ly) {
     case 'rover': it.w = 28; it.h = 14; break;
     case 'beacon': it.w = 4; it.h = randi(22, 34); break;
     case 'gap': it.w = randi(20, 70); break;
+    case 'kingdom': it.w = 26; it.h = randi(80, 96); break;
+    case 'faisaliah': it.w = 20; it.h = randi(62, 76); break;
+    case 'tower': it.w = randi(14, 24); it.h = randi(38, 72); break;
+    case 'najdi': it.w = randi(mid ? 40 : 26, mid ? 70 : 44); it.h = randi(mid ? 16 : 13, mid ? 26 : 19); break;
+    case 'palm': it.w = 16; it.h = randi(26, 36); break;
+    case 'lamp': it.w = 10; it.h = randi(30, 40); break;
+    case 'dune': it.w = randi(70, 130); it.h = randi(14, 28); break;
+    case 'alula': it.w = randi(42, 58); it.h = randi(28, 38); break;
+    case 'camel': it.w = 24; it.h = 19; break;
+    case 'tent': it.w = randi(30, 44); it.h = 12; break;
+    case 'theline': it.w = randi(240, 420); it.h = randi(44, 60); break;
   }
   ly.items.push(it);
   ly.nx += it.w + randi(mid ? 14 : 18, mid ? 90 : 120);
@@ -1012,7 +1259,7 @@ function updateDecor() {
 function addEnt(e) { W.ents.push(e); return e; }
 function addGas(x, kind, v) {
   const sp = VEH[kind];
-  return addEnt({ type: 'gas', kind, x, w: sp.w, h: sp.h, v, boxes: sp.boxes, ci: randi(0, GAS_COLORS.length - 1), wr: 0, puff: rand(0, 0.1),
+  return addEnt({ type: 'gas', kind, x, w: sp.w, h: sp.h, v, boxes: sp.boxes, ci: randi(0, GAS_COLORS.length - 1), sa: SAUDI(), wr: 0, puff: rand(0, 0.1),
     platform: true, smash: true, minGap: 99, over: false, rode: false, passed: false, roofed: false });
 }
 function addCone(x) { return addEnt({ type: 'cone', x, w: 7, h: 9, smash: true }); }
@@ -1188,7 +1435,7 @@ const CHUNK_LIST = [
 ];
 function pickChunk(d) {
   const list = (W.zone === 1 ? CHUNK_LIST_MARS : CHUNK_LIST).filter(c => d >= c.min && c.k !== W.last);
-  const wt = c => c.w * (c.min > 0.2 ? 1 + d : 1);
+  const wt = c => c.w * (c.min > 0.2 ? 1 + d : 1) * (c.k.startsWith('zap') ? DF().zap : 1);
   let tot = 0; for (const c of list) tot += wt(c);
   let r = Math.random() * tot;
   for (const c of list) { r -= wt(c); if (r <= 0) return c.k; }
@@ -1233,7 +1480,7 @@ function spawnContent() {
       else k = pickChunk(d);
       W.last = k; len = CH[k](x, d);
     }
-    W.spawnX = x + len + lerp(175, 100, d) + (W.speed || 150) * 0.2 + rand(0, 50);
+    W.spawnX = x + len + (lerp(175, 100, d) + (W.speed || 150) * 0.2 + rand(0, 50)) * DF().gap;
   }
 }
 
@@ -1312,7 +1559,7 @@ function stepEnts(dt) {
       case 'drone': e.ph += dt * e.bs; e.alt = e.base + Math.sin(e.ph) * e.amp; break;
       case 'zap':
         e.ang += e.spin * dt;
-        if (mode === 'run' && e.x - (W.dist + carX) < IW * 0.7 && e.x > W.dist + carX) hint2('zapper', 'ZAPPER! STEER CLEAR OF THE ELECTRIC ARC');
+        if (mode === 'run' && e.x - (W.dist + carX) < IW * 0.7 && e.x > W.dist + carX) hint2('zapper', t('hZapper'));
         break;
       case 'cell': if (e.mag) magnetPull(e, dt); break;
       case 'power': e.ph += dt; break;
@@ -1427,7 +1674,7 @@ function land(sf) {
   const e = sf.ent;
   if (e && !e.roofed && mode === 'run') {
     e.roofed = true;
-    if (e.type === 'gas') { RUN.stats.roofs++; addMult(); addScore(75, 'ROOF SURF', '#ffd23f'); }
+    if (e.type === 'gas') { RUN.stats.roofs++; addMult(); addScore(75, t('roofSurf'), '#ffd23f'); }
   }
 }
 function takeoff() {
@@ -1530,10 +1777,10 @@ function passEval(e) {
     if (!e.over) return;
     if (e.type === 'gas') RUN.stats.hops++;
     if (!e.rode && e.minGap >= 0 && e.minGap <= 6) closeCall();
-    else if (e.type === 'gas') addScore(25, 'HOP', '#ffffff');
+    else if (e.type === 'gas') addScore(25, t('hop'), '#ffffff');
   } else if (e.near && e.minGap >= 0 && e.minGap <= 6) closeCall();
 }
-function closeCall() { RUN.stats.close++; addMult(); addScore(50, 'CLOSE CALL', '#7fd8ff'); SFX.close(); }
+function closeCall() { RUN.stats.close++; addMult(); addScore(50, t('closeCall'), '#7fd8ff'); SFX.close(); }
 
 function collectCell(e) {
   e.dead = true;
@@ -1551,11 +1798,11 @@ function activatePower(k) {
   sparks(cx, cy, 16, [POWER[k].col, '#ffffff'], 200);
   if (mode !== 'run') return;
   RUN.stats.powers++; addScore(50);
-  if (k === 'plaid') { P.plaid = plaidDur(); P.plaidMax = P.plaid; banner('PLAID MODE', '#ff3149'); }
-  else if (k === 'coil') { P.coil = coilDur(); P.coilMax = P.coil; banner('TESLA COIL', '#b98cff'); }
-  else if (k === 'shield') { P.shield = true; banner('BIOWEAPON DEFENSE MODE', '#43f08a'); }
-  else if (k === 'fly') { P.fly = 5; P.flyMax = 5; P.gas = P.gasMax; banner('FLY MODE', '#7fd8ff'); }
-  else if (k === 'flame') { P.flame = 5; P.flameMax = 5; banner('NOT A FLAMETHROWER', '#ff8a3d'); SFX.flame(); }
+  if (k === 'plaid') { P.plaid = plaidDur(); P.plaidMax = P.plaid; banner(t('plaid'), '#ff3149'); }
+  else if (k === 'coil') { P.coil = coilDur(); P.coilMax = P.coil; banner(t('coil'), '#b98cff'); }
+  else if (k === 'shield') { P.shield = true; banner(t('shield'), '#43f08a'); }
+  else if (k === 'fly') { P.fly = 5; P.flyMax = 5; P.gas = P.gasMax; banner(t('fly'), '#7fd8ff'); }
+  else if (k === 'flame') { P.flame = 5; P.flameMax = 5; banner(t('flame'), '#ff8a3d'); SFX.flame(); }
   SFX.power();
 }
 function hit(e) {
@@ -1565,7 +1812,7 @@ function hit(e) {
   if (P.shield) {
     P.shield = false; P.invuln = 1.2; W.shake = Math.max(W.shake, 5);
     sparks(carX + 30, groundY - P.alt - 8, 22, ['#43f08a', '#d9ffe9', '#ffffff'], 260); SFX.shield();
-    banner('SHIELD DOWN', '#43f08a', 1.1);
+    banner(t('shieldDown'), '#43f08a', 1.1);
     if (e.mon) killMon(e.mon, 'shield'); else if (e.smash) smash(e);
     return;
   }
@@ -1576,7 +1823,7 @@ function smash(e) {
   e.orig = e.type; e.type = 'wreck'; e.platform = false; e.v = 0; e.alt = e.alt || 0;
   e.vx = W.speed * 0.25 + 90; e.vy = rand(170, 260); e.vr = rand(-9, 9); e.rot = 0; e.life = 2.2;
   boom(sx, sy, 0.9);
-  if (mode === 'run') { RUN.stats.smash++; addScore(100, 'SMASH', '#ff3149'); SFX.smash(); }
+  if (mode === 'run') { RUN.stats.smash++; addScore(100, t('smash'), '#ff3149'); SFX.smash(); }
   W.shake = Math.max(W.shake, 3);
 }
 function coneHit(e) {
@@ -1584,7 +1831,7 @@ function coneHit(e) {
   e.orig = 'cone'; e.type = 'wreck'; e.alt = 0; e.vx = W.speed * 0.3 + 70; e.vy = rand(150, 220); e.vr = rand(-12, 12); e.rot = 0; e.life = 1.6;
   if (mode !== 'run' || P.invuln > 0) return;
   P.battery = Math.max(0, P.battery - 6); RUN.chain = 0;
-  floatText(e.rock ? 'ROCK -6%' : 'CONE -6%', carX + 30, groundY - P.alt - CAR_H - 10, '#ff6b7a');
+  floatText(e.rock ? t('rockHit') : t('coneHit'), carX + 30, groundY - P.alt - CAR_H - 10, '#ff6b7a');
   SFX.thud(); W.shake = Math.max(W.shake, 3);
 }
 function crash(cause) {
@@ -1607,7 +1854,7 @@ function crash(cause) {
 function outOfCharge() {
   if (mode !== 'run') return;
   mode = 'crash'; RUN.cause = 'battery'; RUN.speedAtCrash = W.speed; P.wreck = null; P.thrusting = false; holding = false;
-  RUN.overT = 0.9; banner('OUT OF CHARGE', '#ff3149', 2.6);
+  RUN.overT = 0.9; banner(t('outOfCharge'), '#ff3149', 2.6);
   Sound.tone(440, 0.9, { type: 'sawtooth', v: 0.06, f2: 60 });
 }
 function stepCrash(dt) {
@@ -1642,7 +1889,7 @@ function startLoop(e) {
   P.loop = { e, th: 0, R: e.r - 3 };
   P.onGround = false; P.riding = null; P.vy = 0; P.thrusting = false;
   e.done = true;
-  if (mode === 'run') { SFX.loop(); hint('loop', 'FAN GRIP ON: THE ROADSTER STICKS TO THE TRACK'); }
+  if (mode === 'run') { SFX.loop(); hint('loop', t('hLoop')); }
 }
 function stepLoop(dt) {
   const lp = P.loop, rc = lp.R - 8;
@@ -1657,7 +1904,7 @@ function stepLoop(dt) {
     sparks(carX + 30, groundY - 10, 24, ['#ff2e46', '#ffffff', '#7fd8ff'], 260);
     if (mode === 'run') {
       RUN.stats.loops++; P.battery = Math.min(100, P.battery + 8);
-      addMult(); addScore(500, 'LOOP', '#ff6b7a'); W.shake = Math.max(W.shake, 3);
+      addMult(); addScore(500, t('loop'), '#ff6b7a'); W.shake = Math.max(W.shake, 3);
     }
   }
 }
@@ -1688,32 +1935,32 @@ function stepTimers(dt) {
     if (e.type !== 'charger') continue;
     if (cxw > e.x + 4 && cxw < e.x + e.w - 4 && P.onGround && P.alt < 0.5) {
       P.charging = true; P.battery = Math.min(100, P.battery + 75 * dt); e.glowT = 0.3;
-      if (!e.used) { e.used = true; if (!att) { RUN.stats.supers++; addScore(200, 'SUPERCHARGED', '#43f08a'); SFX.charge(); } }
+      if (!e.used) { e.used = true; if (!att) { RUN.stats.supers++; addScore(200, t('supercharged'), '#43f08a'); SFX.charge(); } }
       if (Math.random() < 0.3) addPart({ x: carX + rand(4, 56), y: groundY - rand(4, 14), vx: rand(-10, 10), vy: rand(-60, -30), life: 0.5, max: 0.5, kind: 'px', col: chance(0.5) ? '#43f08a' : '#d9ffe9', world: true, front: true });
     }
-    if (!att && !e.used && e.x - cxw < IW * 0.75 && e.x > cxw) hint('charger', 'STAY ON THE ROAD THROUGH THE SUPERCHARGER');
+    if (!att && !e.used && e.x - cxw < IW * 0.75 && e.x > cxw) hint('charger', t('hCharger'));
   }
   if (att) { P.battery = 100; return; }
   RUN.live += dt;
-  RUN.score += W.scroll / 10 * (P.plaid > 0 ? 2 : 1) * RUN.mult;
+  RUN.score += W.scroll / 10 * (P.plaid > 0 ? 2 : 1) * RUN.mult * DF().score;
   RUN.multT += dt; if (RUN.mult > 1 && RUN.multT > 5) { RUN.mult--; RUN.multT = 0; }
   RUN.stats.mph = Math.max(RUN.stats.mph, Math.round(W.speed * PX2MPH));
-  if (!RUN.ludi && W.speed * PX2MPH >= 200) { RUN.ludi = true; RUN.stats.ludi = 1; banner('LUDICROUS SPEED', '#ff8a3d', 1.8); addScore(300); SFX.ludicrous(); }
-  if (!RUN.funded && RUN.cells >= 100) { RUN.funded = true; banner('FUNDING SECURED', '#43f08a', 1.8); addScore(500); SFX.funding(); }
+  if (!RUN.ludi && W.speed * PX2MPH >= 200) { RUN.ludi = true; RUN.stats.ludi = 1; banner(t('ludicrous'), '#ff8a3d', 1.8); addScore(300); SFX.ludicrous(); }
+  if (!RUN.funded && RUN.cells >= 100) { RUN.funded = true; banner(t('funded'), '#43f08a', 1.8); addScore(500); SFX.funding(); }
   if (!P.onGround && !P.loop) RUN.stats.air += dt;
-  const drain = 1.0 * (1 - 0.1 * save.up.battery) * (P.plaid > 0 ? 1.4 : 1) * (W.boss ? 0.5 : 1);
+  const drain = DF().drain * (1 - 0.1 * save.up.battery) * (P.plaid > 0 ? 1.4 : 1) * (W.boss ? 0.5 : 1);
   if (!P.charging && !P.loop) P.battery -= drain * dt;
   if (P.battery < 25) {
     P.lowWarn -= dt; if (P.lowWarn <= 0) { SFX.low(); P.lowWarn = 1.5; }
-    if (!RUN.lowShown) { RUN.lowShown = true; banner('LOW BATTERY', '#ff3149'); hint('battery', 'GRAB GREEN CELLS TO RECHARGE'); }
+    if (!RUN.lowShown) { RUN.lowShown = true; banner(t('lowBattery'), '#ff3149'); hint('battery', t('hBattery')); }
   } else if (P.battery > 35) RUN.lowShown = false;
   if (P.battery <= 0) { P.battery = 0; outOfCharge(); return; }
   RUN.missionT -= dt;
   if (RUN.missionT <= 0) { RUN.missionT = 0.25; checkMissions(); }
   if (RUN.t060Show > 0) RUN.t060Show -= dt;
-  if (RUN.live > 1.6) hint('hold', 'HOLD TO FIRE THE THRUSTERS. LET GO TO DROP.');
+  if (RUN.live > 1.6) hint('hold', t('hHold'));
   for (const e of W.ents) {
-    if (e.type === 'gas' && e.x - (W.dist + carX) < IW * 0.6 && e.x > W.dist + carX) { hint('gas', 'HOP GAS CARS, OR LAND ON THEIR ROOFS'); break; }
+    if (e.type === 'gas' && e.x - (W.dist + carX) < IW * 0.6 && e.x > W.dist + carX) { hint('gas', t('hGas')); break; }
   }
 }
 
@@ -1735,17 +1982,17 @@ function launchPress() {
 function doLaunch(rt) {
   if (L.done) return;
   L.done = true; mode = 'run';
-  let t060, label = 'GO', col = '#ffffff', bonus = 0, boost = 0;
-  if (rt === 'jump') { t060 = 2.3; label = 'JUMP START'; col = '#ff6b7a'; }
+  let t060, label = t('go'), col = '#ffffff', bonus = 0, boost = 0;
+  if (rt === 'jump') { t060 = 2.3; label = t('jumpStart'); col = '#ff6b7a'; }
   else if (rt === 'auto') { t060 = 1.9; }
-  else if (rt < 0.2) { t060 = 0.86 + rt * 0.5; label = 'PERFECT LAUNCH'; col = '#43f08a'; bonus = 300; boost = 80; RUN.stats.perfect = 1; }
-  else if (rt < 0.45) { t060 = 1.05 + (rt - 0.2) * 1.2; label = 'GOOD LAUNCH'; col = '#7fd8ff'; bonus = 100; boost = 40; }
+  else if (rt < 0.2) { t060 = 0.86 + rt * 0.5; label = t('perfectLaunch'); col = '#43f08a'; bonus = 300; boost = 80; RUN.stats.perfect = 1; }
+  else if (rt < 0.45) { t060 = 1.05 + (rt - 0.2) * 1.2; label = t('goodLaunch'); col = '#7fd8ff'; bonus = 100; boost = 40; }
   else t060 = 1.4 + Math.min(1, rt) * 0.5;
   RUN.score += bonus;
   P.boost = boost ? 3 : 0; P.boostV = boost;
   W.speed = 40 + boost;
   RUN.t060 = t060; RUN.t060Show = 3;
-  banner(bonus ? `${label} +${bonus}` : label, col, 1.6);
+  banner(bonus ? (isAr() ? `${label} +${bonus}` : `${label} +${bonus}`) : label, col, 1.6);
   SFX.launch();
   smoke(carX + 8, groundY - 2, 14, { sx: 10, vx0: -160, vx1: -20, vy0: -30, vy1: -2, r2a: 6, r2b: 11, a: 0.75, life: 1.2 });
 }
@@ -1772,14 +2019,14 @@ function stepSky(dt) {
       bo.vy = bo.burn ? Math.max(12, bo.vy - 150 * dt) : Math.min(95, bo.vy + 25 * dt);
       bo.y += bo.vy * dt;
       if (bo.burn && Math.random() < 0.5) skyParts.push({ x: bo.x + 1, y: bo.y + 12, vx: rand(-14, 14), vy: rand(-4, 8), life: rand(0.6, 1.2), max: 1.2, kind: 'smoke', r: 1, r2: rand(3, 6), col: '#d9dbe3', a: 0.45, drag: 1 });
-      if (bo.y >= groundY - 26) { bo.y = groundY - 26; bo.landed = 2.4; if (mode === 'run') { toast('THE BOOSTER STUCK THE LANDING', '#7fd8ff'); SFX.landing(); } }
+      if (bo.y >= groundY - 26) { bo.y = groundY - 26; bo.landed = 2.4; if (mode === 'run') { toast(t('boosterLanded'), '#7fd8ff'); SFX.landing(); } }
     } else { bo.landed -= dt; if (bo.landed <= 0) W.booster = null; }
   }
   W.spaceT -= dt;
   if (!W.space && W.spaceT <= 0) { W.space = { x: IW + 24, y: groundY * rand(0.12, 0.38), rot: rand(0, TAU), vr: rand(-0.6, 0.6), seen: false }; W.spaceT = rand(55, 90); }
   if (W.space) {
     const sp = W.space; sp.x -= 13 * dt; sp.rot += sp.vr * dt;
-    if (!sp.seen && sp.x < IW * 0.62) { sp.seen = true; if (mode === 'run') { RUN.stats.spotted = 1; toast('SPACE ROADSTER SPOTTED +500', '#ff8a96'); addScore(500); SFX.spotted(); } }
+    if (!sp.seen && sp.x < IW * 0.62) { sp.seen = true; if (mode === 'run') { RUN.stats.spotted = 1; toast(t('spaceSpotted'), '#ff8a96'); addScore(500); SFX.spotted(); } }
     if (sp.x < -30) W.space = null;
   }
   W.starlinkT -= dt;
@@ -1891,7 +2138,7 @@ function stepMon(e, dt) {
       e.x += e.v * dt;
       if (e.alt > 0 || e.vy > 0) {
         e.vy -= 900 * dt; e.alt += e.vy * dt;
-        if (e.alt <= 0) { e.alt = 0; e.vy = 0; e.land = 0.14; if (onScreen(e)) smoke(e.x - W.dist + 8, groundY - 1, 3, { sx: 6, r2a: 3, r2b: 5, a: 0.4, col: '#8f84ab' }); }
+        if (e.alt <= 0) { e.alt = 0; e.vy = 0; e.land = 0.14; if (onScreen(e)) smoke(e.x - W.dist + 8, groundY - 1, 3, { sx: 6, r2a: 3, r2b: 5, a: 0.4, col: smogPal().puff }); }
       } else { e.hopT -= dt; if (e.hopT <= 0) { e.vy = rand(150, 190); e.hopT = rand(0.8, 1.3); } }
       break;
     case 'slime':
@@ -1917,8 +2164,8 @@ function stepMon(e, dt) {
     case 'worm': stepWorm(e, dt); break;
     case 'ufo': stepUfo(e, dt); break;
   }
-  if (rel > 0 && rel < IW * 0.55 && e.kind !== 'worm' && e.kind !== 'ufo') hint2('monster', 'LAND ON MONSTERS OR BLAST THEM WITH YOUR THRUSTERS');
-  if (rel > 0 && rel < IW * 0.6 && e.kind === 'worm') hint2('worm', 'SANDWORM! FLY HIGH OVER IT');
+  if (rel > 0 && rel < IW * 0.55 && e.kind !== 'worm' && e.kind !== 'ufo') hint2('monster', t('hMonster'));
+  if (rel > 0 && rel < IW * 0.6 && e.kind === 'worm') hint2('worm', t('hWorm'));
 }
 function stepWorm(e, dt) {
   const front = W.dist + carX + 57;
@@ -2016,14 +2263,14 @@ function stompMon(e) {
 function killMon(e, how) {
   if (e.dead) return;
   e.dead = true;
-  const d = MON[e.kind];
+  const d = MON[e.kind], col = smogPal().bits[e.kind] || d.col;
   const sx = e.x - W.dist + e.w / 2, sy = groundY - e.alt - e.h / 2;
-  smoke(sx, sy, e.kind === 'truck' ? 16 : 8, { sx: e.w / 3, sy: e.h / 3, col: d.col[0], a: 0.7, vx0: -70, vx1: 70, vy0: -70, vy1: 10, r2a: 4, r2b: 9 });
-  sparks(sx, sy, e.kind === 'truck' ? 26 : 12, [d.col[1], d.col[2] || '#ffffff', '#ffffff'], 230);
+  smoke(sx, sy, e.kind === 'truck' ? 16 : 8, { sx: e.w / 3, sy: e.h / 3, col: col[0], a: 0.7, vx0: -70, vx1: 70, vy0: -70, vy1: 10, r2a: 4, r2b: 9 });
+  sparks(sx, sy, e.kind === 'truck' ? 26 : 12, [col[1], col[2] || '#ffffff', '#ffffff'], 230);
   if (e.kind === 'truck') { W.shake = Math.max(W.shake, reduceMotion ? 0 : 6); W.flash = Math.max(W.flash, 0.35); }
   if (mode !== 'run') return;
   const chain = how === 'stomp' ? Math.max(1, RUN.stompChain) : 1;
-  const label = how === 'stomp' ? (chain > 1 ? `STOMP *${chain}` : 'STOMP') : how === 'blast' ? 'BLAST' : how === 'plaid' ? 'SMASH' : how === 'flame' ? 'TORCHED' : 'POP';
+  const label = how === 'stomp' ? (chain > 1 ? t('stompN', chain) : t('stomp')) : how === 'blast' ? t('blast') : how === 'plaid' ? t('smash') : how === 'flame' ? t('torched') : t('pop');
   addMult();
   addScore((d.pts || 100) * chain, label, '#ffd23f');
   RUN.stats.monsters++;
@@ -2039,15 +2286,16 @@ function maybeBoss() {
   if (W.dist + carX < W.nextBoss) return;
   W.bossKind = W.zone === 1 ? 'mother' : 'smog';
   W.bossWarn = 2.6;
-  banner('WARNING', '#ff3149', 2.5);
-  toast(`${BOSSES[W.bossKind].name} INCOMING`, '#ff6b7a');
+  banner(t('warning'), '#ff3149', 2.5);
+  toast(t('incoming', bossName(W.bossKind)), '#ff6b7a');
   SFX.siren();
 }
+const bossName = kind => t(kind === 'smog' && SAUDI() ? 'boss_dust' : 'boss_' + kind);
 function spawnBoss() {
   const kind = W.bossKind || 'smog', b = BOSSES[kind], lvl = W.bossCount;
-  W.boss = { kind, name: b.name, w: b.w, h: b.h, hp: b.hp + 2 * lvl, max: b.hp + 2 * lvl, st: 'enter', t: 0, x: IW + b.w, tx: IW - b.w / 2 - 6,
+  W.boss = { kind, name: bossName(kind), w: b.w, h: b.h, hp: Math.max(3, b.hp + 2 * lvl + DF().boss), max: Math.max(3, b.hp + 2 * lvl + DF().boss), st: 'enter', t: 0, x: IW + b.w, tx: IW - b.w / 2 - 6,
     alt: bossAlt(), atkT: 1.5, atkI: 0, orbT: 0.9, cellT: 1.6, flash: 0, mouth: 0, dieT: 0, lvl };
-  if (mode === 'run') { SFX.roar(); hint2('boss', 'GRAB THE BLUE COIL ORBS TO ZAP THE BOSS'); }
+  if (mode === 'run') { SFX.roar(); hint2('boss', t('hBoss')); }
 }
 function stepBossSystem(dt) {
   maybeBoss();
@@ -2120,13 +2368,13 @@ function bossAttack(B) {
 }
 // Jetpack-style missiles: a badge tracks your height at the screen edge, locks, then the missile flies in
 function stepMissiles(dt) {
-  if (W.boss || W.bossWarn > 0 || W.zoneDelay > 0 || P.loop || runDist() < 2600) return;
+  if (W.boss || W.bossWarn > 0 || W.zoneDelay > 0 || P.loop || runDist() < DF().missileAt) return;
   W.missileT -= dt;
   if (W.missileT > 0) return;
-  const d = diff(), n = d > 0.5 && chance(0.35) ? randi(2, 3) : 1;
+  const d = diff(), n = DF().volley && d > 0.5 && chance(0.35) ? randi(2, 3) : 1;
   for (let i = 0; i < n; i++) W.fx.push({ k: 'missile', st: 'track', t: 0, delay: i * 0.7, alt: clamp(P.alt + 8, 5, maxAlt + 8), sx: IW + 30, beep: 0 });
-  W.missileT = lerp(14, 6, d) + rand(0, 5);
-  hint2('missile', 'MISSILE! MOVE AWAY FROM ITS HEIGHT BEFORE IT LOCKS ON');
+  W.missileT = (lerp(14, 6, d) + rand(0, 5)) * DF().missile;
+  hint2('missile', t('hMissile'));
 }
 function stepFx(dt) {
   if (!W.fx.length) return;
@@ -2141,7 +2389,7 @@ function stepFx(dt) {
         if (mode === 'run') SFX.pew();
       }
       f.sx -= f.u * dt; f.alt += (f.vy || 0) * dt;
-      if (Math.random() < 0.5) addPart({ x: f.sx + f.r, y: groundY - f.alt, vx: rand(10, 40), vy: rand(-10, 10), life: 0.3, max: 0.3, kind: 'smoke', r: 1, r2: f.r - 1, col: f.k === 'ball' ? '#6c6185' : '#43f08a', a: 0.4, drag: 2 });
+      if (Math.random() < 0.5) addPart({ x: f.sx + f.r, y: groundY - f.alt, vx: rand(10, 40), vy: rand(-10, 10), life: 0.3, max: 0.3, kind: 'smoke', r: 1, r2: f.r - 1, col: f.k === 'ball' ? smogPal().trail : '#43f08a', a: 0.4, drag: 2 });
       if (mode === 'run' && overlapCar(W.dist + f.sx - f.r + 1, f.r * 2 - 2, f.alt - f.r + 1, f.alt + f.r - 1, -1)) { f.dead = true; hit({ type: f.k, smash: false }); }
       if (f.sx < -30) f.dead = true;
     } else if (f.k === 'bomb') {
@@ -2195,7 +2443,7 @@ function zapBoss(sx, alt) {
   W.shake = Math.max(W.shake, reduceMotion ? 0 : 4);
   sparks(B.x - 10, groundY - B.alt, 18, ['#7fd8ff', '#ffffff', '#ffd23f'], 260);
   RUN.stats.zaps++;
-  addMult(); addScore(250, 'ZAP', '#7fd8ff'); SFX.zap();
+  addMult(); addScore(250, t('zapF'), '#7fd8ff'); SFX.zap();
   if (B.hp <= 0) {
     B.st = 'dying'; B.dieT = 0; W.hitstop = 0.25; SFX.bossDie();
     W.fx = [];
@@ -2206,14 +2454,14 @@ function bossDefeated(B) {
   W.boss = null; W.bossCount++;
   const cx = B.x, cy = groundY - B.alt;
   for (let i = 0; i < 5; i++) sparks(cx + rand(-30, 30), cy + rand(-20, 20), 14, ['#ffd23f', '#ffffff', '#ff8a3d', '#7fd8ff'], 320);
-  smoke(cx, cy, 18, { world: false, sx: 34, sy: 22, col: B.kind === 'smog' ? '#5d4f7d' : '#6f7686', a: 0.7, r2a: 8, r2b: 16, life: 1.6 });
+  smoke(cx, cy, 18, { world: false, sx: 34, sy: 22, col: B.kind === 'smog' ? smogPal().death : '#6f7686', a: 0.7, r2a: 8, r2b: 16, life: 1.6 });
   W.flash = reduceMotion ? 0 : 0.7; W.shake = Math.max(W.shake, reduceMotion ? 0 : 8);
   for (let i = 0; i < 24; i++) { const c = addCell(W.dist + cx + rand(-30, 30), B.alt + rand(-20, 20)); c.mag = true; }
   if (mode === 'run') {
     RUN.stats.bosses++;
     addMult();
-    addScore(2000 * (B.lvl + 1), B.name.split(' ')[0] + ' DOWN', '#ffd23f');
-    banner(`${B.name} DEFEATED`, '#ffd23f', 2.4);
+    addScore(2000 * (B.lvl + 1), t('down', B.name), '#ffd23f');
+    banner(t('defeated', B.name), '#ffd23f', 2.4);
     P.battery = Math.min(100, P.battery + 35);
     SFX.victory();
   }
@@ -2223,8 +2471,8 @@ function bossDefeated(B) {
 function switchZone() {
   W.zone = W.zone === 1 ? 0 : 1;
   W.warpT = 2.2;
-  if (W.zone === 1) { banner('NEXT STOP: MARS', '#ff8a5c', 2.6); RUN.stats.mars = 1; }
-  else banner('BACK TO EARTH', '#7fd8ff', 2.4);
+  if (W.zone === 1) { banner(t('toMars'), '#ff8a5c', 2.6); RUN.stats.mars = 1; }
+  else banner(SAUDI() ? t('toSaudi') : t('toEarth'), '#7fd8ff', 2.4);
   if (mode === 'run') SFX.warp();
 }
 
@@ -2234,7 +2482,7 @@ function switchZone() {
    Static art is baked once per scale into offscreen canvases, moving parts are drawn live.
    ========================================================= */
 const INK = '#1a1530', LW = 1.1;
-const HUDF = '"Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
+let HUDF = '"Montserrat", "Cairo", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
 const font = (size, w) => `${w || 700} ${size}px ${HUDF}`;
 function camera(dx, dy) { g.setTransform(SC, 0, 0, SC, OX + (dx || 0) * SC, OY + (dy || 0) * SC); }
 const U = n => n / CSSPX;   // CSS pixels to world units, for HUD sizes
@@ -2248,6 +2496,15 @@ const SKYK = [
   [0.72, '#2f8ef0', '#79c3f7', '#dcf4ff', '#a3c0e8', '#e6b57c', 0],
   [0.92, '#2f8ef0', '#79c3f7', '#dcf4ff', '#a3c0e8', '#e6b57c', 0],
   [1.00, '#2b2363', '#a04a86', '#ff9a64', '#5b3a73', '#3a2a55', 0.55]
+].map(r => ({ t: r[0], top: hex2rgb(r[1]), mid: hex2rgb(r[2]), hor: hex2rgb(r[3]), far: hex2rgb(r[4]), near: hex2rgb(r[5]), n: r[6] }));
+const SAUDIK = [
+  [0.00, '#2b2363', '#b5587a', '#ffad6e', '#a8606a', '#7a4a5a', 0.55],
+  [0.12, '#070a1f', '#121a42', '#2a2a5a', '#262450', '#1a1838', 1],
+  [0.50, '#070a1f', '#121a42', '#2a2a5a', '#262450', '#1a1838', 1],
+  [0.62, '#2c3a7a', '#a07ab0', '#ffc890', '#b8806e', '#8a5a5a', 0.45],
+  [0.72, '#3a8be8', '#86c3ef', '#fbe8c4', '#ebc38c', '#dda15c', 0],
+  [0.92, '#3a8be8', '#86c3ef', '#fbe8c4', '#ebc38c', '#dda15c', 0],
+  [1.00, '#2b2363', '#b5587a', '#ffad6e', '#a8606a', '#7a4a5a', 0.55]
 ].map(r => ({ t: r[0], top: hex2rgb(r[1]), mid: hex2rgb(r[2]), hor: hex2rgb(r[3]), far: hex2rgb(r[4]), near: hex2rgb(r[5]), n: r[6] }));
 const MARSK = [
   [0.00, '#2b1c33', '#7a4a62', '#9fb4d8', '#6a3026', '#46201a', 0.55],
@@ -2270,7 +2527,7 @@ function skyFrom(K, t) {
   return K[0];
 }
 function skyAt(t) {
-  const e = skyFrom(SKYK, t), k = W.marsMix;
+  const e = skyFrom(SAUDI() ? SAUDIK : SKYK, t), k = W.marsMix;
   if (!(k > 0)) return e;
   const m = skyFrom(MARSK, t);
   return { top: mixC(e.top, m.top, k), mid: mixC(e.mid, m.mid, k), hor: mixC(e.hor, m.hor, k), far: mixC(e.far, m.far, k), near: mixC(e.near, m.near, k), n: lerp(e.n, m.n, k) };
@@ -2364,7 +2621,7 @@ function bolt(x0, y0, x1, y1, col, jit, segs, wid) {
   path(); g.strokeStyle = col; g.lineWidth = 2.1 * w; g.stroke();
   path(); g.strokeStyle = '#ffffff'; g.lineWidth = 0.8 * w; g.stroke();
 }
-function measure(s, size, w) { g.font = font(size, w); return g.measureText(s).width; }
+function measure(s, size, w) { g.font = font(size, w); g.direction = isAr() ? 'rtl' : 'ltr'; return g.measureText(s).width; }
 
 /* ---------- sky ---------- */
 let skyBands = null, CLOUDS = [];
@@ -2375,7 +2632,7 @@ function makeClouds() {
   CLOUDS.sort((a, b) => a.s - b.s);
 }
 function drawSky(sky) {
-  const key = Math.round(W.dayT * 400) + '|' + Math.round(W.marsMix * 30) + '|' + groundY;
+  const key = Math.round(W.dayT * 400) + '|' + Math.round(W.marsMix * 30) + '|' + groundY + '|' + save.world;
   if (key !== skyKey || !skyBands) {
     skyKey = key; skyBands = [];
     for (let i = 0; i < 64; i++) { const t = (i + 0.5) / 64; skyBands.push(rgbStr(t < 0.58 ? mixC(sky.top, sky.mid, t / 0.58) : mixC(sky.mid, sky.hor, (t - 0.58) / 0.42))); }
@@ -2592,9 +2849,21 @@ function drawDecor(ly, N) {
         break;
       }
       case 'crowd': {
-        const rng = mulberry32(it.seed);
+        const rng = mulberry32(it.seed), sa = SAUDI() && W.zone === 0;
+        const thobe = dn('#f4f1e8', '#4c4c6c', N), thobe2 = dn('#e4dfd2', '#40405e', N), skin = dn('#b07a4e', '#3a2e3a', N);
         for (let x = 0; x < it.w; x += 3.4) {
           const hh = 8 + rng() * 4, r2 = rng(), r3 = rng(), wave = r3 < 0.3;
+          if (sa) {   // thobes, with red shemaghs or white ghutras held by a black agal
+            g.fillStyle = (Math.round(x / 3.4)) % 2 ? thobe : thobe2;
+            rrect(g, sx + x, base - hh + 3, 3, hh - 3, 1.2); g.fill();
+            circ(g, sx + x + 1.5, base - hh + 1.6, 1.1); g.fillStyle = skin; g.fill();
+            g.beginPath(); g.moveTo(sx + x + 0.1, base - hh + 3.6); g.lineTo(sx + x + 0.4, base - hh + 0.5); g.quadraticCurveTo(sx + x + 1.5, base - hh - 0.6, sx + x + 2.6, base - hh + 0.5); g.lineTo(sx + x + 2.9, base - hh + 3.6); g.lineTo(sx + x + 2.2, base - hh + 1.8); g.lineTo(sx + x + 0.8, base - hh + 1.8); g.closePath();
+            g.fillStyle = r2 < 0.55 ? dn('#d8343a', '#5a2236', N) : dn('#ffffff', '#5a5a7a', N); g.fill();
+            g.fillStyle = dn('#16161c', '#0a0a10', N); g.fillRect(sx + x + 0.5, base - hh + 0.3, 2, 0.45);
+            if (wave) { const a = Math.sin(W.time * (5 + r3 * 6) + x) * 0.5; g.strokeStyle = thobe; g.lineWidth = 0.9; g.beginPath(); g.moveTo(sx + x + 2.6, base - hh + 4); g.lineTo(sx + x + 3.6 + Math.sin(a) * 1.5, base - hh); g.stroke(); }
+            if (N > 0.3 && r2 < 0.2 && Math.sin(W.time * (2 + r3 * 3) + x) > 0.55) { circ(g, sx + x + 1.5, base - hh - 2, 0.6); g.fillStyle = '#ffffff'; g.fill(); glowAt(sx + x + 1.5, base - hh - 2, 4, 'rgba(255,255,255,0.7)'); }
+            continue;
+          }
           g.fillStyle = (Math.round(x / 3.4)) % 2 ? col : dark;
           rrect(g, sx + x, base - hh + 3, 3, hh - 3, 1.2); g.fill();
           circ(g, sx + x + 1.5, base - hh + 1.4, 1.35); g.fill();
@@ -2616,7 +2885,7 @@ function drawDecor(ly, N) {
         g.fillStyle = dark; g.fillRect(sx + it.w * 0.25, top + 12, 1.4, it.h - 12); g.fillRect(sx + it.w * 0.75 - 1.4, top + 12, 1.4, it.h - 12);
         rrect(g, sx, top, it.w, 12.5, 1.6); g.fillStyle = '#121933'; g.fill(); g.lineWidth = 0.7; g.strokeStyle = dn('#3a4566', '#2a3458', N); g.stroke();
         g.fillStyle = '#ff2e46'; g.fillRect(sx + 1, top + 10.4, it.w - 2, 1.2);
-        g.font = font(6.4, 800); g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = '#f2f5fa';
+        g.font = font(6.4, 800); g.direction = isAr() ? 'rtl' : 'ltr'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = '#f2f5fa';
         g.fillText(it.text, sx + it.w / 2, top + 5.6);
         if (N > 0.3) glowAt(sx + it.w / 2, top + 6, it.w * 0.62, 'rgba(255,255,255,0.08)');
         break;
@@ -2657,9 +2926,175 @@ function drawDecor(ly, N) {
         if (N > 0.3) glowAt(sx + 35, y + 6.5, 7, 'rgba(240,248,255,0.7)');
         break;
       }
-      default: drawMarsDecor(it, sx, base, N, col, hi, dark);
+      default: if (!drawSaudiDecor(it, sx, base, N, near)) drawMarsDecor(it, sx, base, N, col, hi, dark);
     }
   }
+}
+/* ---------- Saudi scenery: Riyadh, the desert and NEOM ---------- */
+function drawSaudiDecor(it, sx, base, N, near) {
+  switch (it.k) {
+    case 'kingdom': {   // Kingdom Centre: a tapering tower with the arch cut out of its top and a skybridge across it
+      const w = it.w, h = it.h, x = sx, top = base - h;
+      const path = () => {
+        g.beginPath(); g.moveTo(x, base);
+        g.bezierCurveTo(x, base - h * 0.55, x + w * 0.1, top + h * 0.14, x + w * 0.3, top);
+        g.lineTo(x + w * 0.37, top + h * 0.03);
+        g.bezierCurveTo(x + w * 0.37, top + h * 0.38, x + w * 0.63, top + h * 0.38, x + w * 0.63, top + h * 0.03);
+        g.lineTo(x + w * 0.7, top);
+        g.bezierCurveTo(x + w * 0.9, top + h * 0.14, x + w, base - h * 0.55, x + w, base);
+        g.closePath();
+      };
+      path(); g.fillStyle = hgrad(g, x, x + w, [dn('#d7e6f5', '#34437a', N), dn('#9cb8d8', '#26305c', N), dn('#7390b8', '#1b2246', N)]); g.fill();
+      g.save(); path(); g.clip();
+      g.strokeStyle = dn('#ffffff', '#8caaff', N); g.globalAlpha = lerp(0.35, 0.18, N); g.lineWidth = 0.4; g.beginPath();
+      for (let k = 1; k < 6; k++) { const px = x + w * k / 6; g.moveTo(px, base); g.lineTo(px, top); }
+      g.stroke(); g.globalAlpha = 1; g.restore();
+      g.fillStyle = dn('#eef4fb', '#5a6ca0', N); g.fillRect(x + w * 0.35, top + h * 0.07, w * 0.3, 1.3);
+      if (N > 0.3) {   // the arch is lit at night
+        g.save(); g.globalAlpha = N; g.strokeStyle = '#7fd8ff'; g.lineWidth = 0.7;
+        g.beginPath(); g.moveTo(x + w * 0.37, top + h * 0.03); g.bezierCurveTo(x + w * 0.37, top + h * 0.38, x + w * 0.63, top + h * 0.38, x + w * 0.63, top + h * 0.03); g.stroke();
+        g.restore(); glowAt(x + w / 2, top + h * 0.2, w * 0.9, 'rgba(110,200,255,0.35)', N);
+      }
+      break;
+    }
+    case 'faisaliah': {   // Al Faisaliah: a slim pyramid with a golden globe near the top and a spire
+      const w = it.w, h = it.h, top = base - h, cx = sx + w / 2, gy = top + h * 0.26, gr = w * 0.17;
+      g.beginPath(); g.moveTo(sx, base); g.lineTo(cx - 0.9, top + h * 0.18); g.lineTo(cx + 0.9, top + h * 0.18); g.lineTo(sx + w, base); g.closePath();
+      g.fillStyle = hgrad(g, sx, sx + w, [dn('#cfe0f2', '#2c3a6c', N), dn('#86a6cc', '#1d2650', N)]); g.fill();
+      g.save(); g.clip(); g.strokeStyle = dn('#ffffff', '#8caaff', N); g.globalAlpha = lerp(0.4, 0.2, N); g.lineWidth = 0.45; g.beginPath();
+      for (let k = -6; k < 12; k++) { const y = base - k * 6; g.moveTo(sx, y); g.lineTo(sx + w, y - w * 0.8); g.moveTo(sx + w, y); g.lineTo(sx, y - w * 0.8); }
+      g.stroke(); g.globalAlpha = 1; g.restore();
+      g.strokeStyle = dn('#9aa8bc', '#3c4670', N); g.lineWidth = 0.6; g.beginPath(); g.moveTo(cx, top + h * 0.2); g.lineTo(cx, top); g.stroke();
+      if (N > 0.2) glowAt(cx, gy, gr * 4, 'rgba(255,205,90,0.6)', N);
+      circ(g, cx, gy, gr); g.fillStyle = vgrad(g, gy - gr, gy + gr, ['#fff1b8', '#f2c14e', '#b8851d']); g.fill();
+      circ(g, cx - gr * 0.35, gy - gr * 0.35, gr * 0.3); g.fillStyle = 'rgba(255,255,255,0.7)'; g.fill();
+      break;
+    }
+    case 'tower': {   // a modern Riyadh skyscraper, lit at night
+      const w = it.w, h = it.h, top = base - h, s = it.seed % 3;
+      g.beginPath();
+      if (s === 0) { g.moveTo(sx, base); g.lineTo(sx, top + 3); g.quadraticCurveTo(sx + w / 2, top - 2, sx + w, top + 3); g.lineTo(sx + w, base); }
+      else if (s === 1) { g.moveTo(sx, base); g.lineTo(sx, top + 6); g.lineTo(sx + w, top); g.lineTo(sx + w, base); }
+      else { g.moveTo(sx, base); g.lineTo(sx, top + 8); g.lineTo(sx + w * 0.2, top + 8); g.lineTo(sx + w * 0.2, top); g.lineTo(sx + w * 0.8, top); g.lineTo(sx + w * 0.8, top + 8); g.lineTo(sx + w, top + 8); g.lineTo(sx + w, base); }
+      g.closePath(); g.fillStyle = hgrad(g, sx, sx + w, [dn('#c3d4e8', '#2b3666', N), dn('#8aa2c2', '#1d2550', N)]); g.fill();
+      const rng = mulberry32(it.seed);
+      for (let y = top + 9; y < base - 3; y += 3.4) for (let x = sx + 2; x < sx + w - 2; x += 2.6) {
+        const lit = N > 0.3 && rng() < 0.35;
+        g.fillStyle = lit ? '#ffd98a' : dn('#e3edf7', '#2e3868', N); g.fillRect(x, y, 1.2, 1.5);
+      }
+      break;
+    }
+    case 'najdi': {   // Najdi mud-brick, as in old Diriyah: tapered walls, triangle crenellations and vents, a wooden door
+      const w = it.w, h = it.h, top = base - h, mid = !near;
+      const mud = mid ? dn('#d9a874', '#3e3150', N) : dn('#cf935a', '#4a3448', N), mudL = mid ? dn('#ecc596', '#4a3c5e', N) : dn('#e8b27a', '#5a4058', N), dk = dn('#6a4222', '#22182a', N);
+      const tower = it.seed % 2 === 0, tw = Math.min(10, w * 0.28), tx = sx + w - tw;
+      const wall = (x0, x1, y0) => { g.beginPath(); g.moveTo(x0, base); g.lineTo(x0 + 0.8, y0); g.lineTo(x1 - 0.8, y0); g.lineTo(x1, base); g.closePath(); g.fillStyle = mud; g.fill(); };
+      const crown = (x0, x1, y0) => { g.fillStyle = mudL; g.beginPath(); for (let x = x0 + 1.2; x < x1 - 1.8; x += 2.6) { g.moveTo(x, y0); g.lineTo(x + 1.2, y0 - 1.9); g.lineTo(x + 2.4, y0); } g.fill(); g.fillRect(x0 + 0.8, y0 - 0.5, x1 - x0 - 1.6, 0.8); };
+      wall(sx, tower ? tx + 1 : sx + w, top); crown(sx, tower ? tx + 1 : sx + w, top);
+      if (tower) { wall(tx, sx + w, top - 8); crown(tx, sx + w, top - 8); }
+      g.fillStyle = dk;
+      for (let x = sx + 3; x < (tower ? tx : sx + w) - 3; x += 4) { g.beginPath(); g.moveTo(x, top + 3); g.lineTo(x + 1.6, top + 3); g.lineTo(x + 0.8, top + 4.6); g.fill(); }
+      if (tower) for (let y = top - 4; y < base - 6; y += 6) { g.beginPath(); g.moveTo(tx + tw / 2 - 0.8, y); g.lineTo(tx + tw / 2 + 0.8, y); g.lineTo(tx + tw / 2, y + 1.6); g.fill(); }
+      const dx = sx + Math.min(6, w * 0.2);
+      rrect(g, dx, base - 6.5, 3.6, 6.5, 0.6); g.fillStyle = dn('#3f7a7a', '#1d2a36', N); g.fill();
+      g.strokeStyle = dn('#e8d29a', '#4a4a5a', N); g.lineWidth = 0.3; g.beginPath(); g.moveTo(dx + 0.6, base - 5.6); g.lineTo(dx + 3, base - 3.4); g.moveTo(dx + 3, base - 5.6); g.lineTo(dx + 0.6, base - 3.4); g.stroke();
+      if (N > 0.35) for (let x = sx + 10; x < (tower ? tx : sx + w) - 3; x += 7) { rrect(g, x, top + 6.5, 1.6, 2, 0.4); g.fillStyle = '#ffcf7a'; g.fill(); }
+      break;
+    }
+    case 'palm': {   // a date palm swaying a little
+      const top = base - it.h, x0 = sx + 7, lean = ((it.seed % 5) - 2) * 0.7, cx = x0 + lean * 4, sway = Math.sin(W.time * 1.4 + it.ph) * 0.07;
+      const trunk = dn('#8a6236', '#3a2c34', N), leaf = dn('#3f9a46', '#1c3a36', N), leafL = dn('#69c25c', '#28504a', N);
+      g.strokeStyle = trunk; g.lineWidth = 2; g.lineCap = 'round';
+      g.beginPath(); g.moveTo(x0, base); g.quadraticCurveTo(x0 + lean * 2.5, base - it.h * 0.5, cx, top); g.stroke();
+      g.strokeStyle = dn('#6a4826', '#2a2028', N); g.lineWidth = 0.4; g.beginPath();
+      for (let k = 1; k < 8; k++) { const tt = k / 8, px = lerp(x0, cx, tt * tt), py = lerp(base, top, tt); g.moveTo(px - 1, py); g.lineTo(px + 1, py - 0.4); }
+      g.stroke();
+      for (let i = 0; i < 8; i++) {
+        const a = -Math.PI / 2 + (i - 3.5) * 0.44 + sway, L = 9 + (i % 3), dx = Math.cos(a) * L, dy = Math.sin(a) * L * 0.55 + L * 0.35 * (1 - Math.abs(Math.sin(a)));
+        const tx = cx + dx, ty = top + dy, mx = cx + dx * 0.5, my = top + Math.sin(a) * L * 0.6 - 1.5;
+        g.beginPath(); g.moveTo(cx, top); g.quadraticCurveTo(mx, my - 1.2, tx, ty); g.quadraticCurveTo(mx, my + 1, cx, top + 0.8); g.closePath();
+        g.fillStyle = i % 2 ? leaf : leafL; g.fill();
+      }
+      g.fillStyle = dn('#c76a2a', '#4a2a2a', N); for (const [ox, oy] of [[-1, 1.2], [0.6, 1.6], [1.6, 1]]) { circ(g, cx + ox, top + oy, 0.7); g.fill(); }
+      break;
+    }
+    case 'lamp': {   // a double-armed street lamp
+      const top = base - it.h, x = sx + 5;
+      g.strokeStyle = dn('#56607a', '#20263e', N); g.lineWidth = 0.9; g.beginPath(); g.moveTo(x, base); g.lineTo(x, top + 2);
+      g.moveTo(x, top + 3); g.quadraticCurveTo(x - 1, top, x - 4, top + 1); g.moveTo(x, top + 3); g.quadraticCurveTo(x + 1, top, x + 4, top + 1); g.stroke();
+      for (const lx of [x - 4, x + 4]) { rrect(g, lx - 1.4, top + 0.6, 2.8, 1, 0.5); g.fillStyle = N > 0.3 ? '#fff4d0' : dn('#dfe6ee', '#ffffff', N); g.fill(); if (N > 0.3) glowAt(lx, top + 1.6, 9, 'rgba(255,230,170,0.6)', N); }
+      break;
+    }
+    case 'dune': {   // a sand dune: a long windward slope up to a sharp crest
+      const w = it.w, h = it.h, cx = sx + w * 0.62;
+      g.beginPath(); g.moveTo(sx, base + 1); g.bezierCurveTo(sx + w * 0.3, base - h * 0.2, cx - w * 0.15, base - h, cx, base - h);
+      g.bezierCurveTo(cx + w * 0.1, base - h * 0.85, sx + w * 0.9, base - h * 0.15, sx + w, base + 1); g.closePath();
+      g.fillStyle = dn('#efc98e', '#3a3458', N); g.fill();
+      g.beginPath(); g.moveTo(cx, base - h); g.bezierCurveTo(cx + w * 0.1, base - h * 0.85, sx + w * 0.9, base - h * 0.15, sx + w, base + 1); g.lineTo(cx + w * 0.05, base + 1); g.closePath();
+      g.fillStyle = dn('#aa6e32', '#0a081e', N); g.globalAlpha = 0.35; g.fill();
+      g.strokeStyle = dn('#fff0d2', '#7878b4', N); g.globalAlpha = lerp(0.8, 0.4, N); g.lineWidth = 0.6;
+      g.beginPath(); g.moveTo(sx + w * 0.3, base - h * 0.25); g.bezierCurveTo(sx + w * 0.45, base - h * 0.6, cx - w * 0.1, base - h * 0.98, cx, base - h); g.stroke(); g.globalAlpha = 1;
+      break;
+    }
+    case 'alula': {   // AlUla's Elephant Rock: a sandstone mass whose trunk forms an arch
+      const w = it.w, h = it.h, top = base - h;
+      g.beginPath(); g.moveTo(sx, base);
+      g.bezierCurveTo(sx - 1.5, top + h * 0.35, sx + w * 0.12, top, sx + w * 0.42, top + 0.5);
+      g.bezierCurveTo(sx + w * 0.78, top - 0.5, sx + w + 1, top + h * 0.3, sx + w * 0.96, top + h * 0.62);
+      g.quadraticCurveTo(sx + w * 0.93, base - 1, sx + w * 0.9, base);
+      g.lineTo(sx + w * 0.84, base); g.bezierCurveTo(sx + w * 0.84, base - h * 0.5, sx + w * 0.6, base - h * 0.5, sx + w * 0.6, base); g.closePath();
+      g.fillStyle = vgrad(g, top, base, [dn('#eaa36c', '#5a3448', N), dn('#c8743f', '#432636', N), dn('#9a4f2a', '#2e1a2a', N)]); g.fill();
+      g.strokeStyle = dn('#6e3219', '#000000', N); g.globalAlpha = 0.35; g.lineWidth = 0.4; g.beginPath();
+      for (const fx of [0.18, 0.32, 0.5, 0.7]) { g.moveTo(sx + w * fx, top + h * 0.12); g.quadraticCurveTo(sx + w * (fx + 0.03), top + h * 0.5, sx + w * (fx - 0.02), base - h * 0.08); }
+      g.stroke(); g.globalAlpha = 1;
+      break;
+    }
+    case 'camel': {   // a camel with a Sadu saddle blanket, nodding its head
+      const x = sx, b = base, c = dn('#cf9f62', '#3e3446', N), cd = dn('#a8783f', '#2c2436', N), nod = Math.sin(W.time * 2 + it.ph) * 0.8;
+      g.strokeStyle = cd; g.lineWidth = 1.1; g.beginPath();
+      for (const lx of [x + 5, x + 7.5, x + 14, x + 16.5]) { g.moveTo(lx, b - 9); g.lineTo(lx + 0.4, b - 4.5); g.lineTo(lx, b); }
+      g.stroke();
+      g.fillStyle = c;
+      ell(g, x + 11, b - 10.5, 7.5, 3.8); g.fill();
+      g.beginPath(); g.ellipse(x + 10.5, b - 13.5, 4, 3.2, 0, Math.PI, TAU); g.fill();
+      g.strokeStyle = c; g.lineWidth = 2.2; g.beginPath(); g.moveTo(x + 17, b - 11); g.quadraticCurveTo(x + 21, b - 12, x + 20.5, b - 16.5 + nod * 0.4); g.stroke();
+      ell(g, x + 21.8, b - 17.2 + nod * 0.5, 2.4, 1.3, 0.15); g.fill();
+      g.strokeStyle = cd; g.lineWidth = 0.6; g.beginPath(); g.moveTo(x + 3.6, b - 11); g.quadraticCurveTo(x + 2.4, b - 9, x + 2.8, b - 7); g.stroke();
+      g.save(); g.beginPath(); g.ellipse(x + 10.5, b - 13.5, 4, 3.2, 0, Math.PI, TAU); g.rect(x + 6.5, b - 13.6, 8, 2.6); g.clip();
+      for (let i = 0; i < 8; i++) { g.fillStyle = ['#b3262e', '#f2eadb', '#1d1a1e'][i % 3]; g.fillRect(x + 6.5 + i, b - 12.6, 1, 1.6); }
+      g.restore();
+      break;
+    }
+    case 'tent': {   // a Bedouin goat-hair tent with a Sadu-woven band
+      const w = it.w, top = base - 11;
+      g.strokeStyle = dn('#8a7a66', '#3a3440', N); g.lineWidth = 0.35; g.beginPath(); g.moveTo(sx + 1, top + 4); g.lineTo(sx - 4, base); g.moveTo(sx + w - 1, top + 4); g.lineTo(sx + w + 4, base); g.stroke();
+      g.beginPath(); g.moveTo(sx, base); g.lineTo(sx + 1.5, top + 4);
+      g.quadraticCurveTo(sx + w * 0.25, top - 1, sx + w * 0.38, top + 1.5); g.quadraticCurveTo(sx + w * 0.5, top - 1, sx + w * 0.62, top + 1.5);
+      g.quadraticCurveTo(sx + w * 0.75, top - 1, sx + w - 1.5, top + 4); g.lineTo(sx + w, base); g.closePath();
+      g.fillStyle = dn('#3a2c2a', '#1a1420', N); g.fill();
+      rrect(g, sx + w * 0.3, base - 6, w * 0.4, 6, 0.6); g.fillStyle = N > 0.3 ? '#4a2a18' : dn('#1e1614', '#120c12', N); g.fill();
+      if (N > 0.3) glowAt(sx + w / 2, base - 2.5, 10, 'rgba(255,170,80,0.7)', N);
+      g.save(); g.beginPath(); g.rect(sx + 1, top + 5.4, w - 2, 1.8); g.clip();
+      for (let x = 0; x < w; x += 1.8) { g.fillStyle = ['#c8302f', '#f2eadb', '#c8302f', '#1d1a1e'][Math.round(x / 1.8) % 4]; g.beginPath(); g.moveTo(sx + 1 + x, top + 7.2); g.lineTo(sx + 1.9 + x, top + 5.4); g.lineTo(sx + 2.8 + x, top + 7.2); g.fill(); }
+      g.restore();
+      break;
+    }
+    case 'theline': {   // NEOM's The Line: a long mirrored wall reflecting the sky
+      const w = it.w, h = it.h, top = base - h, sky = skyAt(W.dayT);
+      g.fillStyle = vgrad(g, top, base, [rgbStr(mixC(sky.top, [255, 255, 255], 0.25)), rgbStr(sky.mid), rgbStr(sky.hor), rgbStr(mixC(sky.near, [0, 0, 0], 0.15))]);
+      g.fillRect(sx, top, w, h);
+      g.save(); g.beginPath(); g.rect(sx, top, w, h); g.clip();
+      g.fillStyle = 'rgba(255,255,255,0.12)';
+      for (let x = -40; x < w; x += 46) { g.beginPath(); g.moveTo(sx + x, base); g.lineTo(sx + x + 14, top); g.lineTo(sx + x + 22, top); g.lineTo(sx + x + 8, base); g.fill(); }
+      g.strokeStyle = 'rgba(255,255,255,0.14)'; g.lineWidth = 0.3; g.beginPath(); for (let y = top + 4; y < base; y += 4) { g.moveTo(sx, y); g.lineTo(sx + w, y); } g.stroke();
+      if (N > 0.35) { const rng = mulberry32(it.seed); g.fillStyle = `rgba(255,220,150,${(0.7 * N).toFixed(2)})`; for (let i = 0; i < w * 0.4; i++) g.fillRect(sx + rng() * w, top + 2 + rng() * (h - 4), 0.8, 0.6); }
+      g.restore();
+      g.fillStyle = dn('#ffffff', '#96aae6', N); g.globalAlpha = lerp(0.8, 0.5, N); g.fillRect(sx, top, w, 0.6); g.globalAlpha = 1;
+      break;
+    }
+    default: return false;
+  }
+  return true;
 }
 function drawMarsDecor(it, sx, base, N, col, hi, dark) {
   switch (it.k) {
@@ -2813,32 +3248,36 @@ function drawRoad(N) {
   for (let x = -off3 - 12; x < IW + 12; x += 20) g.fillRect(x, groundY + 9, 10, 2.4);
   g.fillStyle = 'rgba(0,0,0,0.3)'; g.fillRect(-12, groundY + 11.4, IW + 24, 0.9);
 }
-function soilTile(night, h) {
-  return bake('soil' + (night ? 'N' : 'D') + h, 0, 0, 64, h, x => {
-    const bands = night ? ['#2c2236', '#251c2e', '#1f1727', '#1a1320', '#150f1a'] : ['#c79a62', '#b48650', '#9c7244', '#845f39', '#6c4d2f'];
-    const bh = Math.max(6, h / bands.length);
-    for (let i = 0; i < bands.length; i++) {
-      x.fillStyle = bands[i]; x.beginPath(); x.moveTo(-2, i * bh);
-      for (let xx = -2; xx <= 66; xx += 2) x.lineTo(xx, i * bh + (i ? Math.sin(xx * TAU / 32 + i) * 1.2 : 0));
-      x.lineTo(66, h + 1); x.lineTo(-2, h + 1); x.closePath(); x.fill();
-    }
-    const rng = mulberry32(7);
-    for (let i = 0; i < h * 0.18; i++) {
-      const px = rng() * 60 + 2, py = rng() * (h - 2) + 1.5, r = 0.5 + rng() * 1.2;
-      ell(x, px, py, r * 1.3, r, 0); x.fillStyle = night ? '#3c3148' : '#dcb684'; x.fill();
-      ell(x, px + r * 0.2, py + r * 0.3, r * 1.1, r * 0.6, 0); x.fillStyle = 'rgba(0,0,0,0.18)'; x.fill();
-    }
+function paintSoil(x, night, sa, h) {
+  const bands = night ? ['#2c2236', '#251c2e', '#1f1727', '#1a1320', '#150f1a'] : sa ? ['#e6bd7c', '#d8aa68', '#c49455', '#ad7f45', '#936a38'] : ['#c79a62', '#b48650', '#9c7244', '#845f39', '#6c4d2f'];
+  const bh = Math.max(6, h / bands.length);
+  for (let i = 0; i < bands.length; i++) {
+    x.fillStyle = bands[i]; x.beginPath(); x.moveTo(-2, i * bh);
+    for (let xx = -2; xx <= 66; xx += 2) x.lineTo(xx, i * bh + (i ? Math.sin(xx * TAU / 32 + i) * 1.2 : 0));
+    x.lineTo(66, h + 1); x.lineTo(-2, h + 1); x.closePath(); x.fill();
+  }
+  const rng = mulberry32(7);
+  for (let i = 0; i < h * 0.18; i++) {
+    const px = rng() * 60 + 2, py = rng() * (h - 2) + 1.5, r = 0.5 + rng() * 1.2;
+    ell(x, px, py, r * 1.3, r, 0); x.fillStyle = night ? '#3c3148' : '#dcb684'; x.fill();
+    ell(x, px + r * 0.2, py + r * 0.3, r * 1.1, r * 0.6, 0); x.fillStyle = 'rgba(0,0,0,0.18)'; x.fill();
+  }
+}
+// one opaque tile with day and night already blended (in eight steps), so overlapping tiles never darken the seams
+function soilTile(N, h) {
+  const sa = SAUDI(), q = Math.round(clamp(N, 0, 1) * 8);
+  return bake('soil' + q + '|' + h + (sa ? 'sa' : ''), 0, 0, 64, h, x => {
+    paintSoil(x, false, sa, h);
+    if (q) { x.globalAlpha = q / 8; paintSoil(x, true, sa, h); x.globalAlpha = 1; }
     x.fillStyle = 'rgba(0,0,0,0.3)'; x.fillRect(-2, 0, 68, 1.5);
   });
 }
 function drawUnder(N) {
   const top = groundY + 11, h = Math.ceil(IH - top + 1);
   if (h <= 0) return;
-  const off = W.dist % 64;
-  // neighbouring tiles overlap by a device pixel so no seams show between them
-  const tile = (c) => { for (let x = -off; x < IW + 1; x += 64) g.drawImage(c, x, top, c.ww + 1.5 / SC, c.hh); };
-  tile(soilTile(false, h));
-  if (N > 0) { g.globalAlpha = N; tile(soilTile(true, h)); g.globalAlpha = 1; }
+  const off = W.dist % 64, c = soilTile(N, h);
+  // neighbouring tiles overlap by a device pixel so no gaps show between them
+  for (let x = -off; x < IW + 1; x += 64) g.drawImage(c, x, top, c.ww + 1.5 / SC, c.hh);
   if (W.marsMix > 0) { g.globalCompositeOperation = 'multiply'; g.globalAlpha = W.marsMix; g.fillStyle = '#ff9468'; g.fillRect(-12, top, IW + 24, h + 12); g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1; }
   if (h > 96) drawTunnel(top + Math.floor(h * 0.38), N);
 }
@@ -3100,7 +3539,7 @@ function gasBody(x, kind, c) {
     x.strokeStyle = 'rgba(40,40,60,0.3)'; x.lineWidth = 0.6; x.beginPath(); for (const rx of [17.5, 30.5, 43.5]) { x.moveTo(rx, 1.6); x.lineTo(rx, 18.4); } x.stroke();
     shine(x, 6, 3.4, 48, 1.4, 0.7);
     rrect(x, 24, 7.6, 13, 4.6, 2.3); ink(x, '#ff9a1f', 0.5);
-    x.fillStyle = INK; x.font = font(3.2, 800); x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('GAS', 30.5, 10.1);
+    x.fillStyle = INK; x.font = font(isAr() ? 3.6 : 3.2, 800); x.textAlign = 'center'; x.textBaseline = 'middle'; x.direction = isAr() ? 'rtl' : 'ltr'; x.fillText(t('gasLabel'), 30.5, isAr() ? 9.8 : 10.1);
     poly(x, [64, 21, 64, 8.4, 70, 6.6, 79.6, 6.6, 85.4, 13, 85.4, 21]); ink(x, vgrad(x, 6.6, 21, [c.B, c.b, c.d]), LW * 0.9);
     poly(x, [71, 8, 78.8, 8, 83.4, 12.8, 71, 12.8]); x.fillStyle = gl(0, 8, 0, 12.8); x.fill(); x.lineWidth = 0.5; x.strokeStyle = INK; x.stroke();
     x.fillStyle = '#17131f'; x.beginPath(); x.arc(76, 21.4, 4.8, Math.PI, TAU); x.fill();
@@ -3110,8 +3549,8 @@ function gasBody(x, kind, c) {
   }
 }
 function drawGas(e, sx, N) {
-  const sp = VEH[e.kind], top = groundY - e.h, c = GAS_COLORS[e.ci || 0];
-  blit(bake('gas:' + e.kind + (e.ci || 0), -1.5, -1.5, sp.w + 1.5, sp.h + 1.5, x => gasBody(x, e.kind, c)), sx, top);
+  const sp = VEH[e.kind], top = groundY - e.h;
+  blit(gasSpr(e), sx, top);
   const rim = e.kind === 'tanker' ? '#9aa1ab' : '#c3c8cf';
   for (const [wx, wy] of sp.wheels) drawWheel(sx + wx, top + wy, sp.wheelR, e.wr * 1.5, rim, 4);
   if (N > 0.3) {
@@ -3241,9 +3680,10 @@ function drawPower(e, sx) {
     x.beginPath(); x.arc(0, 0, 6.2, -2.6, -1.5); x.lineWidth = 1; x.strokeStyle = 'rgba(255,255,255,0.75)'; x.stroke();
   }), cx, cy);
 }
+const gasSpr = e => { const sp = VEH[e.kind], pal = e.sa ? GAS_COLORS_SA : GAS_COLORS; return bake('gas:' + e.kind + (e.sa ? 'sa' : '') + (e.ci || 0) + LANG, -1.5, -1.5, sp.w + 1.5, sp.h + 1.5, x => gasBody(x, e.kind, pal[e.ci || 0])); };
 function entSprite(e) {
   const o = e.orig;
-  if (o === 'gas') { const sp = VEH[e.kind]; return { c: bake('gas:' + e.kind + (e.ci || 0), -1.5, -1.5, sp.w + 1.5, sp.h + 1.5, x => gasBody(x, e.kind, GAS_COLORS[e.ci || 0])), w: sp.w, h: sp.h }; }
+  if (o === 'gas') { const sp = VEH[e.kind]; return { c: gasSpr(e), w: sp.w, h: sp.h }; }
   if (o === 'cone') return e.rock ? { c: rockSpr(false), w: 16, h: 10 } : { c: coneSpr(), w: 7, h: 9 };
   if (o === 'barrier') return e.rock ? { c: rockSpr(true), w: 30, h: 18 } : { c: barrierSpr(), w: 18, h: 11 };
   return { c: droneSpr(), w: 15, h: 7 };
@@ -3287,12 +3727,21 @@ function eyes(x, ex, ey, r, look, angry, pupil) {
     x.moveTo(ex[1] + r * 1.1, ey - r * 1.5); x.lineTo(ex[1] - r * 0.9, ey - r * 0.75); x.stroke();
   }
 }
-const monSpr = kind => bake('mon:' + kind, -3, -6, MON[kind].w + 3, MON[kind].h + 2, x => {
+// smog creatures in Texas; in Saudi Arabia the same creatures are made of desert dust
+const SMOG = { hi: '#b3a7da', base: '#7d6fa8', lo: '#4c3f72', wing: ['#9a8cc0', '#5a4d80'], body: ['#8c7fb6', '#4a3f6a'], ear: '#5a4d80', king: ['#a596d0', '#6a5c94', '#3a2f5c'],
+  ball: ['#a596d0', '#6c6185', '#3a2f5c'], puff: '#8f84ab', trail: '#6c6185', smoke: '#5b4f7c', death: '#5d4f7d', stack: ['#eef1f6', '#9aa3b2'], cap: '#3a3450',
+  bits: { smog: ['#75699a', '#a99fcb', '#463c5c'], bat: ['#6c6185', '#3d3452', '#ffd23f'] } };
+const DUST = { hi: '#f6d8a2', base: '#d29a58', lo: '#8a5a2c', wing: ['#e6bb84', '#a8743e'], body: ['#deae72', '#93602e'], ear: '#a8743e', king: ['#f4d6a0', '#c99050', '#7a4e26'],
+  ball: ['#f2d29a', '#c99050', '#7a4e26'], puff: '#d6b07a', trail: '#c99a62', smoke: '#c9a070', death: '#b0844e', stack: ['#f2dcb4', '#c09060'], cap: '#6a4a2a',
+  bits: { smog: ['#c99050', '#f2d29a', '#7a4e26'], bat: ['#c99050', '#8a5a2c', '#ffd23f'] } };
+const smogPal = () => SAUDI() ? DUST : SMOG;
+const monSpr = kind => bake('mon:' + kind + (kind === 'smog' && SAUDI() ? 'sa' : ''), -3, -6, MON[kind].w + 3, MON[kind].h + 2, x => {
   x.lineJoin = 'round'; x.lineCap = 'round';
-  if (kind === 'smog') {   // a smog blob with smokestack horns
-    for (const px of [3.4, 10.6]) { rrect(x, px, -3.2, 2.4, 5, 0.5); ink(x, vgrad(x, -3, 2, ['#e3e8ef', '#8d96a6']), 0.6); rrect(x, px - 0.3, -3.6, 3, 1.3, 0.5); ink(x, '#3a3450', 0.5); }
+  if (kind === 'smog') {   // a smog (or dust) blob with smokestack horns
+    const sp = smogPal();
+    for (const px of [3.4, 10.6]) { rrect(x, px, -3.2, 2.4, 5, 0.5); ink(x, vgrad(x, -3, 2, sp.stack), 0.6); rrect(x, px - 0.3, -3.6, 3, 1.3, 0.5); ink(x, sp.cap, 0.5); }
     const body = () => { x.beginPath(); x.moveTo(1, 12.6); x.bezierCurveTo(-0.6, 7, 1, 1.6, 8, 1.4); x.bezierCurveTo(15, 1.6, 16.6, 7, 15, 12.6); x.quadraticCurveTo(8, 13.6, 1, 12.6); x.closePath(); };
-    toon(x, body, 1, 13, '#b3a7da', '#7d6fa8', '#4c3f72', 0.9);
+    toon(x, body, 1, 13, sp.hi, sp.base, sp.lo, 0.9);
     eyes(x, [5, 11], 6.2, 1.9, 0, true, '#ff3149');
     rrect(x, 4.4, 9.2, 7.2, 2.4, 1); ink(x, '#2a1f40', 0.5);
     x.fillStyle = '#ffffff'; for (let i = 0; i < 4; i++) poly(x, [4.9 + i * 1.7, 9.2, 6.2 + i * 1.7, 9.2, 5.55 + i * 1.7, 10.4]), x.fill();
@@ -3353,10 +3802,10 @@ function drawMon(e, sx, N) {
       for (const s of [-1, 1]) {
         g.save(); g.translate(cx + s * 2, cy); g.scale(s, 1); g.rotate(-f * 0.6);
         g.beginPath(); g.moveTo(0, -1.4); g.quadraticCurveTo(4, -5, 9, -2.6); g.quadraticCurveTo(7.6, -0.6, 8, 1); g.quadraticCurveTo(6, 0, 5, 1.6); g.quadraticCurveTo(3.4, 0.4, 0, 1.6); g.closePath();
-        ink(g, vgrad(g, -5, 2, ['#9a8cc0', '#5a4d80']), 0.7); g.restore();
+        ink(g, vgrad(g, -5, 2, smogPal().wing), 0.7); g.restore();
       }
-      circ(g, cx, cy, 3.4); ink(g, vgrad(g, cy - 3.4, cy + 3.4, ['#8c7fb6', '#4a3f6a']), 0.8);
-      for (const s of [-1, 1]) { poly(g, [cx + s * 1.4, cy - 2.8, cx + s * 2.6, cy - 5.4, cx + s * 3, cy - 2]); g.fillStyle = '#5a4d80'; g.fill(); g.lineWidth = 0.5; g.strokeStyle = INK; g.stroke(); }
+      circ(g, cx, cy, 3.4); ink(g, vgrad(g, cy - 3.4, cy + 3.4, smogPal().body), 0.8);
+      for (const s of [-1, 1]) { poly(g, [cx + s * 1.4, cy - 2.8, cx + s * 2.6, cy - 5.4, cx + s * 3, cy - 2]); g.fillStyle = smogPal().ear; g.fill(); g.lineWidth = 0.5; g.strokeStyle = INK; g.stroke(); }
       circ(g, cx - 1.3, cy - 0.6, 1); g.fillStyle = '#ffd23f'; g.fill(); circ(g, cx + 1.3, cy - 0.6, 1); g.fill();
       g.fillStyle = INK; circ(g, cx - 1.1, cy - 0.5, 0.45); g.fill(); circ(g, cx + 1.5, cy - 0.5, 0.45); g.fill();
       g.fillStyle = '#ffffff'; poly(g, [cx - 0.9, cy + 1.2, cx - 0.3, cy + 1.2, cx - 0.6, cy + 2.2]); g.fill(); poly(g, [cx + 0.3, cy + 1.2, cx + 0.9, cy + 1.2, cx + 0.6, cy + 2.2]); g.fill();
@@ -3458,17 +3907,17 @@ function drawTruckWarnings() {
 /* ---------- bosses ---------- */
 const KING_PUFFS = [[-26, 6, 16], [-8, -6, 20], [14, -2, 19], [28, 10, 14], [-16, 18, 14], [8, 18, 16], [26, 24, 10], [-32, 20, 9], [-2, 26, 12]];
 function drawSmogKing(B) {
-  const cx = B.x, cy = groundY - B.alt, t = W.time, fl = B.flash > 0;
+  const cx = B.x, cy = groundY - B.alt, t = W.time, fl = B.flash > 0, sp = smogPal();
   const rr = (dx, r) => r + Math.sin(t * 3 + dx) * 1.2;
   for (const [px, ph] of [[-20, 10], [-10, 15], [0, 19], [10, 15], [20, 10]]) {   // crown of smokestacks
     const x = cx + px, top = cy - 20 - ph;
-    rrect(g, x - 2.4, top, 4.8, ph + 6, 0.8); ink(g, fl ? '#ffffff' : hgrad(g, x - 2.4, x + 2.4, ['#eef1f6', '#9aa3b2']), 0.9);
-    rrect(g, x - 3, top - 1.2, 6, 2.2, 0.8); ink(g, fl ? '#ffffff' : '#3a3450', 0.7);
-    if (!paused && Math.random() < 0.12 && B.st !== 'enter') addPart({ x, y: top - 2, vx: rand(-8, 8), vy: rand(-30, -14), life: rand(0.6, 1.0), max: 1.0, kind: 'smoke', r: 1.5, r2: rand(3, 6), col: '#5b4f7c', a: 0.6, drag: 0.6 });
+    rrect(g, x - 2.4, top, 4.8, ph + 6, 0.8); ink(g, fl ? '#ffffff' : hgrad(g, x - 2.4, x + 2.4, sp.stack), 0.9);
+    rrect(g, x - 3, top - 1.2, 6, 2.2, 0.8); ink(g, fl ? '#ffffff' : sp.cap, 0.7);
+    if (!paused && Math.random() < 0.12 && B.st !== 'enter') addPart({ x, y: top - 2, vx: rand(-8, 8), vy: rand(-30, -14), life: rand(0.6, 1.0), max: 1.0, kind: 'smoke', r: 1.5, r2: rand(3, 6), col: sp.smoke, a: 0.6, drag: 0.6 });
   }
   const path = () => { g.beginPath(); for (const [dx, dy, r] of KING_PUFFS) { const k = rr(dx, r); g.moveTo(cx + dx + k, cy + dy); g.arc(cx + dx, cy + dy, k, 0, TAU); } };
   path(); g.lineWidth = 2.6; g.strokeStyle = INK; g.stroke();
-  path(); g.fillStyle = fl ? '#ffffff' : vgrad(g, cy - 26, cy + 36, ['#a596d0', '#6a5c94', '#3a2f5c']); g.fill();
+  path(); g.fillStyle = fl ? '#ffffff' : vgrad(g, cy - 26, cy + 36, sp.king); g.fill();
   if (!fl) { g.fillStyle = 'rgba(255,255,255,0.22)'; for (const [dx, dy, r] of KING_PUFFS.slice(0, 4)) { circ(g, cx + dx - r * 0.3, cy + dy - r * 0.35, r * 0.4); g.fill(); } }
   const look = clamp((B.alt - P.alt) * 0.04, -2, 2);
   for (const ex of [-14, 8]) {
@@ -3529,7 +3978,7 @@ function drawFx() {
     if (f.delay > 0) continue;
     if (f.k === 'ball') {
       const x = f.sx, y = groundY - f.alt, r = f.r + 0.6;
-      circ(g, x, y, r); ink(g, vgrad(g, y - r, y + r, ['#a596d0', '#6c6185', '#3a2f5c']), 0.9);
+      circ(g, x, y, r); ink(g, vgrad(g, y - r, y + r, smogPal().ball), 0.9);
       circ(g, x - 1.6, y - 0.4, 1); g.fillStyle = '#ff3149'; g.fill(); circ(g, x + 1.4, y - 0.4, 1); g.fill();
       g.strokeStyle = INK; g.lineWidth = 0.7; g.beginPath(); g.moveTo(x - 2.6, y - 2); g.lineTo(x - 0.8, y - 1.3); g.moveTo(x + 2.6, y - 2); g.lineTo(x + 0.8, y - 1.3); g.stroke();
     } else if (f.k === 'plasma') {
@@ -3694,8 +4143,8 @@ const easeOut = t => 1 - Math.pow(1 - t, 3);
 // HUD text: clean type with a soft shadow; o.w weight, o.ls letter spacing (CSS px), o.base baseline
 function txt(s, x, y, size, col, align, o) {
   o = o || {};
-  g.font = font(size, o.w); g.textAlign = align || 'left'; g.textBaseline = o.base || 'top';
-  if ('letterSpacing' in g) g.letterSpacing = o.ls ? U(o.ls) + 'px' : '0px';
+  g.font = font(size, o.w); g.textAlign = align || 'left'; g.textBaseline = o.base || 'top'; g.direction = isAr() ? 'rtl' : 'ltr';
+  if ('letterSpacing' in g) g.letterSpacing = o.ls && !isAr() ? U(o.ls) + 'px' : '0px';
   if (o.shadow !== false) { g.fillStyle = 'rgba(4,6,14,0.45)'; g.fillText(s, x, y + size * 0.07); }
   g.fillStyle = col; g.fillText(s, x, y);
   const w = g.measureText(s).width;
@@ -3703,8 +4152,8 @@ function txt(s, x, y, size, col, align, o) {
   return w;
 }
 function measureLS(s, size, w, ls) {
-  g.font = font(size, w);
-  if ('letterSpacing' in g) g.letterSpacing = ls ? U(ls) + 'px' : '0px';
+  g.font = font(size, w); g.direction = isAr() ? 'rtl' : 'ltr';
+  if ('letterSpacing' in g) g.letterSpacing = ls && !isAr() ? U(ls) + 'px' : '0px';
   const m = g.measureText(s).width;
   if ('letterSpacing' in g) g.letterSpacing = '0px';
   return m;
@@ -3763,7 +4212,7 @@ function drawHUD() {
   // score, best and cells (left)
   const s1 = U(24), pad = U(12);
   const sw = measure(fmt(RUN.score), s1, 800), mw = RUN.mult > 1 ? measure('×' + RUN.mult, U(12), 800) + U(12) : 0;
-  const bestS = 'BEST ' + fmt(Math.max(save.best, RUN.score)), bw = measureLS(bestS, U(10), 600, 1.4);
+  const bestS = t('bestHud') + ' ' + fmt(Math.max(save.best, RUN.score)), bw = measureLS(bestS, U(10), 600, 1.4);
   const cellS = fmt(RUN.cells), cw = measure(cellS, U(15), 700) + U(20) + (RUN.chain >= 5 ? measure('×' + RUN.chain, U(11), 700) + U(6) : 0);
   const lw = Math.max(sw + (mw ? mw + U(8) : 0), bw, cw), lh = U(80);
   chip(ml, m, lw + pad * 2, lh, U(18));
@@ -3792,7 +4241,7 @@ function drawHUD() {
     px += pr * 2 + U(8);
   }
   // speed in the middle and the battery on the right, kept clear of the left chip and the buttons
-  const mph = String(Math.round(W.speed * PX2MPH)), ss = U(26), nw = measure(mph, ss, 800), uw = measureLS('MPH', U(9), 700, 1.6);
+  const mph = String(Math.round(W.speed * PX2MPH * (isAr() ? 1.609 : 1))), unit = t('unit'), ss = U(26), nw = measure(mph, ss, 800), uw = measureLS(unit, U(9), 700, 1.6);
   const sw2 = nw + uw + U(8) + pad * 2, sh = U(44), leftEnd = ml + lw + pad * 2, rightStart = IW - HUD.mr - HUD.reserve;
   const row2 = Math.max(m + U(52), HUD.btnBottom);
   let sx = IW / 2 - sw2 / 2, sy = m;
@@ -3804,8 +4253,10 @@ function drawHUD() {
   if (bx < (sy === m ? sx + sw2 : leftEnd) + U(10)) { bx = IW - HUD.mr - bwid; by = row2; }
   if (by === sy && sx + sw2 > bx - U(8)) sx = Math.max(leftEnd + U(8), bx - U(8) - sw2);
   chip(sx, sy, sw2, sh);
-  txt(mph, sx + pad, sy + sh / 2 + U(1), ss, P.plaid > 0 ? '#ff8a96' : '#ffffff', 'left', { w: 800, base: 'middle' });
-  txt('MPH', sx + pad + nw + U(6), sy + sh / 2 + U(4), U(9), dim, 'left', { w: 700, ls: 1.6, base: 'middle' });
+  // the unit reads after the number: to its right in English, to its left in Arabic
+  const nx = isAr() ? sx + pad + uw + U(8) : sx + pad, ux = isAr() ? sx + pad : sx + pad + nw + U(6);
+  txt(mph, nx, sy + sh / 2 + U(1), ss, P.plaid > 0 ? '#ff8a96' : '#ffffff', 'left', { w: 800, base: 'middle' });
+  txt(unit, ux, sy + sh / 2 + U(isAr() ? 1 : 4), U(9), dim, 'left', { w: 700, ls: 1.6, base: 'middle' });
   const batBottom = drawBattery(bx, by, bwid);
   // centre message stack, below whatever sits on the second row
   let y = Math.max(sy + sh, batBottom) + U(12);
@@ -3828,7 +4279,7 @@ function drawHUD() {
   const fs = U(12);
   if (RUN.t060Show > 0 && mode === 'run') {
     g.globalAlpha = Math.min(1, RUN.t060Show * 2);
-    y = label(`0–60 MPH IN ${RUN.t060.toFixed(2)} S`, y, fs, '#ffffff', 700, 1.2) + U(8);
+    y = label(t('t060', RUN.t060.toFixed(2)), y, fs, '#ffffff', 700, 1.2) + U(8);
     g.globalAlpha = 1;
   }
   if (toasts.length) {
@@ -3864,7 +4315,7 @@ function drawBattery(x0, y, cwid) {
   const f = clamp(P.battery / 100, 0, 1);
   if (f > 0) { rrect(g, bx + U(2.5), by + U(2.5), (w - U(5)) * f, h - U(5), U(2)); g.fillStyle = P.charging && Math.floor(W.time * 8) % 2 ? '#b6ffd2' : col; g.fill(); }
   if (P.charging) boltIcon(bx + w / 2, by + h / 2, U(1.1), '#ffffff');
-  const ft = nextChargerFt(), lab = P.charging ? 'CHARGING' : (ft / 5280).toFixed(1) + ' MI TO CHARGE';
+  const ft = nextChargerFt(), lab = P.charging ? t('charging') : t('toCharge', (ft / 5280 * (isAr() ? 1.609 : 1)).toFixed(1));
   const lw = measureLS(lab, U(10), 700, 1), ry = y + ch + U(5), rh = U(22), rw = lw + U(P.charging ? 20 : 32);
   chip(right - rw, ry, rw, rh, rh / 2, 0.45);
   txt(lab, right - U(10), ry + rh / 2 + U(0.5), U(10), '#8dffbc', 'right', { w: 700, ls: 1, base: 'middle', shadow: false });
@@ -3881,7 +4332,7 @@ function drawLaunchLights(y) {
     if (on) glowAt(cx, cy, r * 3, i < 3 ? 'rgba(255,46,70,0.7)' : 'rgba(61,255,122,0.7)');
     circ(g, cx, cy, r); g.fillStyle = col; g.fill();
   }
-  return label(L.green ? 'GO!' : 'LAUNCH ON GREEN', y + h + U(6), U(11), L.green ? '#3ddc84' : '#ffffff', 800, 2) + U(8);
+  return label(L.green ? t('goGo') : t('launchOn'), y + h + U(6), U(11), L.green ? '#3ddc84' : '#ffffff', 800, 2) + U(8);
 }
 function drawBossBar(y) {
   const B = W.boss; if (!B) return y;
@@ -3898,7 +4349,7 @@ function drawBossBar(y) {
 function drawPrompt() {
   if (!(mode === 'attract' || mode === 'launch' || (mode === 'run' && RUN.time < 8))) return;
   if (mode === 'attract' && !$('scrTitle').classList.contains('on')) return;
-  const msg = 'HOLD ANYWHERE TO FIRE THRUSTERS';
+  const msg = t('holdPrompt');
   let sz = U(11); const mw0 = measureLS(msg, sz, 700, 1.8); if (mw0 > IW - U(60)) sz *= (IW - U(60)) / mw0;
   const w = measureLS(msg, sz, 700, 1.8) + U(36), h = U(34), y = IH - HUD.m - h - U(4);
   g.globalAlpha = 0.75 + 0.25 * Math.sin(W.time * 3);
@@ -3938,38 +4389,38 @@ function render() {
 /* =========================================================
    Missions, ranks & upgrades
    ========================================================= */
+// mission kinds: base target, extra per rank, optional cap (the wording lives in the language table)
 const MT = {
-  cells: { t: n => `Collect ${n} cells in one run`, b: 40, s: 22 },
-  miles: { t: n => `Drive ${n} mile${n === 1 ? '' : 's'} in one run`, b: 1, s: 0.5, half: true },
-  hops: { t: n => `Hop over ${n} gas cars in one run`, b: 5, s: 3 },
-  roofs: { t: n => `Land on ${n} gas car roof${n > 1 ? 's' : ''} in one run`, b: 2, s: 1 },
-  loops: { t: n => `Drive ${n} loop${n > 1 ? 's' : ''} in one run`, b: 1, s: 0.4 },
-  supers: { t: n => `Supercharge ${n} time${n > 1 ? 's' : ''} in one run`, b: 1, s: 0.35 },
-  smash: { t: n => `Smash ${n} obstacles in Plaid mode`, b: 3, s: 2 },
-  close: { t: n => `Pull off ${n} close call${n > 1 ? 's' : ''} in one run`, b: 3, s: 2 },
-  air: { t: n => `Stay airborne for ${n} seconds in one run`, b: 12, s: 6 },
-  mph: { t: n => `Reach ${n} mph`, b: 140, s: 10, max: 230 },
-  chain: { t: n => `Chain ${n} cells in a row`, b: 15, s: 6 },
-  perfect: { t: () => 'Nail a perfect launch on green', b: 1, s: 0, max: 1 },
-  powers: { t: n => `Grab ${n} power-ups in one run`, b: 2, s: 1 },
-  stomps: { t: n => `Stomp ${n} monster${n > 1 ? 's' : ''} in one run`, b: 3, s: 2 },
-  blasts: { t: n => `Blast ${n} monster${n > 1 ? 's' : ''} with your thrusters`, b: 2, s: 2 },
-  bosses: { t: () => 'Defeat a boss', b: 1, s: 0, max: 1 },
-  mars: { t: () => 'Make it to Mars', b: 1, s: 0, max: 1 },
-  mult: { t: n => `Build a \u00d7${n} score multiplier`, b: 3, s: 0.3, max: 5 },
-  flames: { t: n => `Torch ${n} things with the not-a-flamethrower`, b: 3, s: 2 },
-  spotted: { t: () => 'Spot the Roadster drifting through space', b: 1, s: 0, max: 1 },
-  ludi: { t: () => 'Hit ludicrous speed (200 mph)', b: 1, s: 0, max: 1 },
-  dodged: { t: n => `Dodge ${n} missile${n > 1 ? 's' : ''} in one run`, b: 2, s: 1 }
+  cells: { b: 40, s: 22 },
+  miles: { b: 1, s: 0.5, half: true },
+  hops: { b: 5, s: 3 },
+  roofs: { b: 2, s: 1 },
+  loops: { b: 1, s: 0.4 },
+  supers: { b: 1, s: 0.35 },
+  smash: { b: 3, s: 2 },
+  close: { b: 3, s: 2 },
+  air: { b: 12, s: 6 },
+  mph: { b: 140, s: 10, max: 230 },
+  chain: { b: 15, s: 6 },
+  perfect: { b: 1, s: 0, max: 1 },
+  powers: { b: 2, s: 1 },
+  stomps: { b: 3, s: 2 },
+  blasts: { b: 2, s: 2 },
+  bosses: { b: 1, s: 0, max: 1 },
+  mars: { b: 1, s: 0, max: 1 },
+  mult: { b: 3, s: 0.3, max: 5 },
+  flames: { b: 3, s: 2 },
+  spotted: { b: 1, s: 0, max: 1 },
+  ludi: { b: 1, s: 0, max: 1 },
+  dodged: { b: 2, s: 1 }
 };
-const RANKS = ['Reservation holder', 'Test driver', 'Funding secured', 'Thruster pilot', 'Loop specialist', 'Plaid pilot', 'Ludicrous', 'Not a flamethrower', 'Occupy Mars', 'Founders series'];
-const rankName = r => r < RANKS.length ? RANKS[r] : `Mars bound ${r - RANKS.length + 2}`;
+const missionText = m => t('m_' + m.k, m.n);
+function rankName(r) { const R = t('ranks'); return r < R.length ? R[r] : t('rankMore', r - R.length + 2); }
 const UPS = [
-  { id: 'battery', name: 'Battery pack', d: lv => lv ? `Drains ${lv * 10}% slower` : 'Stock pack. Each level drains 10% slower.' },
-  { id: 'thrust', name: 'Cold-gas tanks', d: lv => `${(1.4 + 0.3 * lv).toFixed(1)} s of thrust per tank` },
-  { id: 'coil', name: 'Tesla coil', d: lv => `Cell magnet lasts ${6 + 2 * lv} s` },
-  { id: 'plaid', name: 'Plaid mode', d: lv => `Smash-through boost lasts ${4 + lv} s` }
+  { id: 'battery', d: lv => lv }, { id: 'thrust', d: lv => (1.4 + 0.3 * lv).toFixed(1) },
+  { id: 'coil', d: lv => 6 + 2 * lv }, { id: 'plaid', d: lv => 4 + lv }
 ];
+const upName = u => t('up_' + u.id), upDesc = (u, lv) => t('up_' + u.id + '_d', u.d(lv));
 const UP_COST = [200, 500, 1100, 2200, 4000];
 function missionReward(m) { return m.rw || (60 + 40 * save.rank); }
 function newMission(exclude) {
@@ -3989,10 +4440,10 @@ function checkMissions() {
   for (const m of save.missions) {
     if (m.done || missionProgress(m) < m.n) continue;
     m.done = true; m.rw = missionReward(m); save.bank += m.rw; save.done++;
-    toast(`MISSION DONE +${m.rw} CELLS`, '#43f08a'); SFX.mission();
-    announce(`Mission complete: ${MT[m.k].t(m.n)}. ${m.rw} cells added.`);
+    toast(t('missionDone', m.rw), '#43f08a'); SFX.mission();
+    announce(t('missionAnnounce', missionText(m), m.rw));
     const r = Math.floor(save.done / 3);
-    if (r > save.rank) { save.rank = r; const bonus = 150 + 100 * r; save.bank += bonus; toast(`RANK UP: ${rankName(r).toUpperCase()} +${bonus}`, '#ffd23f'); }
+    if (r > save.rank) { save.rank = r; const bonus = 150 + 100 * r; save.bank += bonus; toast(t('rankUp', rankName(r), bonus), '#ffd23f'); }
     persist();
   }
 }
@@ -4015,7 +4466,7 @@ function bankRun() {
    Screens
    ========================================================= */
 const $ = id => document.getElementById(id);
-const btnPause = $('btnPause'), btnMute = $('btnMute'), live = $('live');
+const btnPause = $('btnPause'), btnMute = $('btnMute'), btnLang = $('btnLang'), live = $('live');
 const SCREENS = ['scrTitle', 'scrGarage', 'scrMissions', 'scrPause', 'scrOver'];
 let backTo = 'scrTitle';
 function show(id) {
@@ -4028,6 +4479,24 @@ function hideAll() { for (const s of SCREENS) $(s).classList.remove('on'); }
 function announce(t) { live.textContent = ''; setTimeout(() => { live.textContent = t; }, 40); }
 function cellAmount(n) { return `<i class="cellico" aria-hidden="true"></i>${fmt(n)}`; }
 
+// puts the whole interface into the current language, and the canvas text with it
+function applyLang() {
+  const ar = isAr(), root = document.documentElement;
+  root.lang = ar ? 'ar' : 'en'; root.dir = ar ? 'rtl' : 'ltr';
+  document.title = ar ? 'رودستر: وضع الطيران' : 'Roadster: Fly Mode';
+  HUDF = ar ? '"Cairo", "Montserrat", system-ui, sans-serif' : '"Montserrat", "Cairo", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
+  document.querySelectorAll('[data-t]').forEach(el => { el.textContent = t(el.dataset.t); });
+  document.querySelectorAll('[data-ta]').forEach(el => el.setAttribute('aria-label', t(el.dataset.ta)));
+  $('tagline').textContent = t('tagline', coarse);
+  btnLang.querySelector('span').textContent = t('langBtn'); btnLang.setAttribute('aria-label', t('langAria'));
+  btnLang.setAttribute('lang', ar ? 'en' : 'ar');
+  updateMuteBtn(); nextMeme(); bakeCache.clear();
+}
+// marks the chosen world and difficulty in the title-screen pickers
+function syncOpts() {
+  for (const b of document.querySelectorAll('[data-world]')) b.setAttribute('aria-checked', String(b.dataset.world === (SAUDI() ? 'saudi' : 'texas')));
+  for (const b of document.querySelectorAll('[data-diff]')) b.setAttribute('aria-checked', String(b.dataset.diff === (DIFFS[save.diff] ? save.diff : 'normal')));
+}
 function refreshTitle() {
   $('tBest').textContent = fmt(save.best);
   $('tBank').textContent = fmt(save.bank);
@@ -4038,7 +4507,8 @@ function goTitle() {
   mode = 'attract'; paused = false; holding = false; latch = false; keys.clear(); pointers.clear();
   resetPlayer(); resetRun(); newWorld(true);
   btnPause.hidden = true;
-  refreshTitle();
+  refreshTitle(); syncOpts();
+  btnLang.hidden = false;
   show('scrTitle');
 }
 function startRun() {
@@ -4048,9 +4518,9 @@ function startRun() {
   resetPlayer(); resetRun(); newWorld(false);
   mode = 'launch'; paused = false; holding = false; latch = false; keys.clear(); pointers.clear();
   L.t = 0; L.greenAt = 1.65 + rand(0.1, 0.8); L.lights = 0; L.green = false; L.done = false;
-  btnPause.hidden = false;
+  btnPause.hidden = false; btnLang.hidden = true;
   if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
-  if (save.runs < 2) hint('launch', coarse ? 'TAP THE MOMENT THE LIGHT TURNS GREEN' : 'PRESS SPACE OR CLICK THE MOMENT THE LIGHT TURNS GREEN');
+  if (save.runs < 2) hint('launch', t('hLaunch', coarse));
 }
 function pause() {
   if (paused || !(mode === 'run' || mode === 'launch')) return;
@@ -4071,33 +4541,26 @@ function countUp(el, to) {
   const tick = now => { const k = Math.min(1, (now - t0) / dur); el.textContent = fmt(to * (1 - Math.pow(1 - k, 3))); if (k < 1) countRAF = requestAnimationFrame(tick); };
   countRAF = requestAnimationFrame(tick);
 }
-const CAUSES = {
-  gas: 'You hit a gas car. Hop it or land on its roof.', barrier: 'You hit a concrete barrier.', drone: 'A camera drone clipped you.',
-  truss: 'You hit the light truss.', trench: 'You dropped into the trench. Should have taken the tunnel.', battery: 'Range anxiety got you. Grab cells and Supercharge to keep going.',
-  'mon:smog': 'A smog monster got you. Land on monsters to stomp them.', 'mon:slime': 'An oil slime ambushed you.', 'mon:bat': 'A smog bat got you.',
-  'mon:truck': 'A monster truck flattened you. Land on its roof next time.', 'mon:crawler': 'A Martian crawler got you.', 'mon:worm': 'A sandworm got you. Fly high when the ground shakes.',
-  'mon:ufo': 'You flew into a UFO.', ball: 'A smog ball hit you.', plasma: 'A plasma bolt hit you.', laser: 'The mothership laser hit you.',
-  bomb: 'An oil bomb hit you.', fire: 'You drove into burning oil.',
-  zap: 'A zapper fried you. Thread the gaps between the coils.', missile: 'A missile got you. Change height when the warning flashes.'
-};
 function updateReviveBtn() {
   const rv = $('btnRevive'), can = !RUN.revived && save.bank >= REVIVE_COST;
   rv.hidden = !can;
-  rv.innerHTML = `Revive for ${cellAmount(REVIVE_COST)}`;
-  rv.setAttribute('aria-label', `Revive and keep going for ${REVIVE_COST} cells`);
+  rv.innerHTML = `${t('reviveFor')} ${cellAmount(REVIVE_COST)}`;
+  rv.setAttribute('aria-label', t('reviveAria', REVIVE_COST));
 }
 function showOver() {
   btnPause.hidden = true;
-  $('oCause').textContent = CAUSES[RUN.cause] || 'You crashed.';
+  const C = t('causes');
+  $('oCause').textContent = (SAUDI() && W.zone === 0 && C[RUN.cause + '@sa']) || C[RUN.cause] || t('crashed');
   countUp($('oScore'), Math.floor(RUN.score));
   $('oNew').hidden = !RUN.newBest;
-  $('oDist').textContent = (runDist() / 5280).toFixed(2) + ' mi';
+  const mi = runDist() / 5280;
+  $('oDist').textContent = (isAr() ? mi * 1.609 : mi).toFixed(2) + ' ' + t('distUnit');
   $('oCells').textContent = fmt(RUN.cells);
   $('oBest').textContent = fmt(save.best);
   renderMissionList($('oList'), true);
   updateReviveBtn();
   show('scrOver');
-  announce(`Run over. Score ${fmt(RUN.score)}.${RUN.newBest ? ' New best.' : ''}`);
+  announce(t('runAnnounce', fmt(RUN.score), RUN.newBest));
 }
 function gameOver() {
   if (mode === 'over') return;
@@ -4118,7 +4581,7 @@ function revive() {
   W.speed = Math.max(150, RUN.speedAtCrash * 0.85);
   mode = 'run'; holding = false; latch = false; keys.clear(); pointers.clear();
   btnPause.hidden = false;
-  banner('BACK IN THE RACE', '#7fd8ff', 1.4); SFX.power();
+  banner(t('backInRace'), '#7fd8ff', 1.4); SFX.power();
   if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
 }
 function renderMissionList(ul, withProgress) {
@@ -4128,9 +4591,9 @@ function renderMissionList(ul, withProgress) {
     li.className = 'ms' + (m.done ? ' done' : '');
     const prog = m.done ? m.n : (withProgress ? Math.min(m.n, missionProgress(m)) : 0);
     const showBar = withProgress || m.done;
-    li.innerHTML = `<div class="row"><span class="tx"></span><span class="rw">${m.done ? 'Done' : '+' + cellAmount(missionReward(m))}</span></div>` +
+    li.innerHTML = `<div class="row"><span class="tx"></span><span class="rw">${m.done ? t('done') : '+' + cellAmount(missionReward(m))}</span></div>` +
       (showBar ? `<div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="${m.n}" aria-valuenow="${Math.floor(prog * 10) / 10}"><b style="width:${Math.round(prog / m.n * 100)}%"></b></div>` : '');
-    li.querySelector('.tx').textContent = MT[m.k].t(m.n);
+    li.querySelector('.tx').textContent = missionText(m);
     ul.appendChild(li);
   }
 }
@@ -4138,7 +4601,7 @@ function openMissions(from) {
   backTo = from;
   $('mRank').textContent = rankName(save.rank);
   const left = 3 - (save.done % 3);
-  $('mRankNote').textContent = `${left} more mission${left === 1 ? '' : 's'} to reach ${rankName(save.rank + 1)}.`;
+  $('mRankNote').textContent = t('rankNote', left, rankName(save.rank + 1));
   $('mRankBar').style.width = ((save.done % 3) / 3 * 100) + '%';
   renderMissionList($('mList'), false);
   show('scrMissions');
@@ -4162,10 +4625,10 @@ function renderGarage(focusPaint, focusUp) {
     b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', sel ? 'true' : 'false');
     b.dataset.paint = p.id;
     b.innerHTML = `<span class="chip" style="background:${p.P}"></span><span class="nm"></span><span class="pr"></span>`;
-    b.querySelector('.nm').textContent = p.name;
+    b.querySelector('.nm').textContent = t('paint_' + p.id);
     const pr = b.querySelector('.pr');
-    if (owned) pr.textContent = sel ? 'Equipped' : 'Owned'; else pr.innerHTML = cellAmount(p.cost);
-    b.setAttribute('aria-label', `${p.name}, ${owned ? (sel ? 'equipped' : 'owned') : `unlock for ${p.cost} cells`}`);
+    if (owned) pr.textContent = sel ? t('equipped') : t('owned'); else pr.innerHTML = cellAmount(p.cost);
+    b.setAttribute('aria-label', t('swatchAria', t('paint_' + p.id), owned, sel, p.cost));
     b.addEventListener('click', () => choosePaint(p));
     box.appendChild(b);
   });
@@ -4174,13 +4637,13 @@ function renderGarage(focusPaint, focusUp) {
     const lv = save.up[u.id] || 0, max = lv >= 5, cost = max ? 0 : UP_COST[lv];
     const li = document.createElement('li'); li.className = 'up';
     li.innerHTML = `<span class="nm"></span><span class="ds"></span><span class="pips" aria-hidden="true">${[0, 1, 2, 3, 4].map(i => `<i class="${i < lv ? 'on' : ''}"></i>`).join('')}</span>`;
-    li.querySelector(".nm").textContent = u.name;
-    li.querySelector('.ds').textContent = u.d(lv);
+    li.querySelector('.nm').textContent = upName(u);
+    li.querySelector('.ds').textContent = upDesc(u, lv);
     const b = document.createElement('button'); b.type = 'button'; b.className = 'btn small'; b.dataset.up = u.id;
-    if (max) { b.textContent = 'Maxed'; b.disabled = true; }
+    if (max) { b.textContent = t('maxed'); b.disabled = true; }
     else {
-      b.innerHTML = `Upgrade ${cellAmount(cost)}`; b.disabled = save.bank < cost;
-      b.setAttribute('aria-label', `Upgrade ${u.name} to level ${lv + 1} for ${cost} cells`);
+      b.innerHTML = `${t('upgrade')} ${cellAmount(cost)}`; b.disabled = save.bank < cost;
+      b.setAttribute('aria-label', t('upAria', upName(u), lv + 1, cost));
       b.addEventListener('click', () => buyUpgrade(u));
     }
     li.appendChild(b); ul.appendChild(li);
@@ -4192,16 +4655,17 @@ function renderGarage(focusPaint, focusUp) {
 }
 function choosePaint(p) {
   const msg = $('gMsg');
-  if (save.paints.includes(p.id)) { save.paint = p.id; SFX.click(); msg.textContent = `${p.name} equipped.`; }
-  else if (save.bank >= p.cost) { save.bank -= p.cost; save.paints.push(p.id); save.paint = p.id; SFX.power(); msg.textContent = `${p.name} unlocked and equipped.`; }
-  else { SFX.thud(); msg.textContent = `${p.name} needs ${fmt(p.cost - save.bank)} more cells. Collect them on the road.`; }
+  const name = t('paint_' + p.id);
+  if (save.paints.includes(p.id)) { save.paint = p.id; SFX.click(); msg.textContent = t('paintOn', name); }
+  else if (save.bank >= p.cost) { save.bank -= p.cost; save.paints.push(p.id); save.paint = p.id; SFX.power(); msg.textContent = t('paintNew', name); }
+  else { SFX.thud(); msg.textContent = t('paintShort', name, fmt(p.cost - save.bank)); }
   persist(); renderGarage(p.id);
 }
 function buyUpgrade(u) {
   const lv = save.up[u.id] || 0; if (lv >= 5) return;
   const cost = UP_COST[lv]; if (save.bank < cost) return;
   save.bank -= cost; save.up[u.id] = lv + 1; persist(); SFX.power();
-  $('gMsg').textContent = `${u.name} upgraded to level ${lv + 1}.`;
+  $('gMsg').textContent = t('upDone', upName(u), lv + 1);
   renderGarage(null, u.id);
 }
 function goBack() {
@@ -4211,7 +4675,7 @@ function goBack() {
 }
 function updateMuteBtn() {
   btnMute.setAttribute('aria-pressed', save.muted ? 'true' : 'false');
-  btnMute.setAttribute('aria-label', save.muted ? 'Unmute sound' : 'Mute sound');
+  btnMute.setAttribute('aria-label', save.muted ? t('unmute') : t('mute'));
 }
 function toggleMute() { save.muted = !save.muted; Sound.setMuted(save.muted); updateMuteBtn(); persist(); }
 const btnMusic = $('btnMusic');
@@ -4220,26 +4684,15 @@ function toggleMusic() { save.music = save.music === false; updateMusicBtn(); pe
 function renderEggs() {
   const ul = $('eggs'); ul.innerHTML = '';
   const li = document.createElement('li'); li.className = 'up';
-  li.innerHTML = '<span class="nm" id="eggName">Emissions testing mode</span><span class="ds">Your thrusters make a rude noise. Tesla hid the same joke in its cars.</span>';
+  li.innerHTML = '<span class="nm" id="eggName"></span><span class="ds"></span>';
+  li.querySelector('.nm').textContent = t('eggName'); li.querySelector('.ds').textContent = t('eggDesc');
   const b = document.createElement('button'); b.type = 'button'; b.className = 'btn small';
-  b.textContent = save.toot ? 'Turn off' : 'Turn on'; b.setAttribute('aria-describedby', 'eggName');
+  b.textContent = save.toot ? t('turnOff') : t('turnOn'); b.setAttribute('aria-describedby', 'eggName');
   b.addEventListener('click', () => { save.toot = !save.toot; persist(); Sound.init(); if (save.toot) SFX.toot(); else SFX.click(); renderEggs(); const nb = $('eggs').querySelector('button'); if (nb) nb.focus(); });
   li.appendChild(b); ul.appendChild(li);
 }
-const MEMES = [
-  'Funding secured. Your move.',
-  'Full self-driving: next year. Fly mode: right now.',
-  'Roadster deliveries in two weeks. Probably.',
-  'There’s a live audience, so you know it’s not AI.',
-  'Occupy Mars. Bring a Supercharger.',
-  'Plaid is the new Ludicrous.',
-  'Not a flamethrower. Definitely not a flamethrower.',
-  'The booster always sticks the landing.',
-  'Emissions testing mode is hiding in the Garage.',
-  'Somewhere out there, a Roadster is still orbiting the Sun.'
-];
-let memeI = Math.floor(Math.random() * MEMES.length);
-function nextMeme() { memeI = (memeI + 1) % MEMES.length; $('meme').textContent = MEMES[memeI]; }
+let memeI = Math.floor(Math.random() * 20);
+function nextMeme() { const M = t('memes'); memeI = (memeI + 1) % M.length; $('meme').textContent = M[memeI]; }
 setInterval(() => { if ($('scrTitle').classList.contains('on') && !document.hidden) nextMeme(); }, 4500);
 
 /* =========================================================
@@ -4309,6 +4762,12 @@ $('btnRevive').addEventListener('click', () => revive());
 btnPause.addEventListener('click', () => { Sound.init(); pause(); });
 btnMute.addEventListener('click', () => { Sound.init(); toggleMute(); });
 btnMusic.addEventListener('click', () => { Sound.init(); toggleMusic(); });
+btnLang.addEventListener('click', () => { SFX.click(); LANG = save.lang = isAr() ? 'en' : 'ar'; persist(); applyLang(); goTitle(); btnLang.focus(); });
+for (const b of document.querySelectorAll('[data-world]')) b.addEventListener('click', () => {
+  if (save.world === b.dataset.world) return;
+  SFX.click(); save.world = b.dataset.world; persist(); goTitle(); b.focus();
+});
+for (const b of document.querySelectorAll('[data-diff]')) b.addEventListener('click', () => { SFX.click(); save.diff = b.dataset.diff; persist(); syncOpts(); });
 document.querySelectorAll('[data-back]').forEach(b => b.addEventListener('click', goBack));
 
 /* =========================================================
@@ -4342,9 +4801,9 @@ function onTheme() {
   if (mode === 'attract') { W.startPhase = isDark() ? 0.3 : 0.8; W.dayT = W.startPhase; skyKey = ''; }
 }
 const coarse = window.matchMedia && matchMedia('(pointer: coarse)').matches;
-$('tagline').textContent = `${coarse ? 'Hold anywhere' : 'Hold Space or the mouse button'} to fire the cold-gas thrusters. Stomp the monsters, beat the bosses and make it to Mars.`;
 
 initMissions();
+applyLang();
 resize();
 if (window.ResizeObserver) new ResizeObserver(() => resize()).observe(app); else window.addEventListener('resize', resize);
 window.addEventListener('orientationchange', () => setTimeout(resize, 150));
@@ -4356,7 +4815,7 @@ renderReady = true;
 requestAnimationFrame(frame);
 // the UI font arrives from Google Fonts; rebake text-bearing art once it does
 if (document.fonts && document.fonts.load) {
-  Promise.all([document.fonts.load(font(40, 800)), document.fonts.load(font(16, 600))])
+  Promise.all([document.fonts.load('800 40px Montserrat'), document.fonts.load('600 16px Montserrat'), document.fonts.load('800 40px Cairo', 'عربي'), document.fonts.load('600 16px Cairo', 'عربي')])
     .then(() => { bakeCache.clear(); }).catch(() => {});
 }
 

@@ -2,11 +2,17 @@
 
 A cartoon browser game inspired by the new Tesla Roadster's flying demo and by Jetpack Joyride. Fire the cold-gas thrusters, dodge zappers and missiles, hop gas cars, stomp monsters, beat two bosses and make it to Mars.
 
+The game opens in Arabic, with an English switch on the title screen, and you can drive through Saudi Arabia or the original Texas launch site.
+
+لعبة متصفح كرتونية: شغّل دافعات الغاز البارد، وتفادَ الصواعق والصواريخ، وادعس الوحوش، واهزم الزعماء، واوصل إلى المريخ. اللعبة بالعربية افتراضيًا مع زر للإنجليزية، ويمكنك اختيار عالم السعودية أو تكساس ومستوى الصعوبة.
+
 > Unofficial fan game. Not affiliated with Tesla, Inc. or Halfbrick.
 
 ![The Roadster flying past a zapper at night with its shield up](gameplay.png)
 
 ![Boss fight against the Smog King](boss.png)
+
+![The Saudi world in Arabic: Kingdom Centre, Al Faisaliah, a Najdi fort and a camel](saudi.png)
 
 ## Play
 
@@ -23,9 +29,14 @@ To play it online, turn on GitHub Pages (steps below).
 | Pause | Pause button | P or Esc |
 | Music on or off | Music button | N |
 | Mute everything | Speaker button | M |
+| Switch language | EN / ع button on the title screen | Same |
+| Choose world and difficulty | Pickers on the title screen | Same |
 
 ## What's in it
 
+- Two worlds for Earth: Saudi Arabia (Riyadh's Kingdom Centre and Al Faisaliah, Najdi mud-brick from Diriyah, palms, dunes, camels, Bedouin tents, AlUla's Elephant Rock and NEOM's The Line, with a Dust King boss) and the Texas launch site
+- Arabic (right to left, km/h and km) and English, switchable on the title screen
+- Easy, Normal and Hard difficulty: speed, obstacle spacing, battery drain, missiles, zappers and boss toughness all change, and harder levels score more
 - Cold-gas thrusters that spray the road, a loop-the-loop and Superchargers to keep the battery alive
 - Tesla-coil zappers (standing, hanging, diagonal and spinning) and missiles that track your height before they fire
 - Battery cells laid out in hearts, stars, arrows and words
@@ -33,7 +44,7 @@ To play it online, turn on GitHub Pages (steps below).
 - Two boss fights, the Smog King and the Mothership, won by grabbing blue coil orbs
 - A Mars zone with its own monsters, scenery and music
 - Power-ups: Plaid mode, Tesla coil, Bioweapon defense, Fly mode and Not a Flamethrower
-- Missions, ranks, upgrades, seven paint colors and an Emissions Testing Mode easter egg
+- Missions, ranks, upgrades, eight paint colors (including Saudi green) and an Emissions Testing Mode easter egg
 - An original chiptune soundtrack and sound effects, all synthesized in the browser
 - Progress saved in the browser with localStorage
 
@@ -46,4 +57,4 @@ To play it online, turn on GitHub Pages (steps below).
 
 ## How it's built
 
-Everything lives in one self-contained `index.html`: cartoon art drawn with canvas paths at full screen resolution, a Web Audio synthesizer with a small step sequencer for the music, and no external assets apart from an optional Google Font (Montserrat). If a device can't keep up, the game lowers its canvas resolution automatically.
+Everything lives in one self-contained `index.html`: cartoon art drawn with canvas paths at full screen resolution, a Web Audio synthesizer with a small step sequencer for the music, and no external assets apart from optional Google Fonts (Montserrat for English, Cairo for Arabic). If a device can't keep up, the game lowers its canvas resolution automatically.

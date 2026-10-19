@@ -156,6 +156,20 @@ html[lang="en"] .ibtn.lang span{font-family:"Cairo",system-ui,sans-serif;font-si
 @media (max-width:600px){.screen.modal{padding-top:60px}}
 .screen.modal>.card{margin:auto 0;animation:rise .3s cubic-bezier(.2,.8,.2,1)}
 @keyframes fade{from{opacity:0}}
+/* card contents rise in one after another, Tesla-app style */
+@keyframes up{from{opacity:0;transform:translateY(10px)}}
+.screen.on .card>*{animation:up .42s cubic-bezier(.2,.8,.2,1) both}
+.screen.on .card>*:nth-child(2){animation-delay:.04s}.screen.on .card>*:nth-child(3){animation-delay:.08s}
+.screen.on .card>*:nth-child(4){animation-delay:.12s}.screen.on .card>*:nth-child(5){animation-delay:.16s}
+.screen.on .card>*:nth-child(6){animation-delay:.2s}.screen.on .card>*:nth-child(7){animation-delay:.24s}
+.screen.on .card>*:nth-child(n+8){animation-delay:.28s}
+@keyframes pop{0%{opacity:0;transform:scale(.4) rotate(-8deg)}60%{opacity:1;transform:scale(1.18) rotate(3deg)}100%{transform:scale(1)}}
+.newbest:not([hidden]){animation:pop .6s .45s cubic-bezier(.3,1.4,.5,1) both}
+.card{position:relative}
+.confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none;border-radius:inherit}
+.confetti i{position:absolute;top:-12px;width:7px;height:11px;border-radius:2px;opacity:0;animation:fall 1.4s cubic-bezier(.25,.6,.4,1) forwards}
+@keyframes fall{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--dx),340px) rotate(var(--r))}}
+html.rm .screen.on .card>*,html.rm .newbest:not([hidden]){animation:none}
 @keyframes rise{from{opacity:0;transform:translateY(16px)}}
 
 /* ---------- cards ---------- */
@@ -338,7 +352,7 @@ html[dir="rtl"] .bar b{inset:0 0 0 auto}
   .card{padding:16px;gap:12px}
   .btn.primary{min-height:44px}
 }
-@media (prefers-reduced-motion:reduce){.btn,.sw .chip,.ibtn,.seg button{transition:none}.screen.on,.screen.modal>.card{animation:none}}
+@media (prefers-reduced-motion:reduce){.screen.on .card>*,.newbest:not([hidden]){animation:none}.btn,.sw .chip,.ibtn,.seg button{transition:none}.screen.on,.screen.modal>.card{animation:none}}
 </style>
 </head>
 <body>
@@ -577,6 +591,7 @@ const STR = {
     ev_national: 'Happy Saudi National Day!', ev_founding: 'Happy Saudi Founding Day!', ev_ramadan: 'Ramadan Kareem', ev_eid: 'Eid Mubarak! Cells count double today.',
     evGift: 'A gift for the day: Saudi green paint.',
     setStyle: 'Visual style', classic: 'Classic', neon: 'Neon',
+    roll: 'BARREL ROLL', hRoll: c => c ? 'Double-tap in the air for a barrel roll' : 'Double-tap Space in the air for a barrel roll',
     settings: 'Settings', setMusic: 'Music volume', setSfx: 'Sound effects', setUnits: 'Speed units', setGfx: 'Graphics', setMotion: 'Reduce motion', setHaptics: 'Vibration',
     auto: 'Auto', high: 'High', medium: 'Medium', low: 'Low', on: 'On', off: 'Off',
     settingsNote: 'Auto units follow the language: km/h in Arabic, mph in English. Auto graphics lowers the resolution if the game slows down, and auto motion follows your device.',
@@ -685,6 +700,7 @@ const STR = {
     ev_national: 'كل عام والوطن بخير! اليوم الوطني السعودي', ev_founding: 'يوم التأسيس السعودي، يوم بدينا!', ev_ramadan: 'رمضان كريم', ev_eid: 'عيدكم مبارك! الخلايا مضاعفة اليوم.',
     evGift: 'هدية اليوم: لون الأخضر السعودي.',
     setStyle: 'نمط الرسومات', classic: 'كلاسيكي', neon: 'نيون',
+    roll: 'دحرجة', hRoll: c => c ? 'المس مرتين بسرعة في الهواء لتدحرج السيارة' : 'اضغط المسافة مرتين بسرعة في الهواء لتدحرج السيارة',
     settings: 'الإعدادات', setMusic: 'صوت الموسيقى', setSfx: 'المؤثرات الصوتية', setUnits: 'وحدة السرعة', setGfx: 'الرسومات', setMotion: 'تقليل الحركة', setHaptics: 'الاهتزاز',
     auto: 'تلقائي', high: 'عالية', medium: 'متوسطة', low: 'منخفضة', on: 'تشغيل', off: 'إيقاف',
     settingsNote: 'الوحدة التلقائية تتبع اللغة: كم/س بالعربية وميل/س بالإنجليزية. الرسومات التلقائية تخفّض الدقة إذا تباطأت اللعبة، والحركة التلقائية تتبع إعدادات جهازك.',
@@ -1110,6 +1126,7 @@ const SFX = {
   loop() { Sound.noise(0.9, { v: 0.25, f: 300, f2: 3200, q: 0.5 }); [0, 4, 7, 11, 14].forEach((n, i) => Sound.tone(392 * Math.pow(2, n / 12), 0.16, { type: 'square', v: 0.04, delay: 0.1 + i * 0.07, lp: 3000, send: 0.35 })); },
   smash() { Sound.noise(0.3, { v: 0.4, f: 1800, f2: 200 }); Sound.tone(220, 0.16, { type: 'square', v: 0.06, f2: 55, lp: 1200 }); Sound.tone(80, 0.2, { type: 'sine', v: 0.18, f2: 40 }); },
   click() { Sound.tone(1300, 0.04, { type: 'triangle', v: 0.05 }); },
+  tick() { Sound.tone(2400, 0.012, { type: 'square', v: 0.012 }); },
   low() { Sound.tone(660, 0.09, { type: 'square', v: 0.045 }); Sound.tone(660, 0.09, { type: 'square', v: 0.045, delay: 0.14 }); },
   close() { Sound.tone(1100, 0.12, { type: 'triangle', v: 0.07, f2: 2000, send: 0.3 }); },
   shield() { Sound.noise(0.45, { v: 0.3, f: 3000, f2: 400, q: 1.5 }); Sound.tone(880, 0.3, { type: 'triangle', v: 0.06, f2: 220, send: 0.3 }); },
@@ -1241,7 +1258,7 @@ const W = { dist: 0, speed: 0, scroll: 0, time: 0, ents: [], spawnX: 0, last: ''
   space: null, spaceT: 30, booster: null, missileT: 0 };
 const P = { alt: 0, vy: 0, onGround: true, gas: 1.4, gasMax: 1.4, battery: 100, thrusting: false, tilt: 0, invuln: 0,
   plaid: 0, plaidMax: 1, coil: 0, coilMax: 1, fly: 0, flyMax: 5, shield: false, riding: null, loop: null, wheelRot: 0,
-  boost: 0, boostV: 0, wreck: null, lowWarn: 0, charging: false, ghostT: 0, ghosts: [], flame: 0, flameMax: 5, tootT: 0, sq: 0, sqV: 0, dustT: 0, ride: null, spool: 0, tiltV: 0 };
+  boost: 0, boostV: 0, wreck: null, lowWarn: 0, charging: false, ghostT: 0, ghosts: [], flame: 0, flameMax: 5, tootT: 0, sq: 0, sqV: 0, dustT: 0, ride: null, spool: 0, tiltV: 0, roll: 0 };
 const RUN = { score: 0, cells: 0, banked: 0, chain: 0, chainT: 0, stats: {}, revived: false, cause: '', overT: 0, startDist: 0,
   tips: {}, time: 0, live: 0, t060: 0, t060Show: 0, newBest: false, counted: false, speedAtCrash: 0, missionT: 0, lowShown: false, mult: 1, multT: 0, stompChain: 0, ludi: false, funded: false, bump: 0 };
 const L = { t: 0, greenAt: 0, lights: 0, green: false, done: false };
@@ -1271,7 +1288,7 @@ const coilDur = () => 6 + 2 * save.up.coil;
 
 function resetPlayer() {
   Object.assign(P, { alt: 0, vy: 0, onGround: true, thrusting: false, tilt: 0, invuln: 0, plaid: 0, coil: 0, fly: 0, shield: false,
-    riding: null, loop: null, wheelRot: 0, boost: 0, boostV: 0, wreck: null, lowWarn: 0, charging: false, battery: 100, ghostT: 0, ghosts: [], flame: 0, tootT: 0, sq: 0, sqV: 0, dustT: 0, ride: null, spool: 0, tiltV: 0 });
+    riding: null, loop: null, wheelRot: 0, boost: 0, boostV: 0, wreck: null, lowWarn: 0, charging: false, battery: 100, ghostT: 0, ghosts: [], flame: 0, tootT: 0, sq: 0, sqV: 0, dustT: 0, ride: null, spool: 0, tiltV: 0, roll: 0 });
   P.gasMax = 1.4 + 0.3 * save.up.thrust; P.gas = P.gasMax;
 }
 function resetRun() {
@@ -1664,7 +1681,7 @@ function startRide(k) {
   P.thrusting = false; P.fly = 0; P.gas = P.gasMax; P.riding = null;
   if (k === 'bot') P.alt = Math.min(P.alt, maxAlt - 22);
   if (k !== 'ship' && P.alt > 0.5) P.onGround = false;
-  RUN.stats.rides++; addScore(100);
+  RUN.stats.rides++; addScore(100); HYPE.cheer = 1.2;
   banner(t('ride_' + k), k === 'truck' ? '#ffd23f' : RIDES[k].col, 1.6);
   hint2('ride_' + k, t('hRide_' + k));
   SFX.power(); buzz(30); W.shake = Math.max(W.shake, reduceMotion ? 0 : 3);
@@ -2091,8 +2108,11 @@ function closeCall() {
   RUN.stats.close++; addMult(); addScore(50, t('closeCall'), '#7fd8ff'); SFX.close();
   // a close shave slows time for a moment, at most every few seconds
   if (SLOW.cd <= 0) { SLOW.t = 0.55; SLOW.cd = 4; }
+  HYPE.t = 2; HYPE.cheer = 1.2;
 }
 const SLOW = { t: 0, cd: 0, zoom: 1 };
+// the crowd's excitement and the Starman's cheer, both counting down
+const HYPE = { t: 0, cheer: 0, lastTap: -9 };
 
 function collectCell(e) {
   e.dead = true;
@@ -2231,6 +2251,12 @@ function stepTimers(dt) {
   if (P.coil > 0) P.coil = Math.max(0, P.coil - dt);
   if (P.fly > 0) P.fly = Math.max(0, P.fly - dt);
   if (P.ride) { P.ride.t -= dt; if (P.ride.t <= 0) endRide(false); }
+  if (P.roll > 0) {
+    P.roll += dt / 0.55;
+    if (P.roll >= 1) { P.roll = 0; if (mode === 'run') { addMult(); addScore(150, t('roll'), '#ffd23f'); SFX.close(); HYPE.t = 1.5; HYPE.cheer = 1; } }
+  }
+  if (HYPE.t > 0) HYPE.t -= dt; if (HYPE.cheer > 0) HYPE.cheer -= dt;
+  if (mode === 'run' && RUN.live > 25 && !P.onGround && !P.ride) hint2('roll', t('hRoll', coarse));
   if (P.flame > 0) { P.flame = Math.max(0, P.flame - dt); if (mode === 'run') flameBurn(); }
   if (RUN.chainT > 0) { RUN.chainT -= dt; if (RUN.chainT <= 0) RUN.chain = 0; }
   P.sqV += (-P.sq * 260 - P.sqV * 14) * dt; P.sq = clamp(P.sq + P.sqV * dt, -0.3, 0.3);
@@ -2804,7 +2830,7 @@ function zapBoss(sx, alt) {
   }
 }
 function bossDefeated(B) {
-  W.boss = null; W.bossCount++; buzz([60, 40, 120]);
+  W.boss = null; W.bossCount++; buzz([60, 40, 120]); HYPE.t = 4; HYPE.cheer = 2.5;
   const cx = B.x, cy = groundY - B.alt;
   for (let i = 0; i < 5; i++) sparks(cx + rand(-30, 30), cy + rand(-20, 20), 14, ['#ffd23f', '#ffffff', '#ff8a3d', '#7fd8ff'], 320);
   smoke(cx, cy, 18, { world: false, sx: 34, sy: 22, col: B.kind === 'smog' ? smogPal().death : '#6f7686', a: 0.7, r2a: 8, r2b: 16, life: 1.6 });
@@ -3222,23 +3248,28 @@ function drawDecor(ly, N) {
         const rng = mulberry32(it.seed), sa = SAUDI() && W.zone === 0;
         const thobe = dn('#f4f1e8', '#4c4c6c', N), thobe2 = dn('#e4dfd2', '#40405e', N), skin = dn('#b07a4e', '#3a2e3a', N);
         for (let x = 0; x < it.w; x += 3.4) {
-          const hh = 8 + rng() * 4, r2 = rng(), r3 = rng(), wave = r3 < 0.3;
+          const hh = 8 + rng() * 4, r2 = rng(), r3 = rng();
+          // people jump and wave as the car goes by, and all at once when something big happens
+          const near = Math.max(0, 1 - Math.abs(sx + x - (carX + 30)) / 70), hype = mode === 'run' ? Math.max(near, HYPE.t > 0 ? 0.8 : 0) : 0;
+          const B = base - Math.abs(Math.sin(W.time * (9 + r3 * 5) + x * 0.9)) * 2.4 * hype, wave = r3 < 0.3 || hype > 0.3;
           if (sa) {   // thobes, with red shemaghs or white ghutras held by a black agal
             g.fillStyle = (Math.round(x / 3.4)) % 2 ? thobe : thobe2;
-            rrect(g, sx + x, base - hh + 3, 3, hh - 3, 1.2); g.fill();
-            circ(g, sx + x + 1.5, base - hh + 1.6, 1.1); g.fillStyle = skin; g.fill();
-            g.beginPath(); g.moveTo(sx + x + 0.1, base - hh + 3.6); g.lineTo(sx + x + 0.4, base - hh + 0.5); g.quadraticCurveTo(sx + x + 1.5, base - hh - 0.6, sx + x + 2.6, base - hh + 0.5); g.lineTo(sx + x + 2.9, base - hh + 3.6); g.lineTo(sx + x + 2.2, base - hh + 1.8); g.lineTo(sx + x + 0.8, base - hh + 1.8); g.closePath();
+            rrect(g, sx + x, B - hh + 3, 3, hh - 3, 1.2); g.fill();
+            circ(g, sx + x + 1.5, B - hh + 1.6, 1.1); g.fillStyle = skin; g.fill();
+            g.beginPath(); g.moveTo(sx + x + 0.1, B - hh + 3.6); g.lineTo(sx + x + 0.4, B - hh + 0.5); g.quadraticCurveTo(sx + x + 1.5, B - hh - 0.6, sx + x + 2.6, B - hh + 0.5); g.lineTo(sx + x + 2.9, B - hh + 3.6); g.lineTo(sx + x + 2.2, B - hh + 1.8); g.lineTo(sx + x + 0.8, B - hh + 1.8); g.closePath();
             g.fillStyle = r2 < 0.55 ? dn('#d8343a', '#5a2236', N) : dn('#ffffff', '#5a5a7a', N); g.fill();
-            g.fillStyle = dn('#16161c', '#0a0a10', N); g.fillRect(sx + x + 0.5, base - hh + 0.3, 2, 0.45);
-            if (wave) { const a = Math.sin(W.time * (5 + r3 * 6) + x) * 0.5; g.strokeStyle = thobe; g.lineWidth = 0.9; g.beginPath(); g.moveTo(sx + x + 2.6, base - hh + 4); g.lineTo(sx + x + 3.6 + Math.sin(a) * 1.5, base - hh); g.stroke(); }
-            if (N > 0.3 && r2 < 0.2 && Math.sin(W.time * (2 + r3 * 3) + x) > 0.55) { circ(g, sx + x + 1.5, base - hh - 2, 0.6); g.fillStyle = '#ffffff'; g.fill(); glowAt(sx + x + 1.5, base - hh - 2, 4, 'rgba(255,255,255,0.7)'); }
+            g.fillStyle = dn('#16161c', '#0a0a10', N); g.fillRect(sx + x + 0.5, B - hh + 0.3, 2, 0.45);
+            if (wave) { const a = Math.sin(W.time * (5 + r3 * 6) + x) * 0.5; g.strokeStyle = thobe; g.lineWidth = 0.9; g.beginPath(); g.moveTo(sx + x + 2.6, B - hh + 4); g.lineTo(sx + x + 3.6 + Math.sin(a) * 1.5, B - hh); g.stroke(); }
+            if (hype > 0.5 && r2 < 0.25 && Math.sin(W.time * 13 + x * 3) > 0.9) glowAt(sx + x + 1.5, B - hh - 2, 5, 'rgba(255,255,255,0.9)');
+            if (N > 0.3 && r2 < 0.2 && Math.sin(W.time * (2 + r3 * 3) + x) > 0.55) { circ(g, sx + x + 1.5, B - hh - 2, 0.6); g.fillStyle = '#ffffff'; g.fill(); glowAt(sx + x + 1.5, B - hh - 2, 4, 'rgba(255,255,255,0.7)'); }
             continue;
           }
           g.fillStyle = (Math.round(x / 3.4)) % 2 ? col : dark;
-          rrect(g, sx + x, base - hh + 3, 3, hh - 3, 1.2); g.fill();
-          circ(g, sx + x + 1.5, base - hh + 1.4, 1.35); g.fill();
-          if (wave) { const a = Math.sin(W.time * (5 + r3 * 6) + x) * 0.5; g.strokeStyle = g.fillStyle; g.lineWidth = 0.9; g.beginPath(); g.moveTo(sx + x + 2.6, base - hh + 4); g.lineTo(sx + x + 3.6 + Math.sin(a) * 1.5, base - hh); g.stroke(); }
-          if (N > 0.3 && r2 < 0.2 && Math.sin(W.time * (2 + r3 * 3) + x) > 0.55) { circ(g, sx + x + 1.5, base - hh - 2, 0.6); g.fillStyle = '#ffffff'; g.fill(); glowAt(sx + x + 1.5, base - hh - 2, 4, 'rgba(255,255,255,0.7)'); }
+          rrect(g, sx + x, B - hh + 3, 3, hh - 3, 1.2); g.fill();
+          circ(g, sx + x + 1.5, B - hh + 1.4, 1.35); g.fill();
+          if (wave) { const a = Math.sin(W.time * (5 + r3 * 6) + x) * 0.5; g.strokeStyle = g.fillStyle; g.lineWidth = 0.9; g.beginPath(); g.moveTo(sx + x + 2.6, B - hh + 4); g.lineTo(sx + x + 3.6 + Math.sin(a) * 1.5, B - hh); g.stroke(); }
+          if (N > 0.3 && r2 < 0.2 && Math.sin(W.time * (2 + r3 * 3) + x) > 0.55) { circ(g, sx + x + 1.5, B - hh - 2, 0.6); g.fillStyle = '#ffffff'; g.fill(); glowAt(sx + x + 1.5, B - hh - 2, 4, 'rgba(255,255,255,0.7)'); }
+          if (hype > 0.5 && r2 < 0.25 && Math.sin(W.time * 13 + x * 3) > 0.9) glowAt(sx + x + 1.5, B - hh - 2, 5, 'rgba(255,255,255,0.9)');   // phone cameras
         }
         g.fillStyle = hi; g.fillRect(sx - 2, base - 4, it.w + 4, 1);
         for (let x = 0; x < it.w + 4; x += 8) g.fillRect(sx - 2 + x, base - 4, 0.8, 4);
@@ -3798,9 +3829,33 @@ function drawCarAt(cx, cy, rot, alpha, sx, sy, paint) {
   g.translate(cx, cy); if (rot) g.rotate(rot);
   g.translate(0, 8); if (sx) g.scale(sx, sy); g.translate(-30, -16);
   drawGlossy(carBodySpr(p), p);
+  if (STAR.pose) drawStarman(STAR.pose);
   WHEEL_BLUR = mode === 'run' || mode === 'attract' ? clamp((W.speed - 140) / 160, 0, 1) : 0;
   roadsterWheels(P.wheelRot * TAU / 13);
   WHEEL_BLUR = 0;
+  g.restore();
+}
+// Starman in the driver's seat, seen through the glass: waves on the title, ducks under danger, cheers on a big moment
+const STAR = { pose: null };
+function dangerAhead() {
+  const cx = W.dist + carX + 60;
+  for (const e of W.ents) if ((e.type === 'zap' || e.type === 'drone' || e.type === 'truss') && e.x > cx - 30 && e.x < cx + 50) return true;
+  for (const f of W.fx) if (f.k === 'missile' && f.st === 'fly' && f.sx > carX && f.sx < carX + 140) return true;
+  return false;
+}
+function drawStarman(pose) {
+  const duck = pose === 'duck' ? 1.3 : 0, bob = pose === 'cheer' ? Math.abs(Math.sin(W.time * 12)) * 0.7 : 0;
+  const hx = 25.4, hy = 3.4 + duck - bob;
+  g.save(); canopyPath(g); g.clip();
+  g.lineCap = 'round';
+  const arm = (x0, y0, x1, y1) => { g.beginPath(); g.moveTo(x0, y0); g.lineTo(x1, y1); g.strokeStyle = '#f2f4f7'; g.lineWidth = 1; g.stroke(); circ(g, x1, y1, 0.45); g.fillStyle = '#f2f4f7'; g.fill(); };
+  if (pose === 'wave') arm(hx + 1, hy + 2, hx + 2.6 + Math.sin(W.time * 9) * 0.9, hy - 1.6);
+  else if (pose === 'cheer') { arm(hx + 1, hy + 2, hx + 2.2, hy - 1.8); arm(hx - 1, hy + 2, hx - 2, hy - 1.8); }
+  else arm(hx + 1, hy + 2.2, hx + 3.2, hy + 2.6);   // hands on the wheel
+  circ(g, hx, hy, 1.85); g.fillStyle = '#f4f6fa'; g.fill();
+  ell(g, hx + 0.55, hy + 0.1, 1.15, 1.2); g.fillStyle = '#1b2234'; g.fill();
+  ell(g, hx + 0.85, hy - 0.4, 0.45, 0.32); g.fillStyle = 'rgba(255,214,140,0.85)'; g.fill();
+  canopyPath(g); g.fillStyle = 'rgba(20,28,46,0.28)'; g.fill();   // the glass in front of him
   g.restore();
 }
 // the car body with a band of reflected light gliding over the paint every few seconds
@@ -3872,7 +3927,9 @@ function drawPlayer(N) {
     }
     glowAt(cx - 8, cy, 36, 'rgba(255,49,73,0.4)');
   }
-  const sq = P.sq || 0, ssx = 1 + sq * 0.55, ssy = 1 - sq;
+  // a barrel roll seen side-on: the car turns belly-up and back over half a second
+  const rollE = P.roll > 0 ? P.roll * P.roll * (3 - 2 * P.roll) : 0;
+  const sq = P.sq || 0, ssx = 1 + sq * 0.55, ssy = (1 - sq) * Math.cos(rollE * TAU);
   g.save(); g.translate(cx, cy); if (P.tilt) g.rotate(P.tilt); g.translate(0, 8); g.scale(ssx, ssy); g.translate(-30, -16);
   // cold-gas thrusters, under the body
   if (P.thrusting) {
@@ -3904,7 +3961,9 @@ function drawPlayer(N) {
     g.beginPath(); g.moveTo(carX + 59, sy + 8.5); g.lineTo(carX + 160, sy + 1); g.lineTo(carX + 160, sy + 24); g.closePath(); g.fill();
   });
   const blink = P.invuln > 0 && P.plaid <= 0 && Math.floor(W.time * 14) % 2 === 0;
+  STAR.pose = mode === 'attract' ? 'wave' : HYPE.cheer > 0 ? 'cheer' : dangerAhead() ? 'duck' : 'drive';
   if (!blink) drawCarAt(cx, cy, P.tilt, undefined, ssx, ssy);
+  STAR.pose = null;
   if (N > 0.15) { glowAt(carX + 1.5, sy + 6.8, 7, 'rgba(255,42,61,0.8)'); glowAt(carX + 58.5, sy + 9, 7, 'rgba(220,245,255,0.85)'); }
   // Tesla coil arcs to magnetised cells
   if (P.coil > 0) {
@@ -5506,12 +5565,29 @@ async function shareRun() {
     if (!e || e.name !== 'AbortError') { if (SHARE.blob) { saveImage(SHARE.blob); msg.textContent = t('shareSaved'); msg.hidden = false; } }
   }
 }
+// a burst of paper confetti over a card, cleared once it has fallen
+function confetti(host) {
+  const box = document.createElement('div'); box.className = 'confetti'; box.setAttribute('aria-hidden', 'true');
+  const cols = ['#3e6ae1', '#e31937', '#ffd23f', '#3cd67a', '#ff5fae', '#ffffff'];
+  for (let i = 0; i < 36; i++) {
+    const s = document.createElement('i');
+    s.style.cssText = `left:${(Math.random() * 100).toFixed(1)}%;background:${pick(cols)};--dx:${(Math.random() * 120 - 60).toFixed(0)}px;--r:${(Math.random() * 720 - 360).toFixed(0)}deg;animation-delay:${(0.35 + Math.random() * 0.35).toFixed(2)}s;animation-duration:${(1.1 + Math.random() * 0.8).toFixed(2)}s`;
+    box.appendChild(s);
+  }
+  host.appendChild(box);
+  setTimeout(() => box.remove(), 2600);
+}
 let countRAF = 0;
 function countUp(el, to) {
   cancelAnimationFrame(countRAF);
   if (reduceMotion) { el.textContent = fmt(to); return; }
-  const t0 = performance.now(), dur = 700;
-  const tick = now => { const k = Math.min(1, (now - t0) / dur); el.textContent = fmt(to * (1 - Math.pow(1 - k, 3))); if (k < 1) countRAF = requestAnimationFrame(tick); };
+  const t0 = performance.now(), dur = 900;
+  let lastTick = 0;
+  const tick = now => {
+    const k = Math.min(1, (now - t0) / dur); el.textContent = fmt(to * (1 - Math.pow(1 - k, 3)));
+    if (now - lastTick > 55 && k < 1) { lastTick = now; SFX.tick(); }   // the counter ticks as it rolls
+    if (k < 1) countRAF = requestAnimationFrame(tick);
+  };
   countRAF = requestAnimationFrame(tick);
 }
 function updateReviveBtn() {
@@ -5526,6 +5602,7 @@ function showOver() {
   $('oCause').textContent = (SAUDI() && W.zone === 0 && C[RUN.cause + '@sa']) || C[RUN.cause] || t('crashed');
   countUp($('oScore'), Math.floor(RUN.score));
   $('oNew').hidden = !RUN.newBest;
+  if (RUN.newBest && !reduceMotion) confetti($('scrOver').querySelector('.card'));
   const od = $('oDaily');
   od.hidden = !DAILY.on;
   if (DAILY.on) od.textContent = t('dailyOver', fmt(dailyRec().best), dailyStreak(), RUN.dailyReward || 0);
@@ -5700,6 +5777,9 @@ setInterval(() => { if ($('scrTitle').classList.contains('on') && !document.hidd
 function isUI(t) { return !!(t && t.closest && t.closest('button, .card, .hudbtns, a, input')); }
 function press() {
   if (paused) return;
+  // a quick double tap in the air rolls the car over
+  if (mode === 'run' && !P.onGround && !P.ride && !P.loop && P.roll <= 0 && W.time - HYPE.lastTap < 0.3) P.roll = 0.001;
+  HYPE.lastTap = W.time;
   if (mode === 'launch') { launchPress(); holding = true; latch = true; return; }
   if (mode === 'run') holding = true;
 }
@@ -5777,6 +5857,7 @@ function applySettings() {
   const vm = clamp(+save.volMusic, 0, 100), vs = clamp(+save.volSfx, 0, 100);
   Sound.setVolumes(isFinite(vm) ? vm / 100 : 1, isFinite(vs) ? vs / 100 : 1);
   reduceMotion = save.motion === 'on' || (save.motion !== 'off' && sysReduceMotion);
+  document.documentElement.classList.toggle('rm', reduceMotion);
   const q = { high: 1, medium: 0.75, low: 0.5 }[save.gfx] || 1;
   if (save.gfx !== 'auto' && QUAL !== q) { QUAL = q; resize(); }
 }

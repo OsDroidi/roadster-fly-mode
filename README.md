@@ -57,6 +57,10 @@ The game opens full screen from its icon. After the first visit everything it ne
 - Installs to the home screen and plays offline
 - A Neon visual style in Settings: a synthwave sky with a striped sun, glowing mountain outlines, a neon road and a grid rushing underneath
 - Night lighting: the scene darkens and the headlights cut a beam through it, with cells, zappers and Superchargers glowing in the dark
+- Starman in the driver's seat: he waves on the title screen, ducks under zappers and missiles, and cheers on close calls, boss wins and vehicle pickups
+- Barrel rolls: double-tap in the air to roll the car over for bonus points
+- A crowd that jumps, waves and snaps phone photos as you fly past, and goes wild on big moments
+- Animated menus: cards rise in, the score ticks up, and a new best pops with confetti
 - Shiny paint, with a reflection sweeping across the car, and slow motion with a zoom on near misses
 - Settings: music and sound effects volume, speed units (auto, km/h or mph), graphics quality, reduced motion and vibration
 - Saudi holidays: fireworks and a free Saudi green paint on National Day and Founding Day, lanterns and a crescent moon through Ramadan, and double cells at Eid (dates follow the Umm al-Qura calendar; add `?event=national`, `founding`, `ramadan` or `eid` to the address to preview one)

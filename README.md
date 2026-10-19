@@ -56,6 +56,9 @@ The game opens full screen from its icon. After the first visit everything it ne
 - A Tesla-style interface: a configurator-like title panel with Tesla blue buttons and segmented pickers, and an in-car dashboard with the gear (P R N D), speed, a speed limit sign, battery and the way to the next Supercharger, which goes light by day and dark by night like Tesla's Auto display
 - Installs to the home screen and plays offline
 - Settings: music and sound effects volume, speed units (auto, km/h or mph), graphics quality, reduced motion and vibration
+- Saudi holidays: fireworks and a free Saudi green paint on National Day and Founding Day, lanterns and a crescent moon through Ramadan, and double cells at Eid (dates follow the Umm al-Qura calendar; add `?event=national`, `founding`, `ramadan` or `eid` to the address to preview one)
+- Wheel styles (Aero, Turbine, Arachnid, Gold) and thruster colours to buy in the Garage
+- Race your best run: a see-through ghost of your best (and of today's best daily) flies alongside, with a marker when it's off screen; switch it off in Settings
 - Phone vibration on crashes, stomps, smashes, boss hits, wrecked vehicles and finished missions (Android; iPhone browsers don't support it)
 - Vehicle pickups, like Jetpack Joyride's: a Cybertruck that smashes through cars, drones and monsters, Optimus with a double jump and a landing shockwave, and a Starship that flips between the road and the sky. Each lasts 16 seconds or until it takes a hit, which throws the Roadster clear instead of ending the run
 - A daily challenge: the same course for everyone each day (the world alternates between Saudi Arabia and Texas), today's best, and a streak that pays 100 cells a day, up to 700

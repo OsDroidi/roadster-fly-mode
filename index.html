@@ -366,6 +366,7 @@ html[dir="rtl"] .bar b{inset:0 0 0 auto}
         <p class="status"><i class="batt" aria-hidden="true"></i><b>100%</b><span aria-hidden="true">·</span><span data-t="parked">Parked</span></p>
         <p class="tagline" id="tagline"></p>
         <p class="meme" id="meme"></p>
+        <p class="daily-note" id="evLine" hidden></p>
       </div>
       <dl class="stats">
         <div><dt data-t="best">Best</dt><dd id="tBest">0</dd></div>
@@ -403,6 +404,10 @@ html[dir="rtl"] .bar b{inset:0 0 0 auto}
       <div class="studio"><canvas id="garageCar" width="864" height="240" aria-hidden="true"></canvas></div>
       <h3 id="paintH" data-t="paint">Paint</h3>
       <div class="swatches" id="paints" role="radiogroup" aria-labelledby="paintH"></div>
+      <h3 id="wheelH" data-t="wheels">Wheels</h3>
+      <div class="swatches" id="wheelBox" role="radiogroup" aria-labelledby="wheelH"></div>
+      <h3 id="flameH" data-t="thrusters">Thruster colour</h3>
+      <div class="swatches" id="flameBox" role="radiogroup" aria-labelledby="flameH"></div>
       <p class="dim small" id="gMsg" aria-live="polite"></p>
       <h3 data-t="upgrades">Upgrades</h3>
       <ul class="group ups" id="ups"></ul>
@@ -439,6 +444,8 @@ html[dir="rtl"] .bar b{inset:0 0 0 auto}
           <div class="seg" role="radiogroup" aria-labelledby="gfxL"><button type="button" role="radio" data-set="gfx" data-v="auto" data-t="auto">auto</button><button type="button" role="radio" data-set="gfx" data-v="high" data-t="high">high</button><button type="button" role="radio" data-set="gfx" data-v="medium" data-t="medium">medium</button><button type="button" role="radio" data-set="gfx" data-v="low" data-t="low">low</button></div></div>
         <div class="opt"><span class="opt-l" id="motionL" data-t="setMotion">setMotion</span>
           <div class="seg" role="radiogroup" aria-labelledby="motionL"><button type="button" role="radio" data-set="motion" data-v="auto" data-t="auto">auto</button><button type="button" role="radio" data-set="motion" data-v="on" data-t="on">on</button><button type="button" role="radio" data-set="motion" data-v="off" data-t="off">off</button></div></div>
+        <div class="opt"><span class="opt-l" id="ghostOnL" data-t="setGhost">Race your best run</span>
+          <div class="seg" role="radiogroup" aria-labelledby="ghostOnL"><button type="button" role="radio" data-set="ghostOn" data-v="on" data-t="on">on</button><button type="button" role="radio" data-set="ghostOn" data-v="off" data-t="off">off</button></div></div>
         <div class="opt" id="optHaptics"><span class="opt-l" id="hapticsL" data-t="setHaptics">setHaptics</span>
           <div class="seg" role="radiogroup" aria-labelledby="hapticsL"><button type="button" role="radio" data-set="haptics" data-v="on" data-t="on">on</button><button type="button" role="radio" data-set="haptics" data-v="off" data-t="off">off</button></div></div>
       </div>
@@ -517,7 +524,8 @@ const defaultSave = () => ({
   paints: ['pearl'], paint: 'pearl', muted: false,
   rank: 0, done: 0, missions: null, seen: {}, music: true, toot: false,
   diff: 'normal', lang: null, world: 'saudi', daily: null,
-  volMusic: 100, volSfx: 100, units: 'auto', gfx: 'auto', motion: 'auto', haptics: 'on'
+  volMusic: 100, volSfx: 100, units: 'auto', gfx: 'auto', motion: 'auto', haptics: 'on',
+  wheels: ['aero'], wheel: 'aero', flames: ['blue'], flame: 'blue', ghostOn: 'on', ghost: null, ghostDaily: null, gifts: {}
 });
 let save = defaultSave();
 try {
@@ -529,6 +537,9 @@ try {
       save = Object.assign(d, s);
       save.up = Object.assign(d.up, s.up || {});
       if (!Array.isArray(save.paints) || !save.paints.length) save.paints = ['pearl'];
+      if (!Array.isArray(save.wheels) || !save.wheels.length) save.wheels = ['aero'];
+      if (!Array.isArray(save.flames) || !save.flames.length) save.flames = ['blue'];
+      if (!save.gifts || typeof save.gifts !== 'object') save.gifts = {};
     }
   }
 } catch (e) { /* storage unavailable: play without saving */ }
@@ -558,6 +569,11 @@ const STR = {
     dailyOver: (b, s, r) => `Daily challenge · Today's best ${b} · ${s}-day streak${r ? ` · +${r} cells` : ''}`,
     share: 'Share', shareText: s => `I scored ${s} in Roadster: Fly Mode. Can you beat it?`, shareSaved: 'Image saved and the link copied. Post them together.',
     scoreLbl: 'Score', topSpeed: 'Top speed', beatIt: 'Can you beat it?', dailyTitle: 'Daily challenge',
+    wheels: 'Wheels', thrusters: 'Thruster colour', wheel_aero: 'Aero', wheel_turbine: 'Turbine', wheel_arachnid: 'Arachnid', wheel_gold: 'Gold',
+    flame_blue: 'Cold blue', flame_green: 'Saudi green', flame_gold: 'Gold', flame_pink: 'Pink', flame_violet: 'Violet',
+    setGhost: 'Race your best run',
+    ev_national: 'Happy Saudi National Day!', ev_founding: 'Happy Saudi Founding Day!', ev_ramadan: 'Ramadan Kareem', ev_eid: 'Eid Mubarak! Cells count double today.',
+    evGift: 'A gift for the day: Saudi green paint.',
     settings: 'Settings', setMusic: 'Music volume', setSfx: 'Sound effects', setUnits: 'Speed units', setGfx: 'Graphics', setMotion: 'Reduce motion', setHaptics: 'Vibration',
     auto: 'Auto', high: 'High', medium: 'Medium', low: 'Low', on: 'On', off: 'Off',
     settingsNote: 'Auto units follow the language: km/h in Arabic, mph in English. Auto graphics lowers the resolution if the game slows down, and auto motion follows your device.',
@@ -660,6 +676,11 @@ const STR = {
     dailyOver: (b, s, r) => `التحدي اليومي · أفضل نتيجة اليوم ${b} · سلسلة ${nAr(s, ['يوم واحد', 'يومين', 'أيام', 'يومًا'])}${r ? ` · +${r} خلية` : ''}`,
     share: 'مشاركة', shareText: s => `سجّلت ${s} نقطة في رودستر: وضع الطيران. تقدر تتفوّق عليّ؟`, shareSaved: 'حُفظت الصورة ونُسخ الرابط. انشرهما معًا.',
     scoreLbl: 'النقاط', topSpeed: 'أعلى سرعة', beatIt: 'تقدر تتفوّق عليّ؟', dailyTitle: 'التحدي اليومي',
+    wheels: 'الجنوط', thrusters: 'لون الدافعات', wheel_aero: 'إيرو', wheel_turbine: 'توربين', wheel_arachnid: 'أراكنيد', wheel_gold: 'ذهبي',
+    flame_blue: 'أزرق بارد', flame_green: 'أخضر سعودي', flame_gold: 'ذهبي', flame_pink: 'وردي', flame_violet: 'بنفسجي',
+    setGhost: 'سابق أفضل جولة لك',
+    ev_national: 'كل عام والوطن بخير! اليوم الوطني السعودي', ev_founding: 'يوم التأسيس السعودي، يوم بدينا!', ev_ramadan: 'رمضان كريم', ev_eid: 'عيدكم مبارك! الخلايا مضاعفة اليوم.',
+    evGift: 'هدية اليوم: لون الأخضر السعودي.',
     settings: 'الإعدادات', setMusic: 'صوت الموسيقى', setSfx: 'المؤثرات الصوتية', setUnits: 'وحدة السرعة', setGfx: 'الرسومات', setMotion: 'تقليل الحركة', setHaptics: 'الاهتزاز',
     auto: 'تلقائي', high: 'عالية', medium: 'متوسطة', low: 'منخفضة', on: 'تشغيل', off: 'إيقاف',
     settingsNote: 'الوحدة التلقائية تتبع اللغة: كم/س بالعربية وميل/س بالإنجليزية. الرسومات التلقائية تخفّض الدقة إذا تباطأت اللعبة، والحركة التلقائية تتبع إعدادات جهازك.',
@@ -754,6 +775,34 @@ const STR = {
   }
 };
 function t(k, ...a) { const v = STR[LANG][k] !== undefined ? STR[LANG][k] : STR.en[k]; return typeof v === 'function' ? v(...a) : v; }
+// Saudi holidays: National Day and Founding Day by the calendar, Ramadan and the Eids by the Umm al-Qura calendar.
+// ?event=national (or founding, ramadan, eid) previews one.
+const EVENTS = {
+  national: { fw: ['#00a651', '#ffffff', '#4fe39a'], gift: 'green' },
+  founding: { fw: ['#00a651', '#d9b46a', '#ffffff'], gift: 'green' },
+  ramadan: { night: true, lanterns: true },
+  eid: { fw: ['#ffd23f', '#ffffff', '#ff8a3d'], cells: 2 }
+};
+function hijriToday() {
+  try {
+    const p = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', { month: 'numeric', day: 'numeric' }).formatToParts(new Date());
+    return { m: +p.find(q => q.type === 'month').value, d: +p.find(q => q.type === 'day').value };
+  } catch (e) { return null; }
+}
+function detectEvent() {
+  let q = null; try { q = new URLSearchParams(location.search).get('event'); } catch (e) { /* ignore */ }
+  if (q && EVENTS[q]) return q;
+  const now = new Date(), m = now.getMonth() + 1, d = now.getDate();
+  if (m === 9 && d >= 22 && d <= 24) return 'national';
+  if (m === 2 && d >= 21 && d <= 23) return 'founding';
+  const h = hijriToday();
+  if (h && h.m > 0) {
+    if ((h.m === 10 && h.d <= 3) || (h.m === 12 && h.d >= 10 && h.d <= 13)) return 'eid';
+    if (h.m === 9) return 'ramadan';
+  }
+  return null;
+}
+const EVENT = detectEvent(), EV = EVENT ? EVENTS[EVENT] : {};
 // the daily challenge: one course a day for everyone, on that day's world at Normal difficulty
 const DAILY = { on: false, day: '', world: 'saudi', rng: null };
 const worldNow = () => DAILY.on ? DAILY.world : save.world;
@@ -796,6 +845,17 @@ const PAINTS = [
   { id: 'black', name: 'Diamond black', cost: 5000, h: '#7a849c', P: '#2a2f39', p: '#101217', c: '#2b303a' }
 ];
 const paintOf = id => PAINTS.find(q => q.id === id) || PAINTS[0];
+// wheel covers and thruster colours, bought with cells like paint
+const WHEELS = [{ id: 'aero', cost: 0 }, { id: 'turbine', cost: 800 }, { id: 'arachnid', cost: 1600 }, { id: 'gold', cost: 4000 }];
+// c: flame core, middle and edge (as r,g,b); p: pellet colour; glow: r,g,b of the nozzle glow
+const FLAMES = [
+  { id: 'blue', cost: 0, c: ['#bff3ff', '#3aa8ff', '40,110,255'], p: '#9ee6ff', glow: '110,200,255' },
+  { id: 'green', cost: 600, c: ['#c8ffd9', '#2fd673', '0,150,70'], p: '#9dffc4', glow: '80,230,140' },
+  { id: 'gold', cost: 1200, c: ['#fff3c4', '#ffb21f', '230,120,20'], p: '#ffe08a', glow: '255,190,60' },
+  { id: 'pink', cost: 2000, c: ['#ffd6ec', '#ff5fae', '220,40,140'], p: '#ffb3da', glow: '255,110,190' },
+  { id: 'violet', cost: 2500, c: ['#e6dcff', '#9b6bff', '110,60,230'], p: '#cbb6ff', glow: '170,130,255' }
+];
+const flameOf = () => FLAMES.find(f => f.id === save.flame) || FLAMES[0];
 // gameplay geometry for each gas vehicle (alt = height above road)
 const VEH = {
   sedan: { w: 40, h: 13, wheelR: 3.5, wheels: [[9, 9.5], [31, 9.5]], pipe: [0, 2],
@@ -1225,7 +1285,8 @@ function newWorld(attract) {
   W.zone = 0; W.marsMix = 0; W.zoneDelay = 0; W.warpT = 0; W.zap = null;
   W.space = null; W.spaceT = attract ? rand(5, 12) : rand(18, 38); W.booster = null; W.missileT = rand(8, 12);
   W.rocketT = rand(6, 18); W.rocket = null; W.starlinkT = rand(8, 20); W.starlink = null; W.tunnelT = rand(1, 4); W.tunnel = null;
-  W.startPhase = isDark() ? (attract ? 0.3 : 0.2) : (attract ? 0.8 : 0.76);
+  W.startPhase = isDark() || EV.night ? (attract ? 0.3 : 0.2) : (attract ? 0.8 : 0.76);
+  W.fwT = 1;
   W.dayT = W.startPhase;
   parts.length = 0; skyParts.length = 0; floats.length = 0; banners.length = 0; toasts.length = 0; hints.length = 0;
   for (const ly of LAY) { ly.items.length = 0; ly.nx = -80; }
@@ -1272,7 +1333,7 @@ function stepPartList(list, dt, scroll) {
   list.length = j;
   if (list === parts) while (splashes.length) {
     const y = splashes.pop(), x = splashes.pop();
-    if (Math.random() < 0.55) addPart({ x, y, vx: rand(-110, 60), vy: rand(-120, -40), life: rand(0.18, 0.32), max: 0.32, kind: 'spark', col: chance(0.5) ? '#ffffff' : '#9ee6ff', grav: 400, world: true, front: true });
+    if (Math.random() < 0.55) addPart({ x, y, vx: rand(-110, 60), vy: rand(-120, -40), life: rand(0.18, 0.32), max: 0.32, kind: 'spark', col: chance(0.5) ? '#ffffff' : flameOf().p, grav: 400, world: true, front: true });
     if (Math.random() < 0.18) addPart({ x, y: y - 1, vx: rand(-70, 30), vy: rand(-26, -6), life: rand(0.4, 0.7), max: 0.7, kind: 'smoke', r: 1.5, r2: rand(4, 7), col: '#eceaf2', a: 0.4, drag: 2, world: true });
   }
 }
@@ -1912,7 +1973,7 @@ function thrustFX() {
   const by = groundY - P.alt - 2, fy = overTrench(W.dist + carX + 26) ? groundY + 60 : groundY - surfaceUnder().alt - 0.5;
   for (const nx of NOZZLES) {
     if (Math.random() < 0.7) addPart({ x: carX + nx + rand(-1, 1), y: by + 3, vx: rand(-20, 20) - W.speed * 0.15, vy: rand(330, 470), life: 0.5, max: 0.5,
-      kind: 'streak', col: chance(0.5) ? '#ffffff' : '#9ee6ff', world: true, fy });
+      kind: 'streak', col: chance(0.5) ? '#ffffff' : flameOf().p, world: true, fy });
   }
   if (P.alt < 50 && Math.random() < 0.5 * (1 - P.alt / 50) + 0.08) {
     const nx = chance(0.5) ? 15 : 37;
@@ -2016,7 +2077,8 @@ function collectCell(e) {
   const sx = e.x - W.dist + 2.5, sy = groundY - e.alt - 4;
   pop(sx, sy, '#b6ffd2');
   if (mode !== 'run') return;
-  RUN.cells++; RUN.stats.cells++; RUN.bump = 1;
+  const n = EV.cells || 1;   // Eid: every cell counts double
+  RUN.cells += n; RUN.stats.cells += n; RUN.bump = 1;
   RUN.chain++; RUN.chainT = 1.6; if (RUN.chain > RUN.stats.chain) RUN.stats.chain = RUN.chain;
   P.battery = Math.min(100, P.battery + CELL_CHARGE);
   addScore(10 + Math.min(10, Math.floor(RUN.chain / 5)));
@@ -2173,7 +2235,7 @@ function stepTimers(dt) {
     if (!att && !e.used && e.x - cxw < IW * 0.75 && e.x > cxw) hint('charger', t('hCharger'));
   }
   if (att) { P.battery = 100; return; }
-  RUN.live += dt;
+  RUN.live += dt; ghostRecord(dt);
   RUN.score += W.scroll / 10 * (P.plaid > 0 ? 2 : 1) * RUN.mult * DF().score;
   RUN.multT += dt; if (RUN.mult > 1 && RUN.multT > 5) { RUN.mult--; RUN.multT = 0; }
   RUN.stats.mph = Math.max(RUN.stats.mph, Math.round(W.speed * PX2MPH));
@@ -2230,7 +2292,39 @@ function doLaunch(rt) {
 }
 
 /* sky events: rocket launches, satellite trains, tunnel traffic */
+// holiday fireworks: a burst of sparks somewhere in the sky every second or so
+function stepFireworks(dt) {
+  if (!EV.fw || reduceMotion) return;
+  W.fwT -= dt;
+  if (W.fwT > 0) return;
+  W.fwT = rand(0.7, 1.6);
+  const x = rand(IW * 0.15, IW * 0.95), y = rand(16, groundY * 0.45), col = pick(EV.fw), n = 26;
+  for (let i = 0; i < n; i++) {
+    const a = i / n * TAU + rand(-0.1, 0.1), sp = rand(40, 70);
+    skyParts.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: rand(0.9, 1.4), max: 1.4, kind: 'spark', col: chance(0.25) ? '#ffffff' : col, grav: 30, drag: 1.1, w: 0.9 });
+  }
+  glowFlash.push({ x, y, t: 0.25 });
+}
+const glowFlash = [];
+// Ramadan: strings of lanterns swaying across the sky, drifting slowly with the road
+function drawLanterns(N) {
+  const sp = 70, off = (W.dist * 0.15) % sp, y0 = 6;
+  g.lineWidth = 0.5; g.strokeStyle = 'rgba(255,220,150,0.5)';
+  g.beginPath(); for (let x = -off - sp; x < IW + sp; x += sp) { g.moveTo(x, y0); g.quadraticCurveTo(x + sp / 2, y0 + 14, x + sp, y0); } g.stroke();
+  for (let x = -off - sp; x < IW + sp; x += sp) {
+    const cx = x + sp / 2, sw = Math.sin(W.time * 1.6 + x * 0.1) * 0.12;
+    g.save(); g.translate(cx, y0 + 7); g.rotate(sw);
+    g.strokeStyle = 'rgba(255,220,150,0.6)'; g.beginPath(); g.moveTo(0, 0); g.lineTo(0, 5); g.stroke();
+    if (N > 0.3) glowAt(0, 11, 12, 'rgba(255,190,90,0.6)');
+    poly(g, [-2.6, 6.4, 2.6, 6.4, 3.4, 10, 2.6, 14, -2.6, 14, -3.4, 10]); ink(g, '#d4a03a', 0.5);
+    rrect(g, -1.6, 8, 3.2, 4.6, 0.8); g.fillStyle = N > 0.3 ? '#fff0b8' : '#f7d27a'; g.fill();
+    poly(g, [-1.6, 6.4, 0, 4.6, 1.6, 6.4]); g.fillStyle = '#b8862a'; g.fill();
+    g.restore();
+  }
+}
 function stepSky(dt) {
+  stepFireworks(dt);
+  for (let i = glowFlash.length - 1; i >= 0; i--) { glowFlash[i].t -= dt; if (glowFlash[i].t <= 0) glowFlash.splice(i, 1); }
   W.rocketT -= dt;
   if (!W.rocket && W.rocketT <= 0) {
     W.rocket = { x: IW * rand(0.5, 0.88), y: groundY - 14, vy: 4, t: 0 };
@@ -2897,9 +2991,15 @@ function drawCelestial(N) {
       circ(g, mx + 34, my + 14, 1.6); g.fillStyle = '#e8dccd'; g.fill();
     } else {
       glowAt(mx, my, 30, 'rgba(200,215,255,0.5)');
-      circ(g, mx, my, 8.5); g.fillStyle = vgrad(g, my - 8, my + 8, ['#fffdf2', '#ece6cf']); g.fill();
-      g.fillStyle = 'rgba(160,150,120,0.35)';
-      circ(g, mx - 3, my - 2, 2.2); g.fill(); circ(g, mx + 2.6, my + 2.4, 1.6); g.fill(); circ(g, mx + 2.2, my - 3.4, 1); g.fill();
+      if (EV.lanterns) blit(bake('crescent', -9.5, -9.5, 9.5, 9.5, x => {
+        circ(x, 0, 0, 8.5); x.fillStyle = '#fff6d8'; x.fill();
+        x.globalCompositeOperation = 'destination-out'; circ(x, 3.8, -2.4, 7.6); x.fill(); x.globalCompositeOperation = 'source-over';
+      }), mx, my);
+      else {
+        circ(g, mx, my, 8.5); g.fillStyle = vgrad(g, my - 8, my + 8, ['#fffdf2', '#ece6cf']); g.fill();
+        g.fillStyle = 'rgba(160,150,120,0.35)';
+        circ(g, mx - 3, my - 2, 2.2); g.fill(); circ(g, mx + 2.6, my + 2.4, 1.6); g.fill(); circ(g, mx + 2.2, my - 3.4, 1); g.fill();
+      }
     }
   }
   if (t > 0.6 || t < 0.04) {   // sun
@@ -3618,21 +3718,31 @@ function carBody(x, p) {
   for (const nx of NOZZLES) { rrect(x, nx - 2.2, 12.6, 4.4, 1.3, 0.6); x.fillStyle = '#2d3650'; x.fill(); rrect(x, nx - 1.3, 13.3, 2.6, 0.55, 0.27); x.fillStyle = '#7fd8ff'; x.fill(); }
 }
 // the Roadster's big turbine wheels: dark rims with silver blades and a red caliper
-function roadsterWheel(x, y, r, rot, c) {
+function roadsterWheel(x, y, r, rot, c, style) {
   c = c || g;
+  const st = style || save.wheel || 'aero', gold = st === 'gold';
   circ(c, x, y, r); c.fillStyle = '#16151d'; c.fill(); c.lineWidth = LW * 0.65; c.strokeStyle = INK; c.stroke();
   circ(c, x, y, r * 0.7); c.fillStyle = '#2f3440'; c.fill();
   c.save(); c.translate(x, y); c.rotate(-0.9);
   c.beginPath(); c.arc(0, 0, r * 0.5, -0.5, 0.5); c.strokeStyle = '#e31937'; c.lineWidth = r * 0.16; c.stroke();
   c.restore();
-  c.strokeStyle = '#c9d0db'; c.lineWidth = r * 0.085; c.beginPath();
-  for (let k = 0; k < 10; k++) {
-    const a = rot + k * TAU / 10, a2 = a + 0.42;
-    c.moveTo(x + Math.cos(a) * r * 0.2, y + Math.sin(a) * r * 0.2);
-    c.quadraticCurveTo(x + Math.cos(a + 0.28) * r * 0.46, y + Math.sin(a + 0.28) * r * 0.46, x + Math.cos(a2) * r * 0.66, y + Math.sin(a2) * r * 0.66);
+  c.beginPath();
+  if (st === 'turbine') {   // many thin straight blades
+    c.strokeStyle = '#c9d0db'; c.lineWidth = r * 0.055;
+    for (let k = 0; k < 14; k++) { const a = rot + k * TAU / 14; c.moveTo(x + Math.cos(a) * r * 0.22, y + Math.sin(a) * r * 0.22); c.lineTo(x + Math.cos(a + 0.18) * r * 0.66, y + Math.sin(a + 0.18) * r * 0.66); }
+  } else if (st === 'arachnid') {   // five bright split spokes
+    c.strokeStyle = '#eef1f5'; c.lineWidth = r * 0.11;
+    for (let k = 0; k < 5; k++) for (const o of [-0.13, 0.13]) { const a = rot + k * TAU / 5 + o; c.moveTo(x + Math.cos(a) * r * 0.2, y + Math.sin(a) * r * 0.2); c.lineTo(x + Math.cos(a + o * 0.6) * r * 0.66, y + Math.sin(a + o * 0.6) * r * 0.66); }
+  } else {   // aero: curved spokes, in silver or gold
+    c.strokeStyle = gold ? '#e6b84a' : '#c9d0db'; c.lineWidth = r * 0.085;
+    for (let k = 0; k < 10; k++) {
+      const a = rot + k * TAU / 10, a2 = a + 0.42;
+      c.moveTo(x + Math.cos(a) * r * 0.2, y + Math.sin(a) * r * 0.2);
+      c.quadraticCurveTo(x + Math.cos(a + 0.28) * r * 0.46, y + Math.sin(a + 0.28) * r * 0.46, x + Math.cos(a2) * r * 0.66, y + Math.sin(a2) * r * 0.66);
+    }
   }
   c.stroke();
-  circ(c, x, y, r * 0.7); c.lineWidth = r * 0.07; c.strokeStyle = '#9aa3b2'; c.stroke();
+  circ(c, x, y, r * 0.7); c.lineWidth = r * 0.07; c.strokeStyle = gold ? '#c9952e' : '#9aa3b2'; c.stroke();
   circ(c, x, y, r * 0.18); c.fillStyle = '#1d2028'; c.fill(); circ(c, x, y, r * 0.07); c.fillStyle = '#c9d0db'; c.fill();
   c.strokeStyle = 'rgba(255,255,255,0.22)'; c.lineWidth = r * 0.1; c.beginPath(); c.arc(x, y, r * 0.86, -2.5, -1.3); c.stroke();
 }
@@ -3651,7 +3761,8 @@ function drawCarAt(cx, cy, rot, alpha, sx, sy, paint) {
 }
 function thrustFlame(x, y, L, w) {
   const gr = g.createLinearGradient(0, y, 0, y + L);
-  gr.addColorStop(0, '#ffffff'); gr.addColorStop(0.2, '#bff3ff'); gr.addColorStop(0.5, '#3aa8ff'); gr.addColorStop(0.8, 'rgba(40,110,255,0.6)'); gr.addColorStop(1, 'rgba(40,110,255,0)');
+  const f = flameOf();
+  gr.addColorStop(0, '#ffffff'); gr.addColorStop(0.2, f.c[0]); gr.addColorStop(0.5, f.c[1]); gr.addColorStop(0.8, `rgba(${f.c[2]},0.6)`); gr.addColorStop(1, `rgba(${f.c[2]},0)`);
   g.beginPath(); g.moveTo(x - w, y); g.quadraticCurveTo(x - w * 1.3, y + L * 0.42, x, y + L); g.quadraticCurveTo(x + w * 1.3, y + L * 0.42, x + w, y); g.closePath();
   g.fillStyle = gr; g.fill();
   g.beginPath(); g.moveTo(x - w * 0.5, y); g.quadraticCurveTo(x - w * 0.6, y + L * 0.3, x, y + L * 0.55); g.quadraticCurveTo(x + w * 0.6, y + L * 0.3, x + w * 0.5, y); g.closePath();
@@ -3693,7 +3804,7 @@ function drawPlayer(N) {
   // cold-gas thrusters, under the body
   if (P.thrusting) {
     const L = 16 + Math.random() * 7 + (P.fly > 0 ? 7 : 0);
-    for (const nx of NOZZLES) { glowAt(nx, 16, 16, 'rgba(110,200,255,0.85)'); thrustFlame(nx, 13.6, L * rand(0.88, 1.08), 2.9); }
+    for (const nx of NOZZLES) { glowAt(nx, 16, 16, `rgba(${flameOf().glow},0.85)`); thrustFlame(nx, 13.6, L * rand(0.88, 1.08), 2.9); }
   }
   g.restore();
   if (P.flame > 0) {   // not a flamethrower
@@ -4842,6 +4953,8 @@ function render() {
   const sh = W.shake > 0 && !reduceMotion ? W.shake * 0.7 : 0;
   camera(sh ? rand(-sh, sh) : 0, sh ? rand(-sh, sh) : 0);
   drawSky(sky); drawCelestial(N); drawClouds(sky, N);
+  for (const f of glowFlash) glowAt(f.x, f.y, 26, 'rgba(255,240,200,0.6)', f.t * 3);
+  if (EV.lanterns && W.zone === 0) drawLanterns(N);
   drawPartList(skyParts, false); drawRocket(); drawSpaceRoadster(N); drawHills(sky); drawBooster();
   drawDecor(LAY[0], N); drawBeams(N); drawDecor(LAY[1], N);
   drawChargers(N); drawLoops(N);
@@ -4849,6 +4962,7 @@ function render() {
   drawPartList(parts, false);
   drawEnts(N);
   drawBoss();
+  drawGhost();
   drawPlayer(N);
   drawFx();
   drawPartList(parts, true);
@@ -4938,6 +5052,7 @@ function bankRun() {
   if (sc > save.best) { save.best = sc; RUN.newBest = true; }
   if (!RUN.counted) { save.runs++; RUN.counted = true; }
   if (DAILY.on) finishDaily();
+  ghostKeep();
   persist();
 }
 // the first daily of a day extends the streak (or starts a new one) and pays 100 cells per day of it, up to 700
@@ -4989,7 +5104,22 @@ function syncOpts() {
   for (const b of document.querySelectorAll('[data-world]')) b.setAttribute('aria-checked', String(b.dataset.world === (SAUDI() ? 'saudi' : 'texas')));
   for (const b of document.querySelectorAll('[data-diff]')) b.setAttribute('aria-checked', String(b.dataset.diff === (DIFFS[save.diff] ? save.diff : 'normal')));
 }
+// the holiday greeting on the title, and the day's gift the first time it is seen
+function showEvent() {
+  const el = $('evLine');
+  el.hidden = !EVENT;
+  if (!EVENT) return;
+  let txt = t('ev_' + EVENT);
+  if (EV.gift && !save.gifts[EVENT + new Date().getFullYear()]) {
+    save.gifts[EVENT + new Date().getFullYear()] = 1;
+    if (!save.paints.includes(EV.gift)) { save.paints.push(EV.gift); save.paint = EV.gift; }
+    persist();
+  }
+  if (EV.gift) txt += ' ' + t('evGift');
+  el.textContent = txt;
+}
 function refreshTitle() {
+  showEvent();
   $('tBest').textContent = fmt(save.best);
   $('tBank').textContent = fmt(save.bank);
   $('tRank').textContent = rankName(save.rank);
@@ -5017,13 +5147,14 @@ function startRun(daily) {
   const dt = dailyToday();
   SNAP.ok = false; SNAP.t = -9;
   DAILY.on = !!daily; DAILY.day = dt.day; DAILY.world = dt.world; DAILY.rng = mulberry32(dt.seed);
-  resetPlayer(); resetRun(); newWorld(false);
+  resetPlayer(); resetRun(); newWorld(false); ghostStart();
   mode = 'launch'; paused = false; holding = false; latch = false; keys.clear(); pointers.clear();
   L.t = 0; L.greenAt = 1.65 + rand(0.1, 0.8); L.lights = 0; L.green = false; L.done = false;
   btnPause.hidden = false; btnLang.hidden = true; $('btnSettings').hidden = true; btnMusic.hidden = false; HT.set = false;
   if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
   if (save.runs < 2) hint('launch', t('hLaunch', coarse));
   if (DAILY.on) toast(t('dailyStart', t(DAILY.world)), '#7d9eff');
+  if (EVENT) toast(t('ev_' + EVENT), EV.fw ? EV.fw[0] : '#ffd23f');
 }
 function pause() {
   if (paused || !(mode === 'run' || mode === 'launch')) return;
@@ -5036,6 +5167,49 @@ function resume() {
   paused = false; hideAll(); holding = false; latch = false; lastT = performance.now();
   if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
 }
+/* ---------- ghost: race a see-through copy of your best run ---------- */
+// rec holds [distance, height] every quarter second of driving; play is the saved best being raced
+const GHOST = { rec: [], recT: 0, play: null };
+const GHOST_STEP = 0.25, GHOST_MAX = 2 * 2400;   // up to ten minutes
+function ghostStart() {
+  GHOST.rec = []; GHOST.recT = 0; GHOST.play = null;
+  if (save.ghostOn === 'off') return;
+  const gd = save.ghostDaily;
+  const src = DAILY.on ? (gd && gd.day === DAILY.day ? gd.d : null) : (save.ghost && save.ghost.d);
+  if (Array.isArray(src) && src.length >= 8) GHOST.play = src;
+}
+function ghostRecord(dt) {
+  GHOST.recT -= dt;
+  if (GHOST.recT > 0 || GHOST.rec.length >= GHOST_MAX) return;
+  GHOST.recT += GHOST_STEP;
+  GHOST.rec.push(Math.round(runDist()), Math.round(P.alt));
+}
+// keeps this run as the ghost to beat when it set a new best (overall, or today's daily)
+function ghostKeep() {
+  if (GHOST.rec.length < 8) return;
+  if (DAILY.on) { if (RUN.dailyBest) save.ghostDaily = { day: DAILY.day, d: GHOST.rec.slice() }; }
+  else if (RUN.newBest) save.ghost = { d: GHOST.rec.slice() };
+}
+function drawGhost() {
+  const d = GHOST.play; if (!d || mode !== 'run') return;
+  const f = RUN.live / GHOST_STEP, i = Math.floor(f) * 2;
+  if (i + 3 >= d.length) return;   // the best run ended here
+  const k = f - Math.floor(f), gd = lerp(d[i], d[i + 2], k), ga = lerp(d[i + 1], d[i + 3], k);
+  const sx = carX + 30 + (gd - runDist()), sy = groundY - ga - 8;
+  if (sx > -30 && sx < IW + 30) {
+    drawCarAt(sx, sy, 0, 0.32);
+    g.font = font(U(10), 600); const w = g.measureText(t('bestHud')).width + U(12);
+    rrect(g, sx - w / 2, sy - 22, w, U(16), U(8)); g.fillStyle = 'rgba(62,106,225,0.75)'; g.fill();
+    txt(t('bestHud'), sx, sy - 22 + U(8), U(10), '#ffffff', 'center', { w: 600, base: 'middle' });
+  } else {
+    // off screen: a marker on the edge it is beyond
+    const ahead = sx > 0, ex = ahead ? IW - U(40) : U(40), ey = clamp(sy, 40, groundY - 12), lab = (ahead ? '' : '◀ ') + t('bestHud') + (ahead ? ' ▶' : '');
+    g.font = font(U(10), 600); const w = g.measureText(lab).width + U(14);
+    rrect(g, ex - w / 2, ey - U(9), w, U(18), U(9)); g.fillStyle = 'rgba(62,106,225,0.75)'; g.fill();
+    txt(lab, ex, ey, U(10), '#ffffff', 'center', { w: 600, base: 'middle' });
+  }
+}
+
 /* ---------- share card ---------- */
 const GAME_URL = 'https://osdroidi.github.io/roadster-fly-mode/';
 // a copy of the road without the HUD, refreshed every second or so, so the card shows the run just before it ended
@@ -5216,27 +5390,47 @@ function drawGarageCar() {
   x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, c.width, c.height);
   x.setTransform(s, 0, 0, s, 6 * s, 3 * s); x.lineJoin = 'round'; x.lineCap = 'round';
   ell(x, 30, 16.2, 30, 1.6); x.fillStyle = 'rgba(0,0,0,0.25)'; x.fill();
+  const f = flameOf();
+  for (const nx of NOZZLES) {
+    const gr = x.createLinearGradient(0, 13.6, 0, 22); gr.addColorStop(0, '#ffffff'); gr.addColorStop(0.35, f.c[0]); gr.addColorStop(0.7, f.c[1]); gr.addColorStop(1, `rgba(${f.c[2]},0)`);
+    x.beginPath(); x.moveTo(nx - 2.4, 13.6); x.quadraticCurveTo(nx - 3, 18, nx, 22); x.quadraticCurveTo(nx + 3, 18, nx + 2.4, 13.6); x.closePath(); x.fillStyle = gr; x.fill();
+  }
   carBody(x, paintOf(save.paint));
   roadsterWheels(0.3, x);
 }
 function openGarage(from) { backTo = from; $('gMsg').textContent = ''; renderGarage(); show('scrGarage'); }
-function renderGarage(focusPaint, focusUp) {
+// what the garage sells: the list, where ownership and the choice are saved, the chip's look
+const wheelChips = {};
+function wheelChip(id) {
+  if (!wheelChips[id]) { const c = makeCanvas(76, 76), x = c.getContext('2d'); x.scale(2, 2); roadsterWheel(19, 19, 17.5, 0.3, x, id); wheelChips[id] = c.toDataURL(); }
+  return `url(${wheelChips[id]}) center/cover`;
+}
+const SHOP = {
+  paint: { list: PAINTS, owned: 'paints', sel: 'paint', box: 'paints', chip: p => p.P },
+  wheel: { list: WHEELS, owned: 'wheels', sel: 'wheel', box: 'wheelBox', chip: w => wheelChip(w.id) },
+  flame: { list: FLAMES, owned: 'flames', sel: 'flame', box: 'flameBox', chip: f => `radial-gradient(circle at 50% 30%, #ffffff 0 18%, ${f.c[0]} 30%, ${f.c[1]} 60%, rgb(${f.c[2]}) 100%)` }
+};
+const itemName = (kind, it) => t(kind + '_' + it.id);
+function renderGarage(focusSel) {
   $('gBank').textContent = fmt(save.bank);
-  const box = $('paints'); box.innerHTML = '';
-  PAINTS.forEach(p => {
-    const owned = save.paints.includes(p.id), sel = save.paint === p.id;
-    const b = document.createElement('button');
-    b.type = 'button'; b.className = 'sw' + (owned ? '' : ' locked');
-    b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', sel ? 'true' : 'false');
-    b.dataset.paint = p.id;
-    b.innerHTML = `<span class="chip" style="background:${p.P}"></span><span class="nm"></span><span class="pr"></span>`;
-    b.querySelector('.nm').textContent = t('paint_' + p.id);
-    const pr = b.querySelector('.pr');
-    if (owned) pr.textContent = sel ? t('equipped') : t('owned'); else pr.innerHTML = cellAmount(p.cost);
-    b.setAttribute('aria-label', t('swatchAria', t('paint_' + p.id), owned, sel, p.cost));
-    b.addEventListener('click', () => choosePaint(p));
-    box.appendChild(b);
-  });
+  for (const kind of Object.keys(SHOP)) {
+    const S = SHOP[kind], box = $(S.box); box.innerHTML = '';
+    S.list.forEach(it => {
+      const owned = save[S.owned].includes(it.id), sel = save[S.sel] === it.id, name = itemName(kind, it);
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'sw' + (owned ? '' : ' locked');
+      b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', sel ? 'true' : 'false');
+      b.dataset.item = kind + ':' + it.id;
+      b.innerHTML = `<span class="chip"></span><span class="nm"></span><span class="pr"></span>`;
+      b.querySelector('.chip').style.background = S.chip(it);
+      b.querySelector('.nm').textContent = name;
+      const pr = b.querySelector('.pr');
+      if (owned) pr.textContent = sel ? t('equipped') : t('owned'); else pr.innerHTML = cellAmount(it.cost);
+      b.setAttribute('aria-label', t('swatchAria', name, owned, sel, it.cost));
+      b.addEventListener('click', () => chooseItem(kind, it));
+      box.appendChild(b);
+    });
+  }
   const ul = $('ups'); ul.innerHTML = '';
   UPS.forEach(u => {
     const lv = save.up[u.id] || 0, max = lv >= 5, cost = max ? 0 : UP_COST[lv];
@@ -5255,23 +5449,23 @@ function renderGarage(focusPaint, focusUp) {
   });
   drawGarageCar();
   renderEggs();
-  const f = focusPaint ? box.querySelector(`[data-paint="${focusPaint}"]`) : focusUp ? ul.querySelector(`[data-up="${focusUp}"]`) : null;
+  const f = focusSel ? $('scrGarage').querySelector(focusSel) : null;
   if (f) { if (f.disabled) $('scrGarage').querySelector('[data-back]').focus(); else f.focus(); }
 }
-function choosePaint(p) {
-  const msg = $('gMsg');
-  const name = t('paint_' + p.id);
-  if (save.paints.includes(p.id)) { save.paint = p.id; SFX.click(); msg.textContent = t('paintOn', name); }
-  else if (save.bank >= p.cost) { save.bank -= p.cost; save.paints.push(p.id); save.paint = p.id; SFX.power(); msg.textContent = t('paintNew', name); }
-  else { SFX.thud(); msg.textContent = t('paintShort', name, fmt(p.cost - save.bank)); }
-  persist(); renderGarage(p.id);
+// equips an owned item, or buys it when there are enough cells
+function chooseItem(kind, it) {
+  const S = SHOP[kind], msg = $('gMsg'), name = itemName(kind, it), own = save[S.owned];
+  if (own.includes(it.id)) { save[S.sel] = it.id; SFX.click(); msg.textContent = t('paintOn', name); }
+  else if (save.bank >= it.cost) { save.bank -= it.cost; own.push(it.id); save[S.sel] = it.id; SFX.power(); msg.textContent = t('paintNew', name); }
+  else { SFX.thud(); msg.textContent = t('paintShort', name, fmt(it.cost - save.bank)); }
+  persist(); renderGarage(`[data-item="${kind}:${it.id}"]`);
 }
 function buyUpgrade(u) {
   const lv = save.up[u.id] || 0; if (lv >= 5) return;
   const cost = UP_COST[lv]; if (save.bank < cost) return;
   save.bank -= cost; save.up[u.id] = lv + 1; persist(); SFX.power();
   $('gMsg').textContent = t('upDone', upName(u), lv + 1);
-  renderGarage(null, u.id);
+  renderGarage(`[data-up="${u.id}"]`);
 }
 function goBack() {
   SFX.click();

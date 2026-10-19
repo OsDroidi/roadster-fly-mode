@@ -1237,7 +1237,7 @@ const W = { dist: 0, speed: 0, scroll: 0, time: 0, ents: [], spawnX: 0, last: ''
   space: null, spaceT: 30, booster: null, missileT: 0 };
 const P = { alt: 0, vy: 0, onGround: true, gas: 1.4, gasMax: 1.4, battery: 100, thrusting: false, tilt: 0, invuln: 0,
   plaid: 0, plaidMax: 1, coil: 0, coilMax: 1, fly: 0, flyMax: 5, shield: false, riding: null, loop: null, wheelRot: 0,
-  boost: 0, boostV: 0, wreck: null, lowWarn: 0, charging: false, ghostT: 0, ghosts: [], flame: 0, flameMax: 5, tootT: 0, sq: 0, sqV: 0, dustT: 0, ride: null };
+  boost: 0, boostV: 0, wreck: null, lowWarn: 0, charging: false, ghostT: 0, ghosts: [], flame: 0, flameMax: 5, tootT: 0, sq: 0, sqV: 0, dustT: 0, ride: null, spool: 0, tiltV: 0 };
 const RUN = { score: 0, cells: 0, banked: 0, chain: 0, chainT: 0, stats: {}, revived: false, cause: '', overT: 0, startDist: 0,
   tips: {}, time: 0, live: 0, t060: 0, t060Show: 0, newBest: false, counted: false, speedAtCrash: 0, missionT: 0, lowShown: false, mult: 1, multT: 0, stompChain: 0, ludi: false, funded: false, bump: 0 };
 const L = { t: 0, greenAt: 0, lights: 0, green: false, done: false };
@@ -1267,7 +1267,7 @@ const coilDur = () => 6 + 2 * save.up.coil;
 
 function resetPlayer() {
   Object.assign(P, { alt: 0, vy: 0, onGround: true, thrusting: false, tilt: 0, invuln: 0, plaid: 0, coil: 0, fly: 0, shield: false,
-    riding: null, loop: null, wheelRot: 0, boost: 0, boostV: 0, wreck: null, lowWarn: 0, charging: false, battery: 100, ghostT: 0, ghosts: [], flame: 0, tootT: 0, sq: 0, sqV: 0, dustT: 0, ride: null });
+    riding: null, loop: null, wheelRot: 0, boost: 0, boostV: 0, wreck: null, lowWarn: 0, charging: false, battery: 100, ghostT: 0, ghosts: [], flame: 0, tootT: 0, sq: 0, sqV: 0, dustT: 0, ride: null, spool: 0, tiltV: 0 });
   P.gasMax = 1.4 + 0.3 * save.up.thrust; P.gas = P.gasMax;
 }
 function resetRun() {
@@ -1701,9 +1701,14 @@ function stepRide(dt) {
     const sf = surfaceUnder();
     if (sf.alt < P.alt - 0.5) { P.onGround = false; P.riding = null; } else { P.alt = sf.alt; P.riding = sf.ent; }
   }
-  if (press) {
-    if (P.onGround) { P.vy = k === 'truck' ? 380 : 360; P.onGround = false; P.riding = null; r.jumps = 1; takeoff(); }
-    else if (k === 'bot' && r.jumps < 2) {   // Optimus double-jumps
+  // a press is remembered for a moment, so tapping just before landing still jumps,
+  // and a jump still works for a moment after rolling off an edge
+  r.buf = press ? 0.12 : Math.max(0, (r.buf || 0) - dt);
+  r.coy = P.onGround ? 0.09 : Math.max(0, (r.coy || 0) - dt);
+  if (r.buf > 0) {
+    if (P.onGround || (r.coy > 0 && !r.jumps)) { P.vy = k === 'truck' ? 380 : 360; P.onGround = false; P.riding = null; r.jumps = 1; r.buf = 0; r.coy = 0; takeoff(); }
+    else if (press && k === 'bot' && r.jumps < 2) {   // Optimus double-jumps
+      r.buf = 0;
       P.vy = 340; r.jumps = 2; SFX.hop();
       smoke(carX + 29, groundY - P.alt, 6, { sx: 6, col: '#dfe8ff', a: 0.6, vx0: -60, vx1: 60, vy0: 10, vy1: 60, r2a: 3, r2b: 6 });
     }
@@ -1862,11 +1867,16 @@ function stepEnts(dt) {
     if (right < left && !(P.loop && P.loop.e === e)) W.ents.splice(i, 1);
   }
 }
+// magnetised cells steer toward the car with momentum, so they swoop in on curves and speed up as they come
 function magnetPull(e, dt) {
   const tx = W.dist + carX + 28, ta = P.alt + 5;
   const dx = tx - e.x, da = ta - e.alt, dd = Math.hypot(dx, da) || 1;
-  const step = Math.min(dd, (380 + W.speed * 0.6) * dt);
-  e.x += dx / dd * step; e.alt += da / dd * step; e.v = 0;
+  e.magT = (e.magT || 0) + dt; e.v = 0;
+  const s = 380 + W.speed * 0.6 + e.magT * 500, k = Math.min(1, dt * 9);
+  e.mvx = lerp(e.mvx || 0, dx / dd * s, k); e.mva = lerp(e.mva || 0, da / dd * s, k);
+  const mv = Math.hypot(e.mvx, e.mva) * dt;
+  if (mv >= dd) { e.x = tx; e.alt = ta; return; }
+  e.x += e.mvx * dt; e.alt += e.mva * dt;
 }
 
 function overTrench(wx) { for (const e of W.ents) if (e.type === 'trench' && wx > e.x + 2 && wx < e.x + e.w - 2) return true; return false; }
@@ -1929,13 +1939,16 @@ function stepPlayer(dt) {
   }
   if (P.thrusting) {
     if (P.onGround) { P.vy = Math.max(P.vy, JUMP_V); P.onGround = false; P.riding = null; takeoff(); }
-    P.vy += THRUST * dt;
+    // the thrusters spool up over about a tenth of a second, and ease off as the car nears the top of the sky
+    P.spool = Math.min(1, Math.max(P.spool, 0.6) + dt * 4);
+    P.vy += THRUST * P.spool * clamp((maxAlt - P.alt) / 16, 0.12, 1) * dt;
     if (!att && P.fly <= 0) P.gas = Math.max(0, P.gas - dt);
     thrustFX();
     if (save.toot && mode === 'run') { P.tootT -= dt; if (P.tootT <= 0) { SFX.toot(); P.tootT = rand(0.2, 0.32); } }
-  } else P.tootT = 0;
+  } else { P.tootT = 0; P.spool = Math.max(0, P.spool - dt * 6); }
   if (!P.onGround) {
-    P.vy = clamp(P.vy - GRAV * dt, -MAX_FALL, MAX_RISE);
+    P.vy = clamp(P.vy - GRAV * dt, -MAX_FALL, MAX_RISE) * (1 - 0.35 * dt);   // light air drag
+    if (P.alt > maxAlt - 16 && P.vy > 0) P.vy *= 1 - 6 * dt;                  // a cushion under the ceiling
     P.alt += P.vy * dt;
     if (P.alt > maxAlt) { P.alt = maxAlt; if (P.vy > 0) P.vy = 0; }
     if (P.vy <= 0) { const sf = surfaceUnder(); if (sf.alt > -100 && P.alt <= sf.alt) land(sf); }
@@ -2218,7 +2231,8 @@ function stepTimers(dt) {
     if (P.dustT <= 0) { P.dustT = rand(0.05, 0.12); addPart({ x: carX + rand(2, 9), y: groundY - P.alt - 1, vx: rand(-80, -30), vy: rand(-18, -4), life: rand(0.4, 0.7), max: 0.7, kind: 'smoke', r: 1, r2: rand(2.5, 4.5), col: W.zone === 1 ? '#d99a72' : '#d9d4c8', a: 0.35, drag: 2, world: true }); }
   }
   const tt = P.onGround ? 0 : clamp(-P.vy * 0.0009, -0.2, 0.16);
-  P.tilt = lerp(P.tilt, tt, Math.min(1, dt * 12));
+  P.tiltV += ((tt - P.tilt) * 240 - P.tiltV * 20) * dt;
+  P.tilt = clamp(P.tilt + P.tiltV * dt, -0.32, 0.26);
   P.ghostT -= dt;
   if (P.plaid > 0 && P.ghostT <= 0) { P.ghostT = 0.035; P.ghosts.unshift({ alt: P.alt, tilt: P.tilt }); if (P.ghosts.length > 5) P.ghosts.pop(); }
   if (P.plaid <= 0 && P.ghosts.length) P.ghosts.pop();
@@ -3718,6 +3732,7 @@ function carBody(x, p) {
   for (const nx of NOZZLES) { rrect(x, nx - 2.2, 12.6, 4.4, 1.3, 0.6); x.fillStyle = '#2d3650'; x.fill(); rrect(x, nx - 1.3, 13.3, 2.6, 0.55, 0.27); x.fillStyle = '#7fd8ff'; x.fill(); }
 }
 // the Roadster's big turbine wheels: dark rims with silver blades and a red caliper
+let WHEEL_BLUR = 0;   // 0 to 1: at speed the spokes smear into a spinning disc
 function roadsterWheel(x, y, r, rot, c, style) {
   c = c || g;
   const st = style || save.wheel || 'aero', gold = st === 'gold';
@@ -3741,7 +3756,14 @@ function roadsterWheel(x, y, r, rot, c, style) {
       c.quadraticCurveTo(x + Math.cos(a + 0.28) * r * 0.46, y + Math.sin(a + 0.28) * r * 0.46, x + Math.cos(a2) * r * 0.66, y + Math.sin(a2) * r * 0.66);
     }
   }
+  const ga = c.globalAlpha;
+  if (WHEEL_BLUR > 0) c.globalAlpha = ga * (1 - 0.75 * WHEEL_BLUR);
   c.stroke();
+  c.globalAlpha = ga;
+  if (WHEEL_BLUR > 0) {
+    circ(c, x, y, r * 0.66); c.fillStyle = gold ? `rgba(230,184,74,${(0.4 * WHEEL_BLUR).toFixed(3)})` : `rgba(200,207,218,${(0.38 * WHEEL_BLUR).toFixed(3)})`; c.fill();
+    c.strokeStyle = `rgba(255,255,255,${(0.25 * WHEEL_BLUR).toFixed(3)})`; c.lineWidth = r * 0.05; circ(c, x, y, r * 0.45); c.stroke();
+  }
   circ(c, x, y, r * 0.7); c.lineWidth = r * 0.07; c.strokeStyle = gold ? '#c9952e' : '#9aa3b2'; c.stroke();
   circ(c, x, y, r * 0.18); c.fillStyle = '#1d2028'; c.fill(); circ(c, x, y, r * 0.07); c.fillStyle = '#c9d0db'; c.fill();
   c.strokeStyle = 'rgba(255,255,255,0.22)'; c.lineWidth = r * 0.1; c.beginPath(); c.arc(x, y, r * 0.86, -2.5, -1.3); c.stroke();
@@ -3756,7 +3778,9 @@ function drawCarAt(cx, cy, rot, alpha, sx, sy, paint) {
   g.translate(cx, cy); if (rot) g.rotate(rot);
   g.translate(0, 8); if (sx) g.scale(sx, sy); g.translate(-30, -16);
   blit(carBodySpr(p), 0, 0);
+  WHEEL_BLUR = mode === 'run' || mode === 'attract' ? clamp((W.speed - 140) / 160, 0, 1) : 0;
   roadsterWheels(P.wheelRot * TAU / 13);
+  WHEEL_BLUR = 0;
   g.restore();
 }
 function thrustFlame(x, y, L, w) {
@@ -3791,6 +3815,11 @@ function drawPlayer(N) {
     g.globalAlpha = clamp(0.4 - h / 340, 0.08, 0.4); ell(g, cx, groundY - surf + 0.2, sw / 2, 1.6 - Math.min(0.8, h / 200)); g.fillStyle = '#05030c'; g.fill(); g.globalAlpha = 1;
   }
   if (P.ride) { drawRide(N); return; }
+  // the thrusters light the road beneath the car when it flies low
+  if (P.thrusting && surf > -100) {
+    const h = P.alt - surf, k = clamp(1 - h / 70, 0, 1);
+    if (k > 0) additive(() => { g.save(); g.translate(cx, groundY - surf); g.scale(1, 0.32); glowAt(0, 0, 18 + 26 * k, `rgba(${flameOf().glow},${(0.55 * k).toFixed(3)})`); g.restore(); });
+  }
   // Plaid afterimages and speed streaks
   if (P.ghosts.length) {
     for (let i = 0; i < P.ghosts.length; i++) {
@@ -3993,6 +4022,8 @@ function drawRide(N) {
     if (P.tilt) { g.translate(32, -10); g.rotate(P.tilt); g.translate(-32, 10); }
     blit(bake('ride:truck', -1.5, -24, 66, 0.5, x => truckBody(x)), 0, 0);
     truckWheels(g, P.wheelRot * TAU / 13);
+    const tb = clamp((W.speed - 140) / 160, 0, 1);
+    if (tb > 0) for (const wx of [13, 51]) { circ(g, wx, -5.3, 3.5); g.fillStyle = `rgba(150,157,167,${(0.6 * tb).toFixed(3)})`; g.fill(); }
     if (N > 0.15) { glowAt(62, -12.8, 9, 'rgba(230,245,255,0.9)'); glowAt(0, -11, 7, 'rgba(255,42,61,0.8)'); }
     g.restore();
   } else if (r.k === 'bot') {
@@ -4945,6 +4976,19 @@ function drawPrompt() {
   g.globalAlpha = 1;
 }
 
+// soft dark edges that pull the eye to the middle; deeper at night
+let vigC = null;
+function drawVignette(N) {
+  if (!vigC) {
+    vigC = makeCanvas(256, 256);
+    const x = vigC.getContext('2d'), gr = x.createRadialGradient(128, 128, 60, 128, 128, 182);
+    gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(0.55, 'rgba(0,0,0,0.12)'); gr.addColorStop(1, 'rgba(0,0,0,0.55)');
+    x.fillStyle = gr; x.fillRect(0, 0, 256, 256);
+  }
+  g.globalAlpha = 0.32 + 0.3 * N;
+  g.drawImage(vigC, -2, -2, IW + 4, IH + 4);
+  g.globalAlpha = 1;
+}
 function render() {
   if (!SC || !renderReady) return;
   const sky = skyAt(W.dayT), N = sky.n;
@@ -4959,18 +5003,19 @@ function render() {
   drawDecor(LAY[0], N); drawBeams(N); drawDecor(LAY[1], N);
   drawChargers(N); drawLoops(N);
   drawRoad(N); drawChargerMarks(N); drawUnder(N); drawTrenches(N);
-  drawPartList(parts, false);
+  g.translate(partShift, 0); drawPartList(parts, false); g.translate(-partShift, 0);
   drawEnts(N);
   drawBoss();
   drawGhost();
   drawPlayer(N);
   drawFx();
-  drawPartList(parts, true);
+  g.translate(partShift, 0); drawPartList(parts, true); g.translate(-partShift, 0);
   drawSpeedLines();
   drawFloats();
   drawTruckWarnings();
   drawWarpAndWarning();
   camera();
+  drawVignette(N);
   if (W.flash > 0 && !reduceMotion) { g.fillStyle = `rgba(255,255,255,${(W.flash * 0.75).toFixed(3)})`; g.fillRect(-12, -12, IW + 24, IH + 24); }
   if (mode === 'run' && !paused && W.time - SNAP.t > 1.2 && P.invuln <= 0) takeSnap();
   drawHUD(N);
@@ -5636,13 +5681,23 @@ function frame(now) {
   if (dt > 0.1) dt = 0.1;
   if (!paused) {
     acc += dt; let n = 0;
-    while (acc >= STEP && n < 14) { update(STEP * TS); acc -= STEP; n++; }
+    while (acc >= STEP && n < 14) { PREV.dist = W.dist; PREV.alt = P.alt; PREV.tilt = P.tilt; update(STEP * TS); acc -= STEP; n++; }
     if (n >= 14) acc = 0;
   }
-  render();
+  renderBlended(paused ? 1 : acc / STEP);
   Sound.engine(W.speed, (mode === 'run' || mode === 'launch') && !paused, P.thrusting && mode === 'run' && !paused, !!save.toot);
   const want = (mode === 'attract' || mode === 'over') ? 'title' : mode === 'crash' ? null : (W.boss || W.bossWarn > 0) ? 'boss' : W.zone === 1 ? 'mars' : 'earth';
   Music.update(want, paused, save.music !== false);
+}
+// draws the world part of the way between the last two physics steps, so motion is smooth at any refresh rate
+const PREV = { dist: 0, alt: 0, tilt: 0 };
+let partShift = 0;
+function renderBlended(a) {
+  const d = W.dist, al = P.alt, ti = P.tilt;
+  if (a >= 1 || Math.abs(d - PREV.dist) > 40 || Math.abs(al - PREV.alt) > 30) { partShift = 0; render(); return; }
+  W.dist = lerp(PREV.dist, d, a); P.alt = lerp(PREV.alt, al, a); P.tilt = lerp(PREV.tilt, ti, a);
+  partShift = d - W.dist;   // particles live in screen space at the latest step; shift them to match
+  try { render(); } finally { W.dist = d; P.alt = al; P.tilt = ti; partShift = 0; }
 }
 function onTheme() {
   if (mode === 'attract') { W.startPhase = isDark() ? 0.3 : 0.8; W.dayT = W.startPhase; skyKey = ''; }

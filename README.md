@@ -66,6 +66,7 @@ The game opens full screen from its icon. After the first visit everything it ne
 - Two worlds for Earth: Saudi Arabia (Riyadh's Kingdom Centre and Al Faisaliah, Najdi mud-brick from Diriyah, palms, dunes, camels, Bedouin tents, AlUla's Elephant Rock and NEOM's The Line, with a Dust King boss) and the Texas launch site
 - Arabic (right to left, km/h and km) and English, switchable on the title screen
 - Easy, Normal and Hard difficulty: speed, obstacle spacing, battery drain, missiles, zappers and boss toughness all change, and harder levels score more
+- Cold-gas thrusters that spool up, ease off under the top of the sky and light the road beneath you, with a spring in the car's tilt and wheels that blur at speed
 - Cold-gas thrusters that spray the road, a loop-the-loop and Superchargers to keep the battery alive
 - Tesla-coil zappers (standing, hanging, diagonal and spinning) and missiles that track your height before they fire
 - Battery cells laid out in hearts, stars, arrows and words
@@ -86,6 +87,6 @@ The game opens full screen from its icon. After the first visit everything it ne
 
 ## How it's built
 
-The game lives in one self-contained `index.html`: cartoon art drawn with canvas paths at full screen resolution, a Web Audio synthesizer with a small step sequencer for the music, and no external assets apart from optional Google Fonts (Montserrat for English, Cairo for Arabic). If a device can't keep up, the game lowers its canvas resolution automatically.
+The game lives in one self-contained `index.html`: cartoon art drawn with canvas paths at full screen resolution, a Web Audio synthesizer with a small step sequencer for the music, and no external assets apart from optional Google Fonts (Montserrat for English, Cairo for Arabic). If a device can't keep up, the game lowers its canvas resolution automatically. Physics runs at a fixed 120 steps a second, and each frame is drawn part of the way between the last two steps, so motion stays smooth on 60, 90, 120 and 144 Hz screens.
 
 Three small extras make it an installable app: `manifest.webmanifest` (name, icons, full-screen display), `sw.js` (a service worker that saves the game and its fonts for offline play) and the icons in `icons/`, drawn from the game's own Roadster.

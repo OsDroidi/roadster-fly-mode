@@ -591,7 +591,7 @@ const STR = {
     ev_national: 'Happy Saudi National Day!', ev_founding: 'Happy Saudi Founding Day!', ev_ramadan: 'Ramadan Kareem', ev_eid: 'Eid Mubarak! Cells count double today.',
     evGift: 'A gift for the day: Saudi green paint.',
     setStyle: 'Visual style', classic: 'Classic', neon: 'Neon',
-    roll: 'BARREL ROLL', hRoll: c => c ? 'Double-tap in the air for a barrel roll' : 'Double-tap Space in the air for a barrel roll',
+    perfectLand: 'PERFECT LANDING', roll: 'BARREL ROLL', hRoll: c => c ? 'Double-tap in the air for a barrel roll' : 'Double-tap Space in the air for a barrel roll',
     settings: 'Settings', setMusic: 'Music volume', setSfx: 'Sound effects', setUnits: 'Speed units', setGfx: 'Graphics', setMotion: 'Reduce motion', setHaptics: 'Vibration',
     auto: 'Auto', high: 'High', medium: 'Medium', low: 'Low', on: 'On', off: 'Off',
     settingsNote: 'Auto units follow the language: km/h in Arabic, mph in English. Auto graphics lowers the resolution if the game slows down, and auto motion follows your device.',
@@ -700,7 +700,7 @@ const STR = {
     ev_national: 'كل عام والوطن بخير! اليوم الوطني السعودي', ev_founding: 'يوم التأسيس السعودي، يوم بدينا!', ev_ramadan: 'رمضان كريم', ev_eid: 'عيدكم مبارك! الخلايا مضاعفة اليوم.',
     evGift: 'هدية اليوم: لون الأخضر السعودي.',
     setStyle: 'نمط الرسومات', classic: 'كلاسيكي', neon: 'نيون',
-    roll: 'دحرجة', hRoll: c => c ? 'المس مرتين بسرعة في الهواء لتدحرج السيارة' : 'اضغط المسافة مرتين بسرعة في الهواء لتدحرج السيارة',
+    perfectLand: 'هبوط مثالي', roll: 'دحرجة', hRoll: c => c ? 'المس مرتين بسرعة في الهواء لتدحرج السيارة' : 'اضغط المسافة مرتين بسرعة في الهواء لتدحرج السيارة',
     settings: 'الإعدادات', setMusic: 'صوت الموسيقى', setSfx: 'المؤثرات الصوتية', setUnits: 'وحدة السرعة', setGfx: 'الرسومات', setMotion: 'تقليل الحركة', setHaptics: 'الاهتزاز',
     auto: 'تلقائي', high: 'عالية', medium: 'متوسطة', low: 'منخفضة', on: 'تشغيل', off: 'إيقاف',
     settingsNote: 'الوحدة التلقائية تتبع اللغة: كم/س بالعربية وميل/س بالإنجليزية. الرسومات التلقائية تخفّض الدقة إذا تباطأت اللعبة، والحركة التلقائية تتبع إعدادات جهازك.',
@@ -1258,7 +1258,7 @@ const W = { dist: 0, speed: 0, scroll: 0, time: 0, ents: [], spawnX: 0, last: ''
   space: null, spaceT: 30, booster: null, missileT: 0 };
 const P = { alt: 0, vy: 0, onGround: true, gas: 1.4, gasMax: 1.4, battery: 100, thrusting: false, tilt: 0, invuln: 0,
   plaid: 0, plaidMax: 1, coil: 0, coilMax: 1, fly: 0, flyMax: 5, shield: false, riding: null, loop: null, wheelRot: 0,
-  boost: 0, boostV: 0, wreck: null, lowWarn: 0, charging: false, ghostT: 0, ghosts: [], flame: 0, flameMax: 5, tootT: 0, sq: 0, sqV: 0, dustT: 0, ride: null, spool: 0, tiltV: 0, roll: 0 };
+  boost: 0, boostV: 0, wreck: null, lowWarn: 0, charging: false, ghostT: 0, ghosts: [], flame: 0, flameMax: 5, tootT: 0, sq: 0, sqV: 0, dustT: 0, ride: null, spool: 0, tiltV: 0, roll: 0, rollAt: -9, dmg: 0, dmgT: 0 };
 const RUN = { score: 0, cells: 0, banked: 0, chain: 0, chainT: 0, stats: {}, revived: false, cause: '', overT: 0, startDist: 0,
   tips: {}, time: 0, live: 0, t060: 0, t060Show: 0, newBest: false, counted: false, speedAtCrash: 0, missionT: 0, lowShown: false, mult: 1, multT: 0, stompChain: 0, ludi: false, funded: false, bump: 0 };
 const L = { t: 0, greenAt: 0, lights: 0, green: false, done: false };
@@ -1288,7 +1288,7 @@ const coilDur = () => 6 + 2 * save.up.coil;
 
 function resetPlayer() {
   Object.assign(P, { alt: 0, vy: 0, onGround: true, thrusting: false, tilt: 0, invuln: 0, plaid: 0, coil: 0, fly: 0, shield: false,
-    riding: null, loop: null, wheelRot: 0, boost: 0, boostV: 0, wreck: null, lowWarn: 0, charging: false, battery: 100, ghostT: 0, ghosts: [], flame: 0, tootT: 0, sq: 0, sqV: 0, dustT: 0, ride: null, spool: 0, tiltV: 0, roll: 0 });
+    riding: null, loop: null, wheelRot: 0, boost: 0, boostV: 0, wreck: null, lowWarn: 0, charging: false, battery: 100, ghostT: 0, ghosts: [], flame: 0, tootT: 0, sq: 0, sqV: 0, dustT: 0, ride: null, spool: 0, tiltV: 0, roll: 0, rollAt: -9, dmg: 0, dmgT: 0 });
   P.gasMax = 1.4 + 0.3 * save.up.thrust; P.gas = P.gasMax;
 }
 function resetRun() {
@@ -1984,6 +1984,10 @@ function stepPlayer(dt) {
 }
 function land(sf) {
   const impact = -P.vy;
+  // touching down soon after a finished roll, and softly, is a perfect landing; landing mid-spin just ends it
+  if (P.roll > 0) P.roll = 0;
+  else if (mode === 'run' && !P.ride && W.time - P.rollAt < 0.8 && impact < 320) { addScore(200, t('perfectLand'), '#43f08a'); HYPE.t = 1.5; HYPE.cheer = 1; SFX.mission(); }
+  P.rollAt = -9;
   RUN.stompChain = 0;
   P.alt = sf.alt; P.vy = 0; P.onGround = true; P.riding = sf.ent;
   P.sqV += Math.min(impact, 520) * 0.004;
@@ -2145,7 +2149,7 @@ function hit(e) {
   // a vehicle takes the hit: the Cybertruck and Starship smash what can be smashed, anything else wrecks the ride
   if (P.ride) { if (RIDES[P.ride.k].smash && e.smash) smash(e); else endRide(true); return; }
   if (P.shield) {
-    P.shield = false; P.invuln = 1.2; W.shake = Math.max(W.shake, 5);
+    P.shield = false; P.invuln = 1.2; W.shake = Math.max(W.shake, 5); P.dmg = 1;
     sparks(carX + 30, groundY - P.alt - 8, 22, ['#43f08a', '#d9ffe9', '#ffffff'], 260); SFX.shield(); buzz(50);
     banner(t('shieldDown'), '#43f08a', 1.1);
     if (e.mon) killMon(e.mon, 'shield'); else if (e.smash) smash(e);
@@ -2253,9 +2257,13 @@ function stepTimers(dt) {
   if (P.ride) { P.ride.t -= dt; if (P.ride.t <= 0) endRide(false); }
   if (P.roll > 0) {
     P.roll += dt / 0.55;
-    if (P.roll >= 1) { P.roll = 0; if (mode === 'run') { addMult(); addScore(150, t('roll'), '#ffd23f'); SFX.close(); HYPE.t = 1.5; HYPE.cheer = 1; } }
+    if (P.roll >= 1) { P.roll = 0; P.rollAt = W.time; if (mode === 'run') { addMult(); addScore(150, t('roll'), '#ffd23f'); SFX.close(); HYPE.t = 1.5; HYPE.cheer = 1; } }
   }
   if (HYPE.t > 0) HYPE.t -= dt; if (HYPE.cheer > 0) HYPE.cheer -= dt;
+  if (P.dmg && !P.ride && !P.loop) {   // a thin trail of smoke from under the bonnet
+    P.dmgT -= dt;
+    if (P.dmgT <= 0) { P.dmgT = 0.07; addPart({ x: carX + 46 + rand(-2, 2), y: groundY - P.alt - 12, vx: rand(-90, -50), vy: rand(-30, -10), life: rand(0.6, 1), max: 1, kind: 'smoke', r: 1, r2: rand(3, 5), col: '#5a5c66', a: 0.4, drag: 1.2, world: true }); }
+  }
   if (mode === 'run' && RUN.live > 25 && !P.onGround && !P.ride) hint2('roll', t('hRoll', coarse));
   if (P.flame > 0) { P.flame = Math.max(0, P.flame - dt); if (mode === 'run') flameBurn(); }
   if (RUN.chainT > 0) { RUN.chainT -= dt; if (RUN.chainT <= 0) RUN.chain = 0; }
@@ -2332,6 +2340,7 @@ function doLaunch(rt) {
   else if (rt < 0.45) { t060 = 1.05 + (rt - 0.2) * 1.2; label = t('goodLaunch'); col = '#7fd8ff'; bonus = 100; boost = 40; }
   else t060 = 1.4 + Math.min(1, rt) * 0.5;
   RUN.score += bonus; if (bonus) buzz(25);
+  P.sqV -= 2.2;   // the squatted rear springs up as the car leaps off the line
   P.boost = boost ? 3 : 0; P.boostV = boost;
   W.speed = 40 + boost;
   RUN.t060 = t060; RUN.t060Show = 3;
@@ -3829,10 +3838,50 @@ function drawCarAt(cx, cy, rot, alpha, sx, sy, paint) {
   g.translate(cx, cy); if (rot) g.rotate(rot);
   g.translate(0, 8); if (sx) g.scale(sx, sy); g.translate(-30, -16);
   drawGlossy(carBodySpr(p), p);
+  if (DOOR.a > 0.01) drawDoor(p, DOOR.a);
   if (STAR.pose) drawStarman(STAR.pose);
+  if (STAR.pose && P.dmg) drawDamage();
   WHEEL_BLUR = mode === 'run' || mode === 'attract' ? clamp((W.speed - 140) / 160, 0, 1) : 0;
   roadsterWheels(P.wheelRot * TAU / 13);
   WHEEL_BLUR = 0;
+  g.restore();
+}
+// the scissor door: on the title it swings up every few seconds, and at the start of a run it shuts with a thunk
+const DOOR = { a: 0, shut: false };
+function doorAngle() {
+  const ease = k => k * k * (3 - 2 * k), MAX = 1.05;
+  if (mode === 'attract') { const ph = W.time % 7; return ph < 1 || ph > 3.6 ? 0 : MAX * ease(clamp(Math.min(ph - 1, 3.6 - ph) / 0.6, 0, 1)); }
+  if (mode === 'launch' && !L.done) {
+    if (L.t >= 0.75) { if (!DOOR.shut) { DOOR.shut = true; SFX.thud(); } return 0; }
+    DOOR.shut = false; return MAX * (1 - ease(clamp(L.t / 0.75, 0, 1)));
+  }
+  return 0;
+}
+function drawDoor(p, a) {
+  const D = [17.6, 4.3, 28.4, 4.95, 38.4, 5.6, 37.8, 12.3, 18.6, 12];
+  poly(g, D); g.fillStyle = '#15161c'; g.fill();   // the cabin behind it
+  rrect(g, 21, 6.4, 7, 4.6, 1.6); g.fillStyle = '#2a2d36'; g.fill();   // a seat
+  g.save(); g.translate(38.4, 6); g.rotate(a); g.translate(-38.4, -6);
+  poly(g, D); g.fillStyle = vgrad(g, 4.3, 12.3, [p.h, p.P, p.p]); g.fill(); g.lineWidth = LW * 0.6; g.strokeStyle = INK; g.stroke();
+  g.strokeStyle = 'rgba(255,255,255,0.5)'; g.lineWidth = 0.4; g.beginPath(); g.moveTo(19, 7.4); g.bezierCurveTo(26, 7.1, 32, 7.4, 37.6, 8.6); g.stroke();
+  rrect(g, 31, 7.6, 3.2, 0.7, 0.35); g.fillStyle = '#c9d0db'; g.fill();   // the handle
+  g.restore();
+}
+// after the shield breaks the car stays scuffed: scratches on the paint and a crack across the glass
+function drawDamage() {
+  g.lineCap = 'round';
+  g.strokeStyle = 'rgba(30,24,40,0.55)'; g.lineWidth = 0.35; g.beginPath();
+  for (const [x0, y0, x1, y1] of [[44, 8.6, 50, 9.4], [45.5, 9.6, 49.5, 10.1], [8, 6.4, 12.6, 5.8], [24, 9.8, 30, 10.4], [26, 10.8, 29.5, 11]]) { g.moveTo(x0, y0); g.lineTo(x1, y1); }
+  g.stroke();
+  g.strokeStyle = 'rgba(255,255,255,0.45)'; g.lineWidth = 0.25; g.beginPath();
+  for (const [x0, y0, x1, y1] of [[44.2, 8.3, 49, 8.9], [8.4, 6, 12, 5.5], [24.5, 9.5, 29, 10]]) { g.moveTo(x0, y0); g.lineTo(x1, y1); }
+  g.stroke();
+  g.save(); carPath(g); g.clip(); canopyPath(g); g.clip();
+  const cx = 34, cy = 2.4;
+  g.strokeStyle = 'rgba(235,245,255,0.85)'; g.lineWidth = 0.28; g.beginPath();
+  for (const [dx, dy] of [[-4.2, -2], [-3, 2.2], [3.4, -2.2], [4.6, 1.6], [0.4, 3], [-5, 0.6]]) { g.moveTo(cx, cy); g.lineTo(cx + dx * 0.55, cy + dy * 0.55 + 0.3); g.lineTo(cx + dx, cy + dy); }
+  g.stroke();
+  circ(g, cx, cy, 0.7); g.stroke();
   g.restore();
 }
 // Starman in the driver's seat, seen through the glass: waves on the title, ducks under danger, cheers on a big moment
@@ -3846,7 +3895,7 @@ function dangerAhead() {
 function drawStarman(pose) {
   const duck = pose === 'duck' ? 1.3 : 0, bob = pose === 'cheer' ? Math.abs(Math.sin(W.time * 12)) * 0.7 : 0;
   const hx = 25.4, hy = 3.4 + duck - bob;
-  g.save(); canopyPath(g); g.clip();
+  g.save(); carPath(g); g.clip(); canopyPath(g); g.clip();
   g.lineCap = 'round';
   const arm = (x0, y0, x1, y1) => { g.beginPath(); g.moveTo(x0, y0); g.lineTo(x1, y1); g.strokeStyle = '#f2f4f7'; g.lineWidth = 1; g.stroke(); circ(g, x1, y1, 0.45); g.fillStyle = '#f2f4f7'; g.fill(); };
   if (pose === 'wave') arm(hx + 1, hy + 2, hx + 2.6 + Math.sin(W.time * 9) * 0.9, hy - 1.6);
@@ -3927,10 +3976,10 @@ function drawPlayer(N) {
     }
     glowAt(cx - 8, cy, 36, 'rgba(255,49,73,0.4)');
   }
-  // a barrel roll seen side-on: the car turns belly-up and back over half a second
-  const rollE = P.roll > 0 ? P.roll * P.roll * (3 - 2 * P.roll) : 0;
-  const sq = P.sq || 0, ssx = 1 + sq * 0.55, ssy = (1 - sq) * Math.cos(rollE * TAU);
-  g.save(); g.translate(cx, cy); if (P.tilt) g.rotate(P.tilt); g.translate(0, 8); g.scale(ssx, ssy); g.translate(-30, -16);
+  // a barrel roll: one full backflip over half a second; at the launch line the rear squats as the lights count down
+  const rollE = P.roll > 0 ? P.roll * P.roll * (3 - 2 * P.roll) : 0, crouch = mode === 'launch' && !L.done ? clamp((L.t - 0.6) / 1.2, 0, 1) : 0;
+  const sq = P.sq || 0, ssx = (1 + sq * 0.55) * (1 + 0.03 * crouch), ssy = (1 - sq) * (1 - 0.09 * crouch), rot = P.tilt - TAU * rollE - 0.045 * crouch;
+  g.save(); g.translate(cx, cy); if (rot) g.rotate(rot); g.translate(0, 8); g.scale(ssx, ssy); g.translate(-30, -16);
   // cold-gas thrusters, under the body
   if (P.thrusting) {
     const L = 16 + Math.random() * 7 + (P.fly > 0 ? 7 : 0);
@@ -3962,8 +4011,9 @@ function drawPlayer(N) {
   });
   const blink = P.invuln > 0 && P.plaid <= 0 && Math.floor(W.time * 14) % 2 === 0;
   STAR.pose = mode === 'attract' ? 'wave' : HYPE.cheer > 0 ? 'cheer' : dangerAhead() ? 'duck' : 'drive';
-  if (!blink) drawCarAt(cx, cy, P.tilt, undefined, ssx, ssy);
-  STAR.pose = null;
+  DOOR.a = doorAngle();
+  if (!blink) drawCarAt(cx, cy, rot, undefined, ssx, ssy);
+  STAR.pose = null; DOOR.a = 0;
   if (N > 0.15) { glowAt(carX + 1.5, sy + 6.8, 7, 'rgba(255,42,61,0.8)'); glowAt(carX + 58.5, sy + 9, 7, 'rgba(220,245,255,0.85)'); }
   // Tesla coil arcs to magnetised cells
   if (P.coil > 0) {

@@ -58,7 +58,9 @@ The game opens full screen from its icon. After the first visit everything it ne
 - A Neon visual style in Settings: a synthwave sky with a striped sun, glowing mountain outlines, a neon road and a grid rushing underneath
 - Night lighting: the scene darkens and the headlights cut a beam through it, with cells, zappers and Superchargers glowing in the dark
 - Starman in the driver's seat: he waves on the title screen, ducks under zappers and missiles, and cheers on close calls, boss wins and vehicle pickups
-- Barrel rolls: double-tap in the air to roll the car over for bonus points
+- Barrel rolls: double-tap in the air for a full 360° spin, and touch down softly right after it for a perfect-landing bonus
+- A scissor door that swings up on the title screen and shuts with a thunk at the start line, where the car squats on its rear before launching
+- Damage that sticks: once the shield breaks, the car keeps its scratches and cracked glass and trails smoke for the rest of the run
 - A crowd that jumps, waves and snaps phone photos as you fly past, and goes wild on big moments
 - Animated menus: cards rise in, the score ticks up, and a new best pops with confetti
 - Shiny paint, with a reflection sweeping across the car, and slow motion with a zoom on near misses

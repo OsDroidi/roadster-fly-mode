@@ -40,7 +40,8 @@ The game opens full screen from its icon. After the first visit everything it ne
 | Fire thrusters (hold), drop (let go) | Hold anywhere | Hold Space, ↑, W or the mouse button |
 | Perfect launch | Tap the moment the light turns green | Press Space the moment it turns green |
 | Pause | Pause button | P or Esc |
-| Music on or off | Music button | N |
+| Music on or off | Music button (in a run) or the music volume in Settings | N |
+| Settings | Gear button on the title screen, or Settings on the pause screen | Same |
 | Mute everything | Speaker button | M |
 | Switch language | EN / ع button on the title screen | Same |
 | Choose world and difficulty | Pickers on the title screen | Same |
@@ -54,6 +55,8 @@ The game opens full screen from its icon. After the first visit everything it ne
 
 - A Tesla-style interface: a configurator-like title panel with Tesla blue buttons and segmented pickers, and an in-car dashboard with the gear (P R N D), speed, a speed limit sign, battery and the way to the next Supercharger, which goes light by day and dark by night like Tesla's Auto display
 - Installs to the home screen and plays offline
+- Settings: music and sound effects volume, speed units (auto, km/h or mph), graphics quality, reduced motion and vibration
+- Phone vibration on crashes, stomps, smashes, boss hits, wrecked vehicles and finished missions (Android; iPhone browsers don't support it)
 - Vehicle pickups, like Jetpack Joyride's: a Cybertruck that smashes through cars, drones and monsters, Optimus with a double jump and a landing shockwave, and a Starship that flips between the road and the sky. Each lasts 16 seconds or until it takes a hit, which throws the Roadster clear instead of ending the run
 - A daily challenge: the same course for everyone each day (the world alternates between Saudi Arabia and Texas), today's best, and a streak that pays 100 cells a day, up to 700
 - A share card: one tap makes a picture of your run (the road just before you crashed, your score, distance, cells and top speed) to post on WhatsApp, Snapchat or X

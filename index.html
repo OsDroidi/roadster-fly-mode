@@ -305,6 +305,15 @@ html[dir="rtl"] [data-back] .ico{transform:scaleX(-1)}
 .pips i.on{background:var(--blue)}
 .up .btn{grid-row:1 / span 3;grid-column:2}
 
+/* ---------- settings ---------- */
+.set{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"l v" "r r";gap:6px 12px;align-items:center}
+.set label{grid-area:l;font-weight:500;font-size:.9rem}
+.set output{grid-area:v;font-size:.84rem;color:var(--text-dim);font-variant-numeric:tabular-nums}
+.set input{grid-area:r;width:100%;margin:6px 0;accent-color:var(--blue);height:24px;touch-action:pan-x;cursor:pointer}
+#scrSettings .opt{grid-template-columns:minmax(96px,auto) 1fr}
+@media (max-width:520px){#scrSettings .opt{grid-template-columns:1fr;gap:6px}}
+#btnPauseSettings{background:var(--surface-2)}
+
 /* ---------- missions ---------- */
 .ms{display:grid;gap:8px}
 .ms .row{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
@@ -341,6 +350,7 @@ html[dir="rtl"] .bar b{inset:0 0 0 auto}
     <button class="ibtn" id="btnPause" type="button" data-ta="pause" aria-label="Pause" hidden>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg>
     </button>
+    <button class="ibtn" id="btnSettings" type="button" data-ta="settings" aria-label="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
     <button class="ibtn" id="btnMusic" type="button" data-ta="music" aria-label="Music" aria-pressed="true">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 17.5V6.5l9-2v11"/><circle cx="7" cy="17.5" r="2.5"/><circle cx="16" cy="15.5" r="2.5"/><path class="slash" d="M3.5 3.5l17 17"/></svg>
     </button>
@@ -415,9 +425,31 @@ html[dir="rtl"] .bar b{inset:0 0 0 auto}
     </div>
   </section>
 
+  <section class="screen modal" id="scrSettings" aria-labelledby="setH">
+    <div class="card">
+      <h2 id="setH" data-t="settings">Settings</h2>
+      <ul class="group">
+        <li class="set"><label for="volMusic" data-t="setMusic">Music volume</label><input type="range" id="volMusic" min="0" max="100" step="5"><output id="volMusicV" for="volMusic">100</output></li>
+        <li class="set"><label for="volSfx" data-t="setSfx">Sound effects</label><input type="range" id="volSfx" min="0" max="100" step="5"><output id="volSfxV" for="volSfx">100</output></li>
+      </ul>
+      <div class="opts">
+        <div class="opt"><span class="opt-l" id="unitsL" data-t="setUnits">setUnits</span>
+          <div class="seg" role="radiogroup" aria-labelledby="unitsL"><button type="button" role="radio" data-set="units" data-v="auto" data-t="auto">auto</button><button type="button" role="radio" data-set="units" data-v="kmh" data-t="uKmh">uKmh</button><button type="button" role="radio" data-set="units" data-v="mph" data-t="uMph">uMph</button></div></div>
+        <div class="opt"><span class="opt-l" id="gfxL" data-t="setGfx">setGfx</span>
+          <div class="seg" role="radiogroup" aria-labelledby="gfxL"><button type="button" role="radio" data-set="gfx" data-v="auto" data-t="auto">auto</button><button type="button" role="radio" data-set="gfx" data-v="high" data-t="high">high</button><button type="button" role="radio" data-set="gfx" data-v="medium" data-t="medium">medium</button><button type="button" role="radio" data-set="gfx" data-v="low" data-t="low">low</button></div></div>
+        <div class="opt"><span class="opt-l" id="motionL" data-t="setMotion">setMotion</span>
+          <div class="seg" role="radiogroup" aria-labelledby="motionL"><button type="button" role="radio" data-set="motion" data-v="auto" data-t="auto">auto</button><button type="button" role="radio" data-set="motion" data-v="on" data-t="on">on</button><button type="button" role="radio" data-set="motion" data-v="off" data-t="off">off</button></div></div>
+        <div class="opt" id="optHaptics"><span class="opt-l" id="hapticsL" data-t="setHaptics">setHaptics</span>
+          <div class="seg" role="radiogroup" aria-labelledby="hapticsL"><button type="button" role="radio" data-set="haptics" data-v="on" data-t="on">on</button><button type="button" role="radio" data-set="haptics" data-v="off" data-t="off">off</button></div></div>
+      </div>
+      <p class="dim small" data-t="settingsNote">Auto units follow the language. Auto graphics lowers the resolution if the game slows down.</p>
+      <button class="btn" type="button" data-back><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5"/></svg><span data-t="back">Back</span></button>
+    </div>
+  </section>
+
   <section class="screen modal" id="scrPause" aria-labelledby="pauseH">
     <div class="card">
-      <h2 id="pauseH" data-t="paused">Paused</h2>
+      <div class="card-head"><h2 id="pauseH" data-t="paused">Paused</h2><button class="btn small" id="btnPauseSettings" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span data-t="settings">Settings</span></button></div>
       <ul class="group missions" id="pList"></ul>
       <button class="btn primary" id="btnResume" type="button"><svg class="ico fill" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><span data-t="resume">Resume</span></button>
       <div class="btn-row">
@@ -471,7 +503,8 @@ const rgbStr = (c, a = 1) => a >= 1 ? `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`
 const mixC = (a, b, t) => [lerp(a[0], b[0], t), lerp(a[1], b[1], t), lerp(a[2], b[2], t)];
 const fmt = n => Math.floor(n).toLocaleString('en-US');
 function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
-const reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const sysReduceMotion = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+let reduceMotion = sysReduceMotion;   // the system setting, unless Settings overrides it
 function makeCanvas(w, h) { const c = document.createElement('canvas'); c.width = Math.max(1, w | 0); c.height = Math.max(1, h | 0); return c; }
 
 /* =========================================================
@@ -483,7 +516,8 @@ const defaultSave = () => ({
   up: { battery: 0, thrust: 0, coil: 0, plaid: 0 },
   paints: ['pearl'], paint: 'pearl', muted: false,
   rank: 0, done: 0, missions: null, seen: {}, music: true, toot: false,
-  diff: 'normal', lang: null, world: 'saudi', daily: null
+  diff: 'normal', lang: null, world: 'saudi', daily: null,
+  volMusic: 100, volSfx: 100, units: 'auto', gfx: 'auto', motion: 'auto', haptics: 'on'
 });
 let save = defaultSave();
 try {
@@ -505,6 +539,9 @@ function persist() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(save));
    ========================================================= */
 let LANG = save.lang === 'en' ? 'en' : 'ar';
 const isAr = () => LANG === 'ar';
+// speed and distance units: Auto follows the language (km/h in Arabic, mph in English)
+const metric = () => save.units === 'kmh' || (save.units !== 'mph' && LANG === 'ar');
+const spdU = () => t(metric() ? 'uKmh' : 'uMph'), distU = () => t(metric() ? 'uKm' : 'uMi');
 // Arabic counted nouns: 1, 2, 3-10 and 11+ take different forms; forms = [one, two, few, many]
 function nAr(n, f) { if (n === 1) return f[0]; if (n === 2) return f[1]; const r = n % 100; return `${n} ${r >= 3 && r <= 10 ? f[2] : f[3]}`; }
 const toKm = mi => Math.round(mi * 16.09) / 10;
@@ -521,6 +558,9 @@ const STR = {
     dailyOver: (b, s, r) => `Daily challenge · Today's best ${b} · ${s}-day streak${r ? ` · +${r} cells` : ''}`,
     share: 'Share', shareText: s => `I scored ${s} in Roadster: Fly Mode. Can you beat it?`, shareSaved: 'Image saved and the link copied. Post them together.',
     scoreLbl: 'Score', topSpeed: 'Top speed', beatIt: 'Can you beat it?', dailyTitle: 'Daily challenge',
+    settings: 'Settings', setMusic: 'Music volume', setSfx: 'Sound effects', setUnits: 'Speed units', setGfx: 'Graphics', setMotion: 'Reduce motion', setHaptics: 'Vibration',
+    auto: 'Auto', high: 'High', medium: 'Medium', low: 'Low', on: 'On', off: 'Off',
+    settingsNote: 'Auto units follow the language: km/h in Arabic, mph in English. Auto graphics lowers the resolution if the game slows down, and auto motion follows your device.',
     drive: 'Drive', parked: 'Parked', garage: 'Garage', missions: 'Missions', best: 'Best', cells: 'Cells', rank: 'Rank',
     fine: 'Unofficial fan game. Not affiliated with Tesla, Inc.',
     world: 'World', saudi: 'Saudi Arabia', texas: 'Texas', difficulty: 'Difficulty', easy: 'Easy', normal: 'Normal', hard: 'Hard',
@@ -538,8 +578,9 @@ const STR = {
     crashed: 'You crashed.', runAnnounce: (s, nb) => `Run over. Score ${s}.${nb ? ' New best.' : ''}`,
     missionAnnounce: (txt, rw) => `Mission complete: ${txt}. ${rw} cells added.`,
     // HUD
-    bestHud: 'Best', unit: 'mph', toCharge: d => `${d} mi to Supercharger`, charging: 'Supercharging', t060: s => `0-60 mph in ${s} s`,
-    launchOn: 'Launch on green', goGo: 'Go!', holdPrompt: 'Hold anywhere to fire thrusters', distUnit: 'mi', gasLabel: 'GAS',
+    bestHud: 'Best', uMph: 'mph', uKmh: 'km/h', uMi: 'mi', uKm: 'km', toCharge: (d, u) => `${d} ${u} to Supercharger`, charging: 'Supercharging',
+    t060: (s, m) => m ? `0-100 km/h in ${s} s` : `0-60 mph in ${s} s`,
+    launchOn: 'Launch on green', goGo: 'Go!', holdPrompt: 'Hold anywhere to fire thrusters', gasLabel: 'GAS',
     // banners and toasts (sentence case, like Tesla's alerts); floating scores stay in capitals
     plaid: 'Plaid mode', coil: 'Tesla coil', shield: 'Bioweapon Defense Mode', fly: 'Fly mode', flame: 'Not a Flamethrower',
     shieldDown: 'Shield down', lowBattery: 'Low battery', outOfCharge: 'Out of charge', ludicrous: 'Ludicrous speed', funded: 'Funding secured',
@@ -573,16 +614,16 @@ const STR = {
     up_coil: 'Tesla coil', up_coil_d: s => `Cell magnet lasts ${s} s`,
     up_plaid: 'Plaid mode', up_plaid_d: s => `Smash-through boost lasts ${s} s`,
     // missions
-    m_cells: n => `Collect ${n} cells in one run`, m_miles: n => `Drive ${n} mile${n === 1 ? '' : 's'} in one run`,
+    m_cells: n => `Collect ${n} cells in one run`, m_miles: n => metric() ? `Drive ${toKm(n)} km in one run` : `Drive ${n} mile${n === 1 ? '' : 's'} in one run`,
     m_hops: n => `Hop over ${n} gas cars in one run`, m_roofs: n => `Land on ${n} gas car roof${n > 1 ? 's' : ''} in one run`,
     m_loops: n => `Drive ${n} loop${n > 1 ? 's' : ''} in one run`, m_supers: n => `Supercharge ${n} time${n > 1 ? 's' : ''} in one run`,
     m_smash: n => `Smash ${n} obstacles in Plaid mode`, m_close: n => `Pull off ${n} close call${n > 1 ? 's' : ''} in one run`,
-    m_air: n => `Stay airborne for ${n} seconds in one run`, m_mph: n => `Reach ${n} mph`, m_chain: n => `Chain ${n} cells in a row`,
+    m_air: n => `Stay airborne for ${n} seconds in one run`, m_mph: n => metric() ? `Reach ${toKmh(n)} km/h` : `Reach ${n} mph`, m_chain: n => `Chain ${n} cells in a row`,
     m_perfect: () => 'Nail a perfect launch on green', m_powers: n => `Grab ${n} power-ups in one run`,
     m_stomps: n => `Stomp ${n} monster${n > 1 ? 's' : ''} in one run`, m_blasts: n => `Blast ${n} monster${n > 1 ? 's' : ''} with your thrusters`,
     m_bosses: () => 'Defeat a boss', m_mars: () => 'Make it to Mars', m_mult: n => `Build a ×${n} score multiplier`,
     m_flames: n => `Torch ${n} things with the not-a-flamethrower`, m_spotted: () => 'Spot the Roadster drifting through space',
-    m_ludi: () => 'Hit ludicrous speed (200 mph)', m_dodged: n => `Dodge ${n} missile${n > 1 ? 's' : ''} in one run`,
+    m_ludi: () => `Hit ludicrous speed (${metric() ? toKmh(200) + ' km/h' : '200 mph'})`, m_dodged: n => `Dodge ${n} missile${n > 1 ? 's' : ''} in one run`,
     ranks: ['Reservation holder', 'Test driver', 'Funding secured', 'Thruster pilot', 'Loop specialist', 'Plaid pilot', 'Ludicrous', 'Not a flamethrower', 'Occupy Mars', 'Founders series'],
     rankMore: n => `Mars bound ${n}`,
     causes: {
@@ -619,6 +660,9 @@ const STR = {
     dailyOver: (b, s, r) => `التحدي اليومي · أفضل نتيجة اليوم ${b} · سلسلة ${nAr(s, ['يوم واحد', 'يومين', 'أيام', 'يومًا'])}${r ? ` · +${r} خلية` : ''}`,
     share: 'مشاركة', shareText: s => `سجّلت ${s} نقطة في رودستر: وضع الطيران. تقدر تتفوّق عليّ؟`, shareSaved: 'حُفظت الصورة ونُسخ الرابط. انشرهما معًا.',
     scoreLbl: 'النقاط', topSpeed: 'أعلى سرعة', beatIt: 'تقدر تتفوّق عليّ؟', dailyTitle: 'التحدي اليومي',
+    settings: 'الإعدادات', setMusic: 'صوت الموسيقى', setSfx: 'المؤثرات الصوتية', setUnits: 'وحدة السرعة', setGfx: 'الرسومات', setMotion: 'تقليل الحركة', setHaptics: 'الاهتزاز',
+    auto: 'تلقائي', high: 'عالية', medium: 'متوسطة', low: 'منخفضة', on: 'تشغيل', off: 'إيقاف',
+    settingsNote: 'الوحدة التلقائية تتبع اللغة: كم/س بالعربية وميل/س بالإنجليزية. الرسومات التلقائية تخفّض الدقة إذا تباطأت اللعبة، والحركة التلقائية تتبع إعدادات جهازك.',
     drive: 'انطلق', parked: 'متوقفة', garage: 'الكراج', missions: 'المهام', best: 'الأفضل', cells: 'الخلايا', rank: 'الرتبة',
     fine: 'لعبة غير رسمية من المعجبين، ولا علاقة لها بشركة تسلا.',
     world: 'العالم', saudi: 'السعودية', texas: 'تكساس', difficulty: 'الصعوبة', easy: 'سهل', normal: 'عادي', hard: 'صعب',
@@ -635,8 +679,9 @@ const STR = {
     rankNote: (left, next) => `باقي ${nAr(left, ['مهمة واحدة', 'مهمتان', 'مهام', 'مهمة'])} لتصل إلى رتبة «${next}».`,
     crashed: 'تحطّمت.', runAnnounce: (s, nb) => `انتهت الجولة. النقاط ${s}.${nb ? ' رقم قياسي جديد.' : ''}`,
     missionAnnounce: (txt, rw) => `أنجزت المهمة: ${txt}. أُضيفت ${rw} خلية.`,
-    bestHud: 'الأفضل', unit: 'كم/س', toCharge: d => `${d} كم للشاحن`, charging: 'يشحن', t060: s => `0-100 كم/س في ${s} ث`,
-    launchOn: 'انطلق مع الأخضر', goGo: 'انطلق!', holdPrompt: 'اضغط مطوّلًا في أي مكان لتشغيل الدافعات', distUnit: 'كم', gasLabel: 'بنزين',
+    bestHud: 'الأفضل', uMph: 'ميل/س', uKmh: 'كم/س', uMi: 'ميل', uKm: 'كم', toCharge: (d, u) => `${d} ${u} للشاحن`, charging: 'يشحن',
+    t060: (s, m) => m ? `0-100 كم/س في ${s} ث` : `0-60 ميل/س في ${s} ث`,
+    launchOn: 'انطلق مع الأخضر', goGo: 'انطلق!', holdPrompt: 'اضغط مطوّلًا في أي مكان لتشغيل الدافعات', gasLabel: 'بنزين',
     plaid: 'وضع بلايد', coil: 'ملف تسلا', shield: 'وضع الدفاع البيولوجي', fly: 'وضع الطيران', flame: 'ليست قاذفة لهب',
     shieldDown: 'سقط الدرع', lowBattery: 'البطارية ضعيفة', outOfCharge: 'نفدت البطارية', ludicrous: 'سرعة جنونية', funded: 'التمويل مضمون',
     warning: 'تحذير', defeated: n => `هُزم ${n}`, incoming: n => `${n} قادم`, down: n => `سقط ${n}`,
@@ -664,7 +709,7 @@ const STR = {
     up_coil: 'ملف تسلا', up_coil_d: s => `مغناطيس الخلايا يدوم ${s} ث`,
     up_plaid: 'وضع بلايد', up_plaid_d: s => `اندفاعة التحطيم تدوم ${s} ث`,
     m_cells: n => `اجمع ${nAr(n, ['خلية واحدة', 'خليتين', 'خلايا', 'خلية'])} في جولة واحدة`,
-    m_miles: n => `اقطع ${toKm(n)} كم في جولة واحدة`,
+    m_miles: n => metric() ? `اقطع ${toKm(n)} كم في جولة واحدة` : `اقطع ${n} ميل في جولة واحدة`,
     m_hops: n => `اقفز فوق ${nAr(n, ['سيارة بنزين واحدة', 'سيارتي بنزين', 'سيارات بنزين', 'سيارة بنزين'])} في جولة واحدة`,
     m_roofs: n => `اهبط على سطح ${nAr(n, ['سيارة بنزين واحدة', 'سيارتي بنزين', 'سيارات بنزين', 'سيارة بنزين'])} في جولة واحدة`,
     m_loops: n => `أكمل ${nAr(n, ['حلقة واحدة', 'حلقتين', 'حلقات', 'حلقة'])} في جولة واحدة`,
@@ -672,7 +717,7 @@ const STR = {
     m_smash: n => `حطّم ${nAr(n, ['عائقًا واحدًا', 'عائقين', 'عوائق', 'عائقًا'])} في وضع بلايد`,
     m_close: n => `انجُ بأعجوبة ${nAr(n, ['مرة واحدة', 'مرتين', 'مرات', 'مرة'])} في جولة واحدة`,
     m_air: n => `ابقَ في الهواء ${nAr(n, ['ثانية واحدة', 'ثانيتين', 'ثوانٍ', 'ثانية'])} في جولة واحدة`,
-    m_mph: n => `صِل إلى سرعة ${toKmh(n)} كم/س`,
+    m_mph: n => metric() ? `صِل إلى سرعة ${toKmh(n)} كم/س` : `صِل إلى سرعة ${n} ميل/س`,
     m_chain: n => `اجمع ${nAr(n, ['خلية واحدة', 'خليتين', 'خلايا', 'خلية'])} متتالية`,
     m_perfect: () => 'انطلق انطلاقة مثالية مع الضوء الأخضر',
     m_powers: n => `التقط ${nAr(n, ['معزّزًا واحدًا', 'معزّزين', 'معزّزات', 'معزّزًا'])} في جولة واحدة`,
@@ -680,7 +725,7 @@ const STR = {
     m_blasts: n => `فجّر ${nAr(n, ['وحشًا واحدًا', 'وحشين', 'وحوش', 'وحشًا'])} بدافعاتك`,
     m_bosses: () => 'اهزم زعيمًا', m_mars: () => 'اوصل إلى المريخ', m_mult: n => `حقّق مضاعف نقاط ×${n}`,
     m_flames: n => `أحرق ${nAr(n, ['شيئًا واحدًا', 'شيئين', 'أشياء', 'شيئًا'])} بـ«ليست قاذفة لهب»`,
-    m_spotted: () => 'اكتشف الرودستر السابح في الفضاء', m_ludi: () => `بلّغ السرعة الجنونية (${toKmh(200)} كم/س)`,
+    m_spotted: () => 'اكتشف الرودستر السابح في الفضاء', m_ludi: () => `بلّغ السرعة الجنونية (${metric() ? toKmh(200) + ' كم/س' : '200 ميل/س'})`,
     m_dodged: n => `تفادَ ${nAr(n, ['صاروخًا واحدًا', 'صاروخين', 'صواريخ', 'صاروخًا'])} في جولة واحدة`,
     ranks: ['صاحب حجز', 'سائق تجريبي', 'التمويل مضمون', 'طيّار الدافعات', 'خبير الحلقات', 'طيّار بلايد', 'لوديكروس', 'ليست قاذفة لهب', 'احتلّوا المريخ', 'سلسلة المؤسسين'],
     rankMore: n => `في الطريق للمريخ ${n}`,
@@ -816,7 +861,7 @@ function wordRows(word) {
    ========================================================= */
 const Sound = (() => {
   let ac = null, comp = null, master = null, sfx = null, mus = null, send = null, noiseBuf = null, eng = null, thr = null, lastEng = '';
-  let muted = !!save.muted;
+  let muted = !!save.muted, musicVol = 1, sfxVol = 1;
   function init() {
     if (ac) { if (ac.state === 'suspended') ac.resume().catch(() => {}); return; }
     try {
@@ -826,7 +871,7 @@ const Sound = (() => {
       comp.threshold.value = -18; comp.knee.value = 12; comp.ratio.value = 4; comp.attack.value = 0.003; comp.release.value = 0.25;
       master = ac.createGain(); master.gain.value = muted ? 0 : 0.9;
       comp.connect(master); master.connect(ac.destination);
-      sfx = ac.createGain(); sfx.gain.value = 0.75; sfx.connect(comp);
+      sfx = ac.createGain(); sfx.gain.value = 0.75 * sfxVol; sfx.connect(comp);
       mus = ac.createGain(); mus.gain.value = 0; mus.connect(comp);
       const dl = ac.createDelay(1), fb = ac.createGain(), lp = ac.createBiquadFilter(), wet = ac.createGain();
       dl.delayTime.value = 0.23; fb.gain.value = 0.34; lp.type = 'lowpass'; lp.frequency.value = 2400; wet.gain.value = 0.55;
@@ -901,7 +946,9 @@ const Sound = (() => {
     thr.rg.gain.setTargetAtTime(on && thrusting ? 0.22 : 0, t, 0.04);
   }
   function setMuted(m) { muted = m; if (master) master.gain.setTargetAtTime(m ? 0 : 0.9, ac.currentTime, 0.02); }
-  return { init, tone, noise, engine, setMuted, get muted() { return muted; }, get ctx() { return ac; }, get musicBus() { return mus; } };
+  // music and effects volumes from Settings, 0 to 1
+  function setVolumes(m, s) { musicVol = m; sfxVol = s; if (sfx) sfx.gain.setTargetAtTime(0.75 * s, ac.currentTime, 0.03); }
+  return { init, tone, noise, engine, setMuted, setVolumes, get muted() { return muted; }, get ctx() { return ac; }, get musicBus() { return mus; }, get musicVol() { return musicVol; } };
 })();
 
 /* ---------- original chiptune soundtrack, played by a small step sequencer ---------- */
@@ -968,7 +1015,7 @@ const Music = (() => {
   }
   function update(want, ducked, enabled) {
     const ac = Sound.ctx; if (!ac) return;
-    const lv = (!enabled || !want) ? 0 : ducked ? 0.16 : 0.5;
+    const lv = ((!enabled || !want) ? 0 : ducked ? 0.16 : 0.5) * Sound.musicVol;
     if (lv !== level) { level = lv; Sound.musicBus.gain.setTargetAtTime(lv, ac.currentTime, 0.25); }
     if (want !== cur) { cur = want; tr = want ? TRACKS[want] : null; step = 0; nextT = ac.currentTime + 0.08; }
     if (!tr || !enabled || Sound.muted) return;
@@ -1555,7 +1602,7 @@ function startRide(k) {
   RUN.stats.rides++; addScore(100);
   banner(t('ride_' + k), k === 'truck' ? '#ffd23f' : RIDES[k].col, 1.6);
   hint2('ride_' + k, t('hRide_' + k));
-  SFX.power(); W.shake = Math.max(W.shake, reduceMotion ? 0 : 3);
+  SFX.power(); buzz(30); W.shake = Math.max(W.shake, reduceMotion ? 0 : 3);
 }
 // hit: the vehicle is wrecked and throws the Roadster clear; otherwise it simply runs out
 function endRide(hitBy) {
@@ -1565,7 +1612,7 @@ function endRide(hitBy) {
   if (hitBy) {
     boom(cx, cy, 1.1);
     for (let i = 0; i < 8; i++) addPart({ x: cx + rand(-24, 24), y: cy + rand(-6, 6), vx: rand(-80, 220), vy: rand(-260, -80), life: rand(1, 1.5), max: 1.5, kind: 'debris', s: rand(0.9, 1.8), col: pick([RIDES[r.k].col, '#3d424b', '#ffffff']), rot: rand(0, TAU), vr: rand(-14, 14), grav: 700, floor: true, world: true, front: true });
-    SFX.smash(); W.shake = Math.max(W.shake, reduceMotion ? 0 : 6);
+    SFX.smash(); buzz(70); W.shake = Math.max(W.shake, reduceMotion ? 0 : 6);
     P.invuln = 1.6; P.vy = Math.max(P.vy, 240); P.onGround = false;
     floatText(t('ejected'), cx, cy - 16, '#ff6b7a');
   } else {
@@ -1656,6 +1703,10 @@ function spawnChunks() {
     W.spawnX = x + len + (lerp(175, 100, d) + (W.speed || 150) * 0.2 + rand(0, 50)) * DF().gap;
   }
 }
+
+// a short vibration on phones that support it (not iPhone), unless it is switched off in Settings
+const canBuzz = typeof navigator.vibrate === 'function';
+function buzz(p) { if (canBuzz && save.haptics !== 'off') { try { navigator.vibrate(p); } catch (e) { /* ignore */ } } }
 
 /* =========================================================
    Simulation
@@ -1991,7 +2042,7 @@ function hit(e) {
   if (P.ride) { if (RIDES[P.ride.k].smash && e.smash) smash(e); else endRide(true); return; }
   if (P.shield) {
     P.shield = false; P.invuln = 1.2; W.shake = Math.max(W.shake, 5);
-    sparks(carX + 30, groundY - P.alt - 8, 22, ['#43f08a', '#d9ffe9', '#ffffff'], 260); SFX.shield();
+    sparks(carX + 30, groundY - P.alt - 8, 22, ['#43f08a', '#d9ffe9', '#ffffff'], 260); SFX.shield(); buzz(50);
     banner(t('shieldDown'), '#43f08a', 1.1);
     if (e.mon) killMon(e.mon, 'shield'); else if (e.smash) smash(e);
     return;
@@ -2003,7 +2054,7 @@ function smash(e) {
   e.orig = e.type; e.type = 'wreck'; e.platform = false; e.v = 0; e.alt = e.alt || 0;
   e.vx = W.speed * 0.25 + 90; e.vy = rand(170, 260); e.vr = rand(-9, 9); e.rot = 0; e.life = 2.2;
   boom(sx, sy, 0.9);
-  if (mode === 'run') { RUN.stats.smash++; addScore(100, t('smash'), '#ff3149'); SFX.smash(); }
+  if (mode === 'run') { RUN.stats.smash++; addScore(100, t('smash'), '#ff3149'); SFX.smash(); buzz(25); }
   W.shake = Math.max(W.shake, 3);
 }
 function coneHit(e) {
@@ -2012,7 +2063,7 @@ function coneHit(e) {
   if (mode !== 'run' || P.invuln > 0) return;
   P.battery = Math.max(0, P.battery - 6); RUN.chain = 0;
   floatText(e.rock ? t('rockHit') : t('coneHit'), carX + 30, groundY - P.alt - CAR_H - 10, '#ff6b7a');
-  SFX.thud(); W.shake = Math.max(W.shake, 3);
+  SFX.thud(); buzz(20); W.shake = Math.max(W.shake, 3);
 }
 function crash(cause) {
   if (mode !== 'run') return;
@@ -2028,13 +2079,13 @@ function crash(cause) {
   if (!pit) addPart({ x: carX + CAR_WHEELS[1], y: groundY - P.alt - 5, vx: rand(150, 230), vy: rand(-230, -170), life: 2.6, max: 2.6, kind: 'debris', wheel: true, s: CAR_WR, rot: 0, vr: 16, grav: 650, floor: true, world: true, front: true });
   smoke(cx, cy, 10, { sx: 20, sy: 6, vx0: -80, vx1: 80, vy0: -60, vy1: -10, col: '#3a3c44', a: 0.7, r2a: 6, r2b: 12, life: 1.4 });
   SFX.crash();
-  try { if (navigator.vibrate) navigator.vibrate(140); } catch (e) { /* ignore */ }
+  buzz(160);
   RUN.overT = 2.0;
 }
 function outOfCharge() {
   if (mode !== 'run') return;
   mode = 'crash'; RUN.cause = 'battery'; RUN.speedAtCrash = W.speed; P.wreck = null; P.thrusting = false; holding = false;
-  RUN.overT = 0.9; banner(t('outOfCharge'), '#ff3149', 2.6);
+  RUN.overT = 0.9; banner(t('outOfCharge'), '#ff3149', 2.6); buzz(200);
   Sound.tone(440, 0.9, { type: 'sawtooth', v: 0.06, f2: 60 });
 }
 function stepCrash(dt) {
@@ -2169,7 +2220,7 @@ function doLaunch(rt) {
   else if (rt < 0.2) { t060 = 0.86 + rt * 0.5; label = t('perfectLaunch'); col = '#43f08a'; bonus = 300; boost = 80; RUN.stats.perfect = 1; }
   else if (rt < 0.45) { t060 = 1.05 + (rt - 0.2) * 1.2; label = t('goodLaunch'); col = '#7fd8ff'; bonus = 100; boost = 40; }
   else t060 = 1.4 + Math.min(1, rt) * 0.5;
-  RUN.score += bonus;
+  RUN.score += bonus; if (bonus) buzz(25);
   P.boost = boost ? 3 : 0; P.boostV = boost;
   W.speed = 40 + boost;
   RUN.t060 = t060; RUN.t060Show = 3;
@@ -2461,6 +2512,7 @@ function killMon(e, how) {
   if (how === 'stomp') RUN.stats.stomps++; else if (how === 'blast') RUN.stats.blasts++; else if (how === 'plaid') RUN.stats.smash++;
   for (let i = 0; i < (d.cells || 0); i++) { const c = addCell(e.x + rand(0, e.w), Math.max(4, e.alt) + rand(2, 14)); c.mag = true; }
   if (how === 'stomp') SFX.stomp(chain); else if (how === 'blast') SFX.blast(); else SFX.smash();
+  buzz(how === 'stomp' ? 18 : 25);
 }
 
 /* ---------- bosses ---------- */
@@ -2622,7 +2674,7 @@ function zapBoss(sx, alt) {
   const B = W.boss;
   sparks(sx, groundY - alt, 10, ['#bfefff', '#ffffff'], 180);
   if (!B || B.st !== 'fight') return;
-  B.hp -= 1; B.flash = 0.22;
+  B.hp -= 1; B.flash = 0.22; buzz(35);
   W.zap = { t: 0.32, x0: carX + 30, y0: groundY - P.alt - 12, x1: B.x - 10, y1: groundY - B.alt };
   W.shake = Math.max(W.shake, reduceMotion ? 0 : 4);
   sparks(B.x - 10, groundY - B.alt, 18, ['#7fd8ff', '#ffffff', '#ffd23f'], 260);
@@ -2635,7 +2687,7 @@ function zapBoss(sx, alt) {
   }
 }
 function bossDefeated(B) {
-  W.boss = null; W.bossCount++;
+  W.boss = null; W.bossCount++; buzz([60, 40, 120]);
   const cx = B.x, cy = groundY - B.alt;
   for (let i = 0; i < 5; i++) sparks(cx + rand(-30, 30), cy + rand(-20, 20), 14, ['#ffd23f', '#ffffff', '#ff8a3d', '#7fd8ff'], 320);
   smoke(cx, cy, 18, { world: false, sx: 34, sy: 22, col: B.kind === 'smog' ? smogPal().death : '#6f7686', a: 0.7, r2a: 8, r2b: 16, life: 1.6 });
@@ -4602,7 +4654,7 @@ function boltIcon(x, y, s, col) {
 // the speed limit sign Tesla shows beside the speed: a European disc for km/h (Saudi highways top out at 140),
 // a US plate for mph (85 on Texas SH 130, the fastest road in the US)
 function limitSign(cx, cy) {
-  if (isAr()) {
+  if (metric()) {
     const r = U(15);
     circ(g, cx, cy, r); g.fillStyle = '#ffffff'; g.fill();
     circ(g, cx, cy, r - U(1.7)); g.lineWidth = U(3.2); g.strokeStyle = '#e31937'; g.stroke();
@@ -4619,9 +4671,9 @@ function limitSign(cx, cy) {
 }
 // the driver's card: gear, battery, speed with its unit and the limit sign, and the way to the next Supercharger
 function drawCluster(x, y) {
-  const pad = U(14), ink = inkH(), dim = dimH(), kmh = isAr(), charging = P.charging;
+  const pad = U(14), ink = inkH(), dim = dimH(), kmh = metric(), charging = P.charging;
   const spd = String(Math.round(W.speed * PX2MPH * (kmh ? 1.609 : 1))), ss = U(40);
-  const foot = charging ? t('charging') : t('toCharge', (nextChargerFt() / 5280 * (kmh ? 1.609 : 1)).toFixed(1));
+  const foot = charging ? t('charging') : t('toCharge', (nextChargerFt() / 5280 * (kmh ? 1.609 : 1)).toFixed(1), distU());
   const fw = measure(foot, U(11), 500) + U(15), pctW = measure('100%', U(12), 600);
   const w = Math.max(U(17) * 4 + U(14) + pctW + U(32), measure('888', ss, 500) + U(48), fw) + pad * 2, h = U(118);
   const A = cardAlpha('cluster', x, y, w, h);
@@ -4646,7 +4698,7 @@ function drawCluster(x, y) {
   if (charging) boltIcon(ix + iw / 2, gy, U(0.95), Math.floor(W.time * 6) % 2 ? '#ffffff' : ink);
   // speed and unit, with the limit sign beside them
   txt(spd, x + pad - U(1), y + U(68), ss, P.plaid > 0 ? redH() : ink, 'left', { w: 500, base: 'alphabetic' });
-  txt(t('unit'), x + pad, y + U(84), U(11), dim, 'left', { w: 500, base: 'alphabetic' });
+  txt(spdU(), x + pad, y + U(84), U(11), dim, 'left', { w: 500, base: 'alphabetic' });
   limitSign(right - U(15), y + U(60));
   // a hairline, then the distance to the next Supercharger
   g.fillStyle = hc('#dcdddf', '#34363b'); g.fillRect(x + pad, y + U(94), w - pad * 2, U(1));
@@ -4732,7 +4784,7 @@ function drawHUD(N) {
   const fs = U(12);
   if (RUN.t060Show > 0 && mode === 'run') {
     g.globalAlpha = Math.min(1, RUN.t060Show * 2);
-    y = alertCard(t('t060', RUN.t060.toFixed(2)), y, fs, 500, null, wrapW) + U(8);
+    y = alertCard(t('t060', RUN.t060.toFixed(2), metric()), y, fs, 500, null, wrapW) + U(8);
     g.globalAlpha = 1;
   }
   if (toasts.length) {
@@ -4866,7 +4918,7 @@ function checkMissions() {
   for (const m of save.missions) {
     if (m.done || missionProgress(m) < m.n) continue;
     m.done = true; m.rw = missionReward(m); save.bank += m.rw; save.done++;
-    toast(t('missionDone', m.rw), '#43f08a'); SFX.mission();
+    toast(t('missionDone', m.rw), '#43f08a'); SFX.mission(); buzz([20, 60, 20]);
     announce(t('missionAnnounce', missionText(m), m.rw));
     const r = Math.floor(save.done / 3);
     if (r > save.rank) { save.rank = r; const bonus = 150 + 100 * r; save.bank += bonus; toast(t('rankUp', rankName(r), bonus), '#ffd23f'); }
@@ -4906,7 +4958,7 @@ function finishDaily() {
    ========================================================= */
 const $ = id => document.getElementById(id);
 const btnPause = $('btnPause'), btnMute = $('btnMute'), btnLang = $('btnLang'), live = $('live');
-const SCREENS = ['scrTitle', 'scrGarage', 'scrMissions', 'scrPause', 'scrOver'];
+const SCREENS = ['scrTitle', 'scrGarage', 'scrMissions', 'scrPause', 'scrOver', 'scrSettings'];
 let backTo = 'scrTitle';
 function show(id) {
   for (const s of SCREENS) $(s).classList.toggle('on', s === id);
@@ -4955,7 +5007,7 @@ function goTitle() {
   resetPlayer(); resetRun(); newWorld(true);
   btnPause.hidden = true;
   refreshTitle(); syncOpts();
-  btnLang.hidden = false; HT.set = false; delete app.dataset.hud;
+  btnLang.hidden = false; $('btnSettings').hidden = false; btnMusic.hidden = true; HT.set = false; delete app.dataset.hud;
   show('scrTitle');
 }
 function startRun(daily) {
@@ -4968,7 +5020,7 @@ function startRun(daily) {
   resetPlayer(); resetRun(); newWorld(false);
   mode = 'launch'; paused = false; holding = false; latch = false; keys.clear(); pointers.clear();
   L.t = 0; L.greenAt = 1.65 + rand(0.1, 0.8); L.lights = 0; L.green = false; L.done = false;
-  btnPause.hidden = false; btnLang.hidden = true; HT.set = false;
+  btnPause.hidden = false; btnLang.hidden = true; $('btnSettings').hidden = true; btnMusic.hidden = false; HT.set = false;
   if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
   if (save.runs < 2) hint('launch', t('hLaunch', coarse));
   if (DAILY.on) toast(t('dailyStart', t(DAILY.world)), '#7d9eff');
@@ -5032,8 +5084,8 @@ function shareCard() {
     x.fillStyle = '#ffffff'; x.textAlign = 'center'; x.fillText(lab, bx + lw / 2, 1020);
   }
   // distance, cells and top speed, like Tesla's spec row
-  const km = isAr(), mi = runDist() / 5280, top = RUN.stats.mph * (km ? 1.609 : 1);
-  const specs = [[(km ? mi * 1.609 : mi).toFixed(2) + ' ' + t('distUnit'), t('distance')], [fmt(RUN.cells), t('cells')], [Math.round(top) + ' ' + t('unit'), t('topSpeed')]];
+  const km = metric(), mi = runDist() / 5280, top = RUN.stats.mph * (km ? 1.609 : 1);
+  const specs = [[(km ? mi * 1.609 : mi).toFixed(2) + ' ' + distU(), t('distance')], [fmt(RUN.cells), t('cells')], [Math.round(top) + ' ' + spdU(), t('topSpeed')]];
   const colW = (R - L) / 3;
   specs.forEach(([v, lab], i) => {
     const cx = ar ? R - i * colW : L + i * colW;
@@ -5107,7 +5159,7 @@ function showOver() {
   $('shareMsg').hidden = true;
   setTimeout(prepareShare, 60);
   const mi = runDist() / 5280;
-  $('oDist').textContent = (isAr() ? mi * 1.609 : mi).toFixed(2) + ' ' + t('distUnit');
+  $('oDist').textContent = (metric() ? mi * 1.609 : mi).toFixed(2) + ' ' + distU();
   $('oCells').textContent = fmt(RUN.cells);
   $('oBest').textContent = fmt(save.best);
   renderMissionList($('oList'), true);
@@ -5224,6 +5276,7 @@ function buyUpgrade(u) {
 function goBack() {
   SFX.click();
   if (backTo === 'scrOver') { updateReviveBtn(); $('oBest').textContent = fmt(save.best); show('scrOver'); }
+  else if (backTo === 'scrPause') { renderMissionList($('pList'), true); show('scrPause'); }
   else { refreshTitle(); show('scrTitle'); }
 }
 function updateMuteBtn() {
@@ -5286,7 +5339,7 @@ window.addEventListener('keydown', e => {
   if (e.code === 'KeyN' && !e.repeat && !e.ctrlKey && !e.metaKey && !e.altKey) { Sound.init(); toggleMusic(); return; }
   if (e.code === 'Escape' || e.code === 'KeyP') {
     if (mode === 'run' || mode === 'launch') { e.preventDefault(); if (paused) resume(); else pause(); }
-    else if ($('scrGarage').classList.contains('on') || $('scrMissions').classList.contains('on')) { e.preventDefault(); goBack(); }
+    else if (['scrGarage', 'scrMissions', 'scrSettings'].some(s => $(s).classList.contains('on'))) { e.preventDefault(); goBack(); }
     return;
   }
   if (THRUST_KEYS.has(e.code) && (mode === 'run' || mode === 'launch') && !paused) {
@@ -5325,6 +5378,34 @@ for (const b of document.querySelectorAll('[data-world]')) b.addEventListener('c
 for (const b of document.querySelectorAll('[data-diff]')) b.addEventListener('click', () => { SFX.click(); save.diff = b.dataset.diff; persist(); syncOpts(); });
 document.querySelectorAll('[data-back]').forEach(b => b.addEventListener('click', goBack));
 
+/* ---------- settings ---------- */
+// puts the saved settings into effect: volumes, motion, graphics quality
+function applySettings() {
+  const vm = clamp(+save.volMusic, 0, 100), vs = clamp(+save.volSfx, 0, 100);
+  Sound.setVolumes(isFinite(vm) ? vm / 100 : 1, isFinite(vs) ? vs / 100 : 1);
+  reduceMotion = save.motion === 'on' || (save.motion !== 'off' && sysReduceMotion);
+  const q = { high: 1, medium: 0.75, low: 0.5 }[save.gfx] || 1;
+  if (save.gfx !== 'auto' && QUAL !== q) { QUAL = q; resize(); }
+}
+// marks the current choices in the Settings screen
+function syncSettings() {
+  for (const id of ['volMusic', 'volSfx']) { const v = clamp(+save[id] || 0, 0, 100); $(id).value = v; $(id + 'V').textContent = v + '%'; }
+  for (const b of document.querySelectorAll('[data-set]')) b.setAttribute('aria-checked', String(save[b.dataset.set] === b.dataset.v));
+  $('optHaptics').hidden = !canBuzz;
+}
+function openSettings(from) { backTo = from; syncSettings(); show('scrSettings'); }
+for (const id of ['volMusic', 'volSfx']) $(id).addEventListener('input', () => {
+  save[id] = +$(id).value; $(id + 'V').textContent = save[id] + '%'; Sound.init(); applySettings(); persist();
+  if (id === 'volSfx') SFX.click();
+});
+for (const b of document.querySelectorAll('[data-set]')) b.addEventListener('click', () => {
+  SFX.click(); save[b.dataset.set] = b.dataset.v; persist(); applySettings(); syncSettings();
+  if (b.dataset.set === 'haptics' && b.dataset.v === 'on') buzz(30);
+  if (b.dataset.set === 'gfx' && b.dataset.v === 'auto') { QUAL = 1; resize(); }
+});
+$('btnSettings').addEventListener('click', () => { Sound.init(); SFX.click(); openSettings('scrTitle'); });
+$('btnPauseSettings').addEventListener('click', () => { SFX.click(); openSettings('scrPause'); });
+
 /* ---------- install to the home screen, and play offline ---------- */
 const btnInstall = $('btnInstall'), installTip = $('installTip'), web = /^https?:$/.test(location.protocol);
 let installEvt = null;
@@ -5348,7 +5429,7 @@ if ('serviceWorker' in navigator && web) window.addEventListener('load', () => {
 let lastT = performance.now(), acc = 0, slowT = 0, frameEMA = 16;
 // drops the canvas resolution a step when frames keep arriving late, as on browsers without GPU canvas
 function adaptQuality(dt) {
-  if (document.hidden || paused || dt > 0.25) return;
+  if (document.hidden || paused || dt > 0.25 || save.gfx !== 'auto') return;
   frameEMA = lerp(frameEMA, dt * 1000, 0.05);
   slowT = frameEMA > 21 ? slowT + dt : 0;
   if (slowT > 2 && QUAL > 0.5) { QUAL = Math.max(0.5, QUAL - 0.25); slowT = 0; frameEMA = 16; resize(); }
@@ -5381,7 +5462,7 @@ if (window.ResizeObserver) new ResizeObserver(() => resize()).observe(app); else
 window.addEventListener('orientationchange', () => setTimeout(resize, 150));
 if (mqDark) { if (mqDark.addEventListener) mqDark.addEventListener('change', onTheme); else if (mqDark.addListener) mqDark.addListener(onTheme); }
 new MutationObserver(onTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-Sound.setMuted(save.muted); updateMuteBtn(); updateMusicBtn(); nextMeme();
+Sound.setMuted(save.muted); updateMuteBtn(); updateMusicBtn(); nextMeme(); applySettings();
 goTitle();
 renderReady = true;
 requestAnimationFrame(frame);

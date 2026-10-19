@@ -30,7 +30,7 @@
 <link rel="canonical" href="https://osdroidi.github.io/roadster-fly-mode/">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231a1530'/%3E%3Cpath d='M8.5 21c-1.6 3.4-1 6.4 0 8 1-1.6 1.6-4.6 0-8zM20.5 21c-1.6 3.4-1 6.4 0 8 1-1.6 1.6-4.6 0-8z' fill='%234cc3ff'/%3E%3Cpath d='M2.6 16.4c3.4-2.6 6.6-3.8 10.4-4.4 3.6-.6 6.4.4 8.6 2.6 3.2.4 5.8 1.2 7.6 2.6.6.8.4 2.2-.4 3H3.6c-1.4-.6-1.6-2.4-1-3.8z' fill='%23f2f5fa' stroke='%23000' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cpath d='M10.4 14.6c2.6-1.4 6-1.8 8.6-.2l1 1.6h-9.6z' fill='%232c4778'/%3E%3Ccircle cx='8.5' cy='19.6' r='3' fill='%231f1d29' stroke='%23000'/%3E%3Ccircle cx='22.6' cy='19.6' r='3' fill='%231f1d29' stroke='%23000'/%3E%3Ccircle cx='8.5' cy='19.6' r='1.4' fill='%23d9dfe8'/%3E%3Ccircle cx='22.6' cy='19.6' r='1.4' fill='%23d9dfe8'/%3E%3Crect x='2.4' y='15.8' width='1.6' height='1.4' rx='.5' fill='%23ff2a3d'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400..800&family=Montserrat:wght@400..800&display=swap">
@@ -373,10 +373,10 @@ html[dir="rtl"] .bar b{inset:0 0 0 auto}
         <div><dt data-t="cells">Cells</dt><dd id="tBank">0</dd></div>
         <div><dt data-t="rank">Rank</dt><dd id="tRank" class="wrap">Test driver</dd></div>
       </dl>
-      <button class="btn primary" id="btnDrive" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2.2"/><path d="M3.8 11h6M14.2 11h6M12 14.2v6.3"/></svg><span data-t="drive">Drive</span></button>
+      <button class="btn primary" id="btnDrive" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 8.6C3.5 6.9 4.7 6 6.4 6h11.2c1.7 0 2.9.9 2.9 2.6v1.6c0 2.6-1.8 4.6-4.4 5.1l-1.6.3V19h-5v-3.4l-1.6-.3c-2.6-.5-4.4-2.5-4.4-5.1z"/><circle cx="12" cy="11.2" r="2"/><path d="M3.8 10.2h6.2M14 10.2h6.2"/></svg><span data-t="drive">Drive</span></button>
       <div class="tiles">
         <button class="btn tile" id="btnDaily" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="2.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/><path d="M9.5 15l2 2 3.5-4"/></svg><span data-t="daily">Daily</span><b class="badge" id="dailyBadge" hidden></b></button>
-        <button class="btn tile" id="btnGarage" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 15.5l1.7-4.4A2.2 2.2 0 0 1 7.2 9.6h9.6a2.2 2.2 0 0 1 2 1.5l1.7 4.4"/><path d="M3.5 15.5h17v2.8h-17z"/><circle cx="7.5" cy="18.3" r="1.6"/><circle cx="16.5" cy="18.3" r="1.6"/></svg><span data-t="garage">Garage</span></button>
+        <button class="btn tile" id="btnGarage" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M1.8 17v-2.6c0-1.1.8-2 1.9-2.2l3.6-.8C9.2 9 11.6 7.6 14.4 7.6c2.4 0 4.4 1.1 5.8 2.9l1.3.4c.5.2.8.6.8 1.1V17"/><path d="M9.8 17h4.8M20.6 17h1.3M1.8 17h2"/><path d="M9.2 11.5h9.6"/><circle cx="7.1" cy="17" r="2.5"/><circle cx="17.6" cy="17" r="2.5"/></svg><span data-t="garage">Garage</span></button>
         <button class="btn tile" id="btnMissions" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 21V4"/><path d="M5.5 4.5h11.5l-2.4 4.2 2.4 4.3H5.5"/></svg><span data-t="missions">Missions</span></button>
       </div>
       <div class="rule" aria-hidden="true"></div>
@@ -482,7 +482,7 @@ html[dir="rtl"] .bar b{inset:0 0 0 auto}
       <button class="btn accent" id="btnRevive" type="button">Revive</button>
       <button class="btn primary" id="btnAgain" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 4.5v4.2h4.2"/></svg><span data-t="driveAgain">Drive again</span></button>
       <div class="btn-row">
-        <button class="btn" id="btnOverGarage" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 15.5l1.7-4.4A2.2 2.2 0 0 1 7.2 9.6h9.6a2.2 2.2 0 0 1 2 1.5l1.7 4.4"/><path d="M3.5 15.5h17v2.8h-17z"/><circle cx="7.5" cy="18.3" r="1.6"/><circle cx="16.5" cy="18.3" r="1.6"/></svg><span data-t="garage">Garage</span></button>
+        <button class="btn" id="btnOverGarage" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M1.8 17v-2.6c0-1.1.8-2 1.9-2.2l3.6-.8C9.2 9 11.6 7.6 14.4 7.6c2.4 0 4.4 1.1 5.8 2.9l1.3.4c.5.2.8.6.8 1.1V17"/><path d="M9.8 17h4.8M20.6 17h1.3M1.8 17h2"/><path d="M9.2 11.5h9.6"/><circle cx="7.1" cy="17" r="2.5"/><circle cx="17.6" cy="17" r="2.5"/></svg><span data-t="garage">Garage</span></button>
         <button class="btn" id="btnHome" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6.8 8 6.8"/><path d="M6.2 9.4V20h11.6V9.4"/></svg><span data-t="home">Home</span></button>
       </div>
     </div>
@@ -3102,6 +3102,12 @@ function hillPath(base, par, seed, amp, mesa) {
 }
 function drawHills(sky) {
   const far = rgbStr(sky.far), near = rgbStr(sky.near);
+  // a distant ridge washed out by the air, then a haze settling toward the horizon, for depth
+  hillPath(groundY - 14, 0.022, 5.3, groundY * 0.3 + 18, false);
+  g.fillStyle = rgbStr(mixC(sky.far, sky.hor, 0.6)); g.fill();
+  const hz = g.createLinearGradient(0, groundY - groundY * 0.42, 0, groundY);
+  hz.addColorStop(0, rgbStr(sky.hor, 0)); hz.addColorStop(1, rgbStr(sky.hor, 0.45));
+  g.fillStyle = hz; g.fillRect(0, groundY - groundY * 0.42, IW, groundY * 0.42);
   hillPath(groundY - 10, 0.05, 1.7, groundY * 0.16 + 14, true);
   g.fillStyle = far; g.fill();
   g.strokeStyle = rgbStr(mixC(sky.far, [255, 255, 255], 0.25)); g.lineWidth = 0.9; g.stroke();
@@ -3815,6 +3821,14 @@ function drawPlayer(N) {
     g.globalAlpha = clamp(0.4 - h / 340, 0.08, 0.4); ell(g, cx, groundY - surf + 0.2, sw / 2, 1.6 - Math.min(0.8, h / 200)); g.fillStyle = '#05030c'; g.fill(); g.globalAlpha = 1;
   }
   if (P.ride) { drawRide(N); return; }
+  // at night the headlights and tail lights shine on the road surface below the car
+  if (N > 0.25 && surf > -100 && P.alt - surf < 50) {
+    const k = (1 - (P.alt - surf) / 50) * Math.min(1, (N - 0.25) * 2), ry = groundY - surf + 2.5;
+    additive(() => {
+      g.save(); g.translate(carX + 80, ry); g.scale(1, 0.18); glowAt(0, 0, 30, `rgba(220,240,255,${(0.45 * k).toFixed(3)})`); g.restore();
+      g.save(); g.translate(carX + 1, ry); g.scale(1, 0.2); glowAt(0, 0, 12, `rgba(255,40,60,${(0.5 * k).toFixed(3)})`); g.restore();
+    });
+  }
   // the thrusters light the road beneath the car when it flies low
   if (P.thrusting && surf > -100) {
     const h = P.alt - surf, k = clamp(1 - h / 70, 0, 1);
@@ -3833,7 +3847,14 @@ function drawPlayer(N) {
   // cold-gas thrusters, under the body
   if (P.thrusting) {
     const L = 16 + Math.random() * 7 + (P.fly > 0 ? 7 : 0);
-    for (const nx of NOZZLES) { glowAt(nx, 16, 16, `rgba(${flameOf().glow},0.85)`); thrustFlame(nx, 13.6, L * rand(0.88, 1.08), 2.9); }
+    const f = flameOf(), mist = 26 + Math.min(P.alt, 60) * 0.6;
+    for (const nx of NOZZLES) {
+      // a faint cone of cold gas spreading below the flame
+      const mg = g.createLinearGradient(0, 14, 0, 14 + mist);
+      mg.addColorStop(0, `rgba(${f.glow},0.28)`); mg.addColorStop(1, `rgba(${f.glow},0)`);
+      g.beginPath(); g.moveTo(nx - 2.2, 14); g.lineTo(nx - 2.2 - mist * 0.32, 14 + mist); g.lineTo(nx + 2.2 + mist * 0.32, 14 + mist); g.lineTo(nx + 2.2, 14); g.closePath(); g.fillStyle = mg; g.fill();
+      glowAt(nx, 16, 16, `rgba(${f.glow},0.85)`); thrustFlame(nx, 13.6, L * rand(0.88, 1.08), 2.9);
+    }
   }
   g.restore();
   if (P.flame > 0) {   // not a flamethrower
@@ -4615,11 +4636,11 @@ function drawPartList(list, front) {
         break;
       }
       case 'spark': glowing = true; break;
-      case 'streak': {
-        const k = 0.022;
-        g.globalAlpha = Math.min(1, a * 3); g.lineCap = 'round';
+      case 'streak': {   // a cold-gas pellet: a short dash that shrinks as it fades
+        const k = 0.006 + 0.006 * a;
+        g.globalAlpha = Math.min(1, a * 2.2) * 0.9; g.lineCap = 'round';
         g.beginPath(); g.moveTo(p.x, p.y); g.lineTo(p.x - p.vx * k, p.y - p.vy * k);
-        g.strokeStyle = '#3aa8ff'; g.lineWidth = 1.5; g.stroke(); g.strokeStyle = '#ffffff'; g.lineWidth = 0.6; g.stroke();
+        g.strokeStyle = flameOf().c[1]; g.lineWidth = 0.6 + 1.1 * a; g.stroke(); g.strokeStyle = '#ffffff'; g.lineWidth = 0.25 + 0.4 * a; g.stroke();
         break;
       }
       case 'star': g.globalAlpha = Math.min(1, a * 2); star(p.x, p.y, (p.s || 2.4) * (0.4 + 0.6 * Math.sin(a * Math.PI)), p.col); break;

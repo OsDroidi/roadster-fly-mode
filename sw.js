@@ -1,6 +1,6 @@
 // Roadster: Fly Mode service worker: keeps the game and its fonts on the device so it plays offline.
 // Bump VERSION when the icons or manifest change; the page itself refreshes from the network whenever it can.
-const VERSION = 'v1';
+const VERSION = 'v2';
 const SHELL = 'flymode-shell-' + VERSION, FONTS = 'flymode-fonts-' + VERSION;
 const FILES = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/apple-touch-icon.png'];
 const FONT_CSS = 'https://fonts.googleapis.com/css2?family=Cairo:wght@400..800&family=Montserrat:wght@400..800&display=swap';

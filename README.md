@@ -55,6 +55,9 @@ The game opens full screen from its icon. After the first visit everything it ne
 
 - A Tesla-style interface: a configurator-like title panel with Tesla blue buttons and segmented pickers, and an in-car dashboard with the gear (P R N D), speed, a speed limit sign, battery and the way to the next Supercharger, which goes light by day and dark by night like Tesla's Auto display
 - Installs to the home screen and plays offline
+- A Neon visual style in Settings: a synthwave sky with a striped sun, glowing mountain outlines, a neon road and a grid rushing underneath
+- Night lighting: the scene darkens and the headlights cut a beam through it, with cells, zappers and Superchargers glowing in the dark
+- Shiny paint, with a reflection sweeping across the car, and slow motion with a zoom on near misses
 - Settings: music and sound effects volume, speed units (auto, km/h or mph), graphics quality, reduced motion and vibration
 - Saudi holidays: fireworks and a free Saudi green paint on National Day and Founding Day, lanterns and a crescent moon through Ramadan, and double cells at Eid (dates follow the Umm al-Qura calendar; add `?event=national`, `founding`, `ramadan` or `eid` to the address to preview one)
 - Wheel styles (Aero, Turbine, Arachnid, Gold) and thruster colours to buy in the Garage

@@ -446,6 +446,8 @@ html[dir="rtl"] .bar b{inset:0 0 0 auto}
           <div class="seg" role="radiogroup" aria-labelledby="motionL"><button type="button" role="radio" data-set="motion" data-v="auto" data-t="auto">auto</button><button type="button" role="radio" data-set="motion" data-v="on" data-t="on">on</button><button type="button" role="radio" data-set="motion" data-v="off" data-t="off">off</button></div></div>
         <div class="opt"><span class="opt-l" id="ghostOnL" data-t="setGhost">Race your best run</span>
           <div class="seg" role="radiogroup" aria-labelledby="ghostOnL"><button type="button" role="radio" data-set="ghostOn" data-v="on" data-t="on">on</button><button type="button" role="radio" data-set="ghostOn" data-v="off" data-t="off">off</button></div></div>
+        <div class="opt"><span class="opt-l" id="styleL" data-t="setStyle">Visual style</span>
+          <div class="seg" role="radiogroup" aria-labelledby="styleL"><button type="button" role="radio" data-set="style" data-v="classic" data-t="classic">classic</button><button type="button" role="radio" data-set="style" data-v="neon" data-t="neon">neon</button></div></div>
         <div class="opt" id="optHaptics"><span class="opt-l" id="hapticsL" data-t="setHaptics">setHaptics</span>
           <div class="seg" role="radiogroup" aria-labelledby="hapticsL"><button type="button" role="radio" data-set="haptics" data-v="on" data-t="on">on</button><button type="button" role="radio" data-set="haptics" data-v="off" data-t="off">off</button></div></div>
       </div>
@@ -524,7 +526,7 @@ const defaultSave = () => ({
   paints: ['pearl'], paint: 'pearl', muted: false,
   rank: 0, done: 0, missions: null, seen: {}, music: true, toot: false,
   diff: 'normal', lang: null, world: 'saudi', daily: null,
-  volMusic: 100, volSfx: 100, units: 'auto', gfx: 'auto', motion: 'auto', haptics: 'on',
+  volMusic: 100, volSfx: 100, units: 'auto', gfx: 'auto', motion: 'auto', haptics: 'on', style: 'classic',
   wheels: ['aero'], wheel: 'aero', flames: ['blue'], flame: 'blue', ghostOn: 'on', ghost: null, ghostDaily: null, gifts: {}
 });
 let save = defaultSave();
@@ -574,6 +576,7 @@ const STR = {
     setGhost: 'Race your best run',
     ev_national: 'Happy Saudi National Day!', ev_founding: 'Happy Saudi Founding Day!', ev_ramadan: 'Ramadan Kareem', ev_eid: 'Eid Mubarak! Cells count double today.',
     evGift: 'A gift for the day: Saudi green paint.',
+    setStyle: 'Visual style', classic: 'Classic', neon: 'Neon',
     settings: 'Settings', setMusic: 'Music volume', setSfx: 'Sound effects', setUnits: 'Speed units', setGfx: 'Graphics', setMotion: 'Reduce motion', setHaptics: 'Vibration',
     auto: 'Auto', high: 'High', medium: 'Medium', low: 'Low', on: 'On', off: 'Off',
     settingsNote: 'Auto units follow the language: km/h in Arabic, mph in English. Auto graphics lowers the resolution if the game slows down, and auto motion follows your device.',
@@ -681,6 +684,7 @@ const STR = {
     setGhost: 'سابق أفضل جولة لك',
     ev_national: 'كل عام والوطن بخير! اليوم الوطني السعودي', ev_founding: 'يوم التأسيس السعودي، يوم بدينا!', ev_ramadan: 'رمضان كريم', ev_eid: 'عيدكم مبارك! الخلايا مضاعفة اليوم.',
     evGift: 'هدية اليوم: لون الأخضر السعودي.',
+    setStyle: 'نمط الرسومات', classic: 'كلاسيكي', neon: 'نيون',
     settings: 'الإعدادات', setMusic: 'صوت الموسيقى', setSfx: 'المؤثرات الصوتية', setUnits: 'وحدة السرعة', setGfx: 'الرسومات', setMotion: 'تقليل الحركة', setHaptics: 'الاهتزاز',
     auto: 'تلقائي', high: 'عالية', medium: 'متوسطة', low: 'منخفضة', on: 'تشغيل', off: 'إيقاف',
     settingsNote: 'الوحدة التلقائية تتبع اللغة: كم/س بالعربية وميل/س بالإنجليزية. الرسومات التلقائية تخفّض الدقة إذا تباطأت اللعبة، والحركة التلقائية تتبع إعدادات جهازك.',
@@ -2083,7 +2087,12 @@ function passEval(e) {
     else if (e.type === 'gas') addScore(25, t('hop'), '#ffffff');
   } else if (e.near && e.minGap >= 0 && e.minGap <= 6) closeCall();
 }
-function closeCall() { RUN.stats.close++; addMult(); addScore(50, t('closeCall'), '#7fd8ff'); SFX.close(); }
+function closeCall() {
+  RUN.stats.close++; addMult(); addScore(50, t('closeCall'), '#7fd8ff'); SFX.close();
+  // a close shave slows time for a moment, at most every few seconds
+  if (SLOW.cd <= 0) { SLOW.t = 0.55; SLOW.cd = 4; }
+}
+const SLOW = { t: 0, cd: 0, zoom: 1 };
 
 function collectCell(e) {
   e.dead = true;
@@ -2828,7 +2837,12 @@ function switchZone() {
 const INK = '#1a1530', LW = 1.1;
 let HUDF = '"Montserrat", "Cairo", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
 const font = (size, w) => `${w || 700} ${size}px ${HUDF}`;
-function camera(dx, dy) { g.setTransform(SC, 0, 0, SC, OX + (dx || 0) * SC, OY + (dy || 0) * SC); }
+// z zooms in about the car (slow-motion near misses); the HUD always draws at z = 1
+function camera(dx, dy, z) {
+  z = z || 1;
+  const fx = carX + 30, fy = groundY - P.alt - 8;
+  g.setTransform(SC * z, 0, 0, SC * z, OX + ((dx || 0) - fx * (z - 1)) * SC, OY + ((dy || 0) - fy * (z - 1)) * SC);
+}
 const U = n => n / CSSPX;   // CSS pixels to world units, for HUD sizes
 
 const SKYK = [
@@ -3783,11 +3797,27 @@ function drawCarAt(cx, cy, rot, alpha, sx, sy, paint) {
   if (alpha !== undefined) g.globalAlpha *= alpha;
   g.translate(cx, cy); if (rot) g.rotate(rot);
   g.translate(0, 8); if (sx) g.scale(sx, sy); g.translate(-30, -16);
-  blit(carBodySpr(p), 0, 0);
+  drawGlossy(carBodySpr(p), p);
   WHEEL_BLUR = mode === 'run' || mode === 'attract' ? clamp((W.speed - 140) / 160, 0, 1) : 0;
   roadsterWheels(P.wheelRot * TAU / 13);
   WHEEL_BLUR = 0;
   g.restore();
+}
+// the car body with a band of reflected light gliding over the paint every few seconds
+let glossC = null;
+function drawGlossy(c, p) {
+  const ph = ((W.time * 0.42) % 1.7) - 0.35;
+  if (ph < -0.2 || ph > 1.2 || save.gfx === 'low') { blit(c, 0, 0); return; }
+  if (!glossC || glossC.width !== c.width || glossC.height !== c.height) glossC = makeCanvas(c.width, c.height);
+  const x = glossC.getContext('2d'), w = c.width, h = c.height;
+  x.setTransform(1, 0, 0, 1, 0, 0); x.globalCompositeOperation = 'source-over'; x.clearRect(0, 0, w, h);
+  x.drawImage(c, 0, 0);
+  x.globalCompositeOperation = 'source-atop';
+  const cx = ph * w, bw = w * 0.16, metal = ['silver', 'black', 'grey', 'blue'].includes(p.id) ? 0.7 : 0.5;
+  const gr = x.createLinearGradient(cx - bw, 0, cx + bw, 0);
+  gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(0.5, `rgba(255,255,255,${metal})`); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  x.setTransform(1, 0, -0.6, 1, h * 0.3, 0); x.fillStyle = gr; x.fillRect(-w, 0, w * 3, h * 0.62);
+  g.drawImage(glossC, c.x0, c.y0, c.ww, c.hh);
 }
 function thrustFlame(x, y, L, w) {
   const gr = g.createLinearGradient(0, y, 0, y + L);
@@ -5010,33 +5040,136 @@ function drawVignette(N) {
   g.drawImage(vigC, -2, -2, IW + 4, IH + 4);
   g.globalAlpha = 1;
 }
+/* ---------- neon (synthwave) style ---------- */
+let neonSun = null;
+function neonSky() {
+  const gr = g.createLinearGradient(0, 0, 0, groundY);
+  gr.addColorStop(0, '#0b0322'); gr.addColorStop(0.55, '#2b0a4f'); gr.addColorStop(0.85, '#7a1a6e'); gr.addColorStop(1, '#ff3d8b');
+  g.fillStyle = gr; g.fillRect(-4, -4, IW + 8, groundY + 8);
+  g.fillStyle = 'rgba(255,255,255,0.7)';
+  for (const s of STARS) if (s.y < groundY * 0.55) { g.globalAlpha = s.b * (0.5 + 0.5 * Math.sin(W.time * s.f + s.ph)); g.fillRect(s.x, s.y, 0.7, 0.7); }
+  g.globalAlpha = 1;
+  // the striped sun sinking behind the mountains
+  const R = Math.min(groundY * 0.34, IW * 0.18);
+  if (!neonSun) neonSun = bake('neonsun', -51, -51, 51, 51, x => {
+    const sg = x.createLinearGradient(0, -50, 0, 50); sg.addColorStop(0, '#fff27a'); sg.addColorStop(0.5, '#ff9a3d'); sg.addColorStop(1, '#ff2e8a');
+    circ(x, 0, 0, 50); x.fillStyle = sg; x.fill();
+    x.globalCompositeOperation = 'destination-out';
+    for (let i = 0; i < 9; i++) { const y = -34 + i * 6.5, h = 0.8 + i * 0.6; x.fillRect(-52, y, 104, h); }
+    x.globalCompositeOperation = 'source-over';
+  });
+  const sx = IW * 0.62, sy = groundY - R * 0.45;
+  glowAt(sx, sy, R * 2.2, 'rgba(255,80,160,0.55)');
+  g.save(); g.translate(sx, sy); g.scale(R / 50, R / 50); blit(neonSun, 0, 0); g.restore();
+}
+function neonHills() {
+  const line = (base, par, seed, amp, col) => {
+    hillPath(base, par, seed, amp, false);
+    g.fillStyle = '#12052a'; g.fill();
+    g.lineWidth = 2.6; g.strokeStyle = col.replace('1)', '0.25)'); g.stroke();
+    g.lineWidth = 0.9; g.strokeStyle = col; g.stroke();
+  };
+  line(groundY - 12, 0.03, 5.3, groundY * 0.3 + 16, 'rgba(255,61,180,1)');
+  line(groundY - 7, 0.09, 3.1, groundY * 0.12 + 10, 'rgba(70,230,255,1)');
+}
+// the road becomes a dark strip with glowing edges, the ground a grid rushing toward you
+function neonGround() {
+  const top = groundY, bot = IH + 4;
+  g.fillStyle = 'rgba(10,2,24,0.82)'; g.fillRect(-4, top, IW + 8, bot - top);
+  g.lineWidth = 1.2; g.strokeStyle = '#ff3db4'; g.beginPath(); g.moveTo(-4, top + 0.5); g.lineTo(IW + 4, top + 0.5); g.stroke();
+  const rb = top + 15;
+  g.strokeStyle = '#46e6ff'; g.beginPath(); g.moveTo(-4, rb); g.lineTo(IW + 4, rb); g.stroke();
+  g.lineWidth = 1; g.strokeStyle = 'rgba(255,255,255,0.6)'; g.setLineDash([10, 12]); g.lineDashOffset = W.dist % 22;
+  g.beginPath(); g.moveTo(-4, top + 7.5); g.lineTo(IW + 4, top + 7.5); g.stroke(); g.setLineDash([]);
+  // the grid below the road: rows that spread apart as they come closer, columns that converge far away
+  const g0 = rb + 2, h = bot - g0, vx = IW * 0.62;
+  g.lineWidth = 0.7; g.strokeStyle = 'rgba(255,61,180,0.55)'; g.beginPath();
+  const ph = (W.dist * 0.02) % 1;
+  for (let i = 0; i < 9; i++) { const k = (i + ph) / 9, y = g0 + h * k * k; g.moveTo(-4, y); g.lineTo(IW + 4, y); }
+  const off = (W.dist * 0.9) % 24;
+  for (let x = -IW - off; x < IW * 2; x += 24) { g.moveTo(vx + (x - vx) * 0.25, g0); g.lineTo(x, bot); }
+  g.stroke();
+}
+// a magenta-to-cyan grade over the whole picture
+function neonGrade() {
+  const gr = g.createLinearGradient(0, 0, 0, IH);
+  gr.addColorStop(0, 'rgba(255,40,170,0.35)'); gr.addColorStop(1, 'rgba(40,200,255,0.3)');
+  g.globalCompositeOperation = 'soft-light'; g.fillStyle = gr; g.fillRect(-4, -4, IW + 8, IH + 8);
+  g.globalCompositeOperation = 'source-over';
+}
+
+/* ---------- night lighting: the scene darkens and lamps cut light into it ---------- */
+let lightC = null, lightSpr = null;
+function drawNightLight(N) {
+  const k = clamp((N - 0.45) / 0.4, 0, 1) * (save.style === 'neon' ? 0.55 : 1);
+  if (k <= 0 || save.gfx === 'low' || W.zone === 1) return;
+  const LS = 2, w = Math.ceil(IW * LS), h = Math.ceil(IH * LS);
+  if (!lightC || lightC.width !== w || lightC.height !== h) lightC = makeCanvas(w, h);
+  if (!lightSpr) {
+    lightSpr = makeCanvas(64, 64);
+    const x = lightSpr.getContext('2d'), gr = x.createRadialGradient(32, 32, 0, 32, 32, 32);
+    gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(0.5, 'rgba(0,0,0,0.55)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
+    x.fillStyle = gr; x.fillRect(0, 0, 64, 64);
+  }
+  const x = lightC.getContext('2d');
+  x.setTransform(1, 0, 0, 1, 0, 0); x.globalCompositeOperation = 'source-over'; x.clearRect(0, 0, w, h);
+  x.fillStyle = `rgba(4,6,20,${(0.42 * k).toFixed(3)})`; x.fillRect(0, 0, w, h);
+  x.setTransform(LS, 0, 0, LS, 0, 0); x.globalCompositeOperation = 'destination-out';
+  const hole = (px, py, r, a) => { x.globalAlpha = a === undefined ? 1 : a; x.drawImage(lightSpr, px - r, py - r, r * 2, r * 2); };
+  // the headlight cone, the glow around the car and its tail lights
+  if (mode !== 'crash' && mode !== 'over') {
+    const hx = carX + 58, hy = groundY - P.alt - 8, L = 190;
+    const cg = x.createLinearGradient(hx, 0, hx + L, 0); cg.addColorStop(0, 'rgba(0,0,0,0.95)'); cg.addColorStop(1, 'rgba(0,0,0,0)');
+    x.globalAlpha = 1; x.fillStyle = cg; x.beginPath(); x.moveTo(hx, hy - 3); x.lineTo(hx + L, hy - 34); x.lineTo(hx + L, hy + 46); x.lineTo(hx, hy + 4); x.closePath(); x.fill();
+    hole(carX + 30, hy, 42, 0.9); hole(hx + 10, groundY, 40, 0.6);
+  }
+  // everything that glows: cells, zappers, chargers, power-ups and the boss fight's shots
+  let n = 0;
+  for (const e of W.ents) {
+    if (n > 60) break;
+    const sx = e.x - W.dist;
+    if (sx < -60 || sx > IW + 60) continue;
+    if (e.type === 'cell') { hole(sx + 2.5, groundY - e.alt - 4, 10, 0.7); n++; }
+    else if (e.type === 'power' || e.type === 'ride') { hole(sx + 8, groundY - e.alt - 7, 22); n++; }
+    else if (e.type === 'charger') { hole(sx + e.w / 2, groundY - 20, 90, 0.9); n++; }
+    else if (e.type === 'zap') { const [x0, a0, x1, a1] = zapEnds(e); for (let i = 0; i <= 4; i++) { const t2 = i / 4; hole(lerp(x0, x1, t2) - W.dist, groundY - lerp(a0, a1, t2), 18, 0.8); } n++; }
+    else if (e.type === 'mon' || e.type === 'gas' || e.type === 'drone') { hole(sx + (e.w || 12) / 2, groundY - (e.alt || 0) - (e.h || 10) / 2, 16, 0.35); n++; }
+  }
+  for (const f of W.fx) if (!f.dead && f.sx !== undefined) hole(f.sx, groundY - (f.alt || 0), 24, 0.8);
+  if (W.boss) hole(W.boss.x, groundY - W.boss.alt, 70, 0.5);
+  x.globalAlpha = 1;
+  g.drawImage(lightC, 0, 0, IW, IH);
+}
 function render() {
   if (!SC || !renderReady) return;
-  const sky = skyAt(W.dayT), N = sky.n;
+  const neon = save.style === 'neon', sky = skyAt(W.dayT), N = neon ? 1 : sky.n;
   g.setTransform(1, 0, 0, 1, 0, 0);
   g.globalAlpha = 1; g.globalCompositeOperation = 'source-over'; g.lineJoin = 'round'; g.lineCap = 'round';
   const sh = W.shake > 0 && !reduceMotion ? W.shake * 0.7 : 0;
-  camera(sh ? rand(-sh, sh) : 0, sh ? rand(-sh, sh) : 0);
-  drawSky(sky); drawCelestial(N); drawClouds(sky, N);
+  camera(sh ? rand(-sh, sh) : 0, sh ? rand(-sh, sh) : 0, SLOW.zoom);
+  if (neon) neonSky(); else { drawSky(sky); drawCelestial(N); drawClouds(sky, N); }
   for (const f of glowFlash) glowAt(f.x, f.y, 26, 'rgba(255,240,200,0.6)', f.t * 3);
   if (EV.lanterns && W.zone === 0) drawLanterns(N);
-  drawPartList(skyParts, false); drawRocket(); drawSpaceRoadster(N); drawHills(sky); drawBooster();
+  drawPartList(skyParts, false); drawRocket(); drawSpaceRoadster(N); if (neon) neonHills(); else drawHills(sky); drawBooster();
   drawDecor(LAY[0], N); drawBeams(N); drawDecor(LAY[1], N);
   drawChargers(N); drawLoops(N);
-  drawRoad(N); drawChargerMarks(N); drawUnder(N); drawTrenches(N);
+  drawRoad(N); drawChargerMarks(N); drawUnder(N); if (neon) neonGround(); drawTrenches(N);
   g.translate(partShift, 0); drawPartList(parts, false); g.translate(-partShift, 0);
   drawEnts(N);
   drawBoss();
   drawGhost();
   drawPlayer(N);
   drawFx();
+  drawNightLight(N);
   g.translate(partShift, 0); drawPartList(parts, true); g.translate(-partShift, 0);
   drawSpeedLines();
   drawFloats();
   drawTruckWarnings();
   drawWarpAndWarning();
   camera();
+  if (neon) neonGrade();
   drawVignette(N);
+  if (SLOW.zoom > 1.005) { g.globalAlpha = (SLOW.zoom - 1) * 6; g.drawImage(vigC, -2, -2, IW + 4, IH + 4); g.globalAlpha = 1; }
   if (W.flash > 0 && !reduceMotion) { g.fillStyle = `rgba(255,255,255,${(W.flash * 0.75).toFixed(3)})`; g.fillRect(-12, -12, IW + 24, IH + 24); }
   if (mode === 'run' && !paused && W.time - SNAP.t > 1.2 && P.invuln <= 0) takeSnap();
   drawHUD(N);
@@ -5662,6 +5795,7 @@ for (const b of document.querySelectorAll('[data-set]')) b.addEventListener('cli
   SFX.click(); save[b.dataset.set] = b.dataset.v; persist(); applySettings(); syncSettings();
   if (b.dataset.set === 'haptics' && b.dataset.v === 'on') buzz(30);
   if (b.dataset.set === 'gfx' && b.dataset.v === 'auto') { QUAL = 1; resize(); }
+  if (b.dataset.set === 'style') { skyKey = ''; if (mode === 'attract') render(); }
 });
 $('btnSettings').addEventListener('click', () => { Sound.init(); SFX.click(); openSettings('scrTitle'); });
 $('btnPauseSettings').addEventListener('click', () => { SFX.click(); openSettings('scrPause'); });
@@ -5702,7 +5836,13 @@ function frame(now) {
   if (dt > 0.1) dt = 0.1;
   if (!paused) {
     acc += dt; let n = 0;
-    while (acc >= STEP && n < 14) { PREV.dist = W.dist; PREV.alt = P.alt; PREV.tilt = P.tilt; update(STEP * TS); acc -= STEP; n++; }
+    while (acc >= STEP && n < 14) {
+      PREV.dist = W.dist; PREV.alt = P.alt; PREV.tilt = P.tilt;
+      const slow = SLOW.t > 0 && mode === 'run' ? 0.35 : 1;
+      update(STEP * TS * slow); acc -= STEP; n++;
+      if (SLOW.t > 0) SLOW.t -= STEP; if (SLOW.cd > 0) SLOW.cd -= STEP;
+    }
+    SLOW.zoom = lerp(SLOW.zoom, SLOW.t > 0 && mode === 'run' && !reduceMotion ? 1.07 : 1, Math.min(1, dt * 10));
     if (n >= 14) acc = 0;
   }
   renderBlended(paused ? 1 : acc / STEP);

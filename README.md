@@ -14,6 +14,8 @@ The game opens in Arabic, with an English switch on the title screen, and you ca
 
 ![Boss fight against the Smog King](boss.png)
 
+![The Cybertruck leaping clear after smashing through a fuel tanker](vehicles.png)
+
 ![The Saudi world in Arabic: Kingdom Centre, Al Faisaliah, a Najdi fort and a camel](saudi.png)
 
 ## Play
@@ -43,11 +45,18 @@ The game opens full screen from its icon. After the first visit everything it ne
 | Switch language | EN / ع button on the title screen | Same |
 | Choose world and difficulty | Pickers on the title screen | Same |
 | Install to the home screen | Install app button on the title screen | Same, or the browser menu |
+| Cybertruck and Optimus: jump | Tap (hold for a higher jump; Optimus can jump again in the air) | Space, ↑, W or click |
+| Starship: flip between road and sky | Tap | Space, ↑, W or click |
+| Daily challenge | Daily tile on the title screen | Same |
+| Share your run | Share button on the game-over screen | Same |
 
 ## What's in it
 
 - A Tesla-style interface: a configurator-like title panel with Tesla blue buttons and segmented pickers, and an in-car dashboard with the gear (P R N D), speed, a speed limit sign, battery and the way to the next Supercharger, which goes light by day and dark by night like Tesla's Auto display
 - Installs to the home screen and plays offline
+- Vehicle pickups, like Jetpack Joyride's: a Cybertruck that smashes through cars, drones and monsters, Optimus with a double jump and a landing shockwave, and a Starship that flips between the road and the sky. Each lasts 16 seconds or until it takes a hit, which throws the Roadster clear instead of ending the run
+- A daily challenge: the same course for everyone each day (the world alternates between Saudi Arabia and Texas), today's best, and a streak that pays 100 cells a day, up to 700
+- A share card: one tap makes a picture of your run (the road just before you crashed, your score, distance, cells and top speed) to post on WhatsApp, Snapchat or X
 - Two worlds for Earth: Saudi Arabia (Riyadh's Kingdom Centre and Al Faisaliah, Najdi mud-brick from Diriyah, palms, dunes, camels, Bedouin tents, AlUla's Elephant Rock and NEOM's The Line, with a Dust King boss) and the Texas launch site
 - Arabic (right to left, km/h and km) and English, switchable on the title screen
 - Easy, Normal and Hard difficulty: speed, obstacle spacing, battery drain, missiles, zappers and boss toughness all change, and harder levels score more

@@ -193,6 +193,15 @@ html[lang="ar"] .logo-word{font-weight:600;line-height:1.3}
 html[data-theme="dark"] .meme{color:#7d9eff}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .meme{color:#7d9eff}}
 .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
+/* the title's quick controls, like the icon row in the Tesla app: icon over label */
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;width:100%}
+.btn.tile{flex-direction:column;gap:4px;min-height:62px;padding:8px 6px;font-size:.84rem}
+.btn.tile .ico{width:20px;height:20px}
+.badge{position:absolute;top:6px;inset-inline-end:8px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;display:grid;place-items:center;font-size:.68rem;font-weight:600;line-height:1;color:var(--text);background:var(--surface-3)}
+.badge.due{color:#fff;background:var(--blue)}
+.badge.dot{min-width:8px;width:8px;height:8px;padding:0;top:9px;inset-inline-end:11px}
+.daily-note{font-size:.84rem;font-weight:500;color:var(--text);background:var(--surface-2);border-radius:8px;padding:8px 12px}
+.sl-end{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap}
 .opts{display:grid;gap:10px;width:100%}
 .opt{display:grid;grid-template-columns:minmax(70px,auto) 1fr;align-items:center;gap:12px}
 .opt-l{font-size:.84rem;font-weight:500;color:var(--text-dim)}
@@ -206,8 +215,8 @@ html[data-theme="dark"] .meme{color:#7d9eff}
 .foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
 .foot .fine{flex:1 1 160px}
 .foot .tip{flex-basis:100%;font-size:.8rem;color:var(--text)}
-#btnInstall{background:var(--surface-2)}
-#btnInstall:hover{background:var(--surface-3)}
+#btnInstall,#btnShare{background:var(--surface-2)}
+#btnInstall:hover,#btnShare:hover{background:var(--surface-3)}
 html[dir="rtl"] [data-back] .ico{transform:scaleX(-1)}
 
 /* specs, the way Tesla lists range and top speed: the figure big, the label small beneath */
@@ -233,7 +242,7 @@ html[dir="rtl"] [data-back] .ico{transform:scaleX(-1)}
   #scrTitle .brand{grid-area:brand;gap:6px}
   #scrTitle .stats{grid-area:stats;align-self:end}
   #btnDrive{grid-area:drive}
-  #scrTitle .btn-row{grid-area:row}
+  #scrTitle .tiles{grid-area:row}
   #scrTitle .opts{grid-area:opts;align-self:start}
   #scrTitle .opt{grid-template-columns:1fr;gap:4px}
   #scrTitle .rule,#scrTitle .meme{display:none}
@@ -354,9 +363,10 @@ html[dir="rtl"] .bar b{inset:0 0 0 auto}
         <div><dt data-t="rank">Rank</dt><dd id="tRank" class="wrap">Test driver</dd></div>
       </dl>
       <button class="btn primary" id="btnDrive" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2.2"/><path d="M3.8 11h6M14.2 11h6M12 14.2v6.3"/></svg><span data-t="drive">Drive</span></button>
-      <div class="btn-row">
-        <button class="btn" id="btnGarage" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 15.5l1.7-4.4A2.2 2.2 0 0 1 7.2 9.6h9.6a2.2 2.2 0 0 1 2 1.5l1.7 4.4"/><path d="M3.5 15.5h17v2.8h-17z"/><circle cx="7.5" cy="18.3" r="1.6"/><circle cx="16.5" cy="18.3" r="1.6"/></svg><span data-t="garage">Garage</span></button>
-        <button class="btn" id="btnMissions" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 21V4"/><path d="M5.5 4.5h11.5l-2.4 4.2 2.4 4.3H5.5"/></svg><span data-t="missions">Missions</span></button>
+      <div class="tiles">
+        <button class="btn tile" id="btnDaily" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="2.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/><path d="M9.5 15l2 2 3.5-4"/></svg><span data-t="daily">Daily</span><b class="badge" id="dailyBadge" hidden></b></button>
+        <button class="btn tile" id="btnGarage" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 15.5l1.7-4.4A2.2 2.2 0 0 1 7.2 9.6h9.6a2.2 2.2 0 0 1 2 1.5l1.7 4.4"/><path d="M3.5 15.5h17v2.8h-17z"/><circle cx="7.5" cy="18.3" r="1.6"/><circle cx="16.5" cy="18.3" r="1.6"/></svg><span data-t="garage">Garage</span></button>
+        <button class="btn tile" id="btnMissions" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 21V4"/><path d="M5.5 4.5h11.5l-2.4 4.2 2.4 4.3H5.5"/></svg><span data-t="missions">Missions</span></button>
       </div>
       <div class="rule" aria-hidden="true"></div>
       <div class="opts">
@@ -421,7 +431,9 @@ html[dir="rtl"] .bar b{inset:0 0 0 auto}
     <div class="card">
       <h2 id="overH" class="sr-only" data-t="runOver">Run over</h2>
       <p class="cause" id="oCause">You hit a gas car.</p>
-      <div class="scoreline"><span class="big" id="oScore">0</span><span class="newbest" id="oNew" data-t="newBest" hidden>New best</span></div>
+      <p class="daily-note" id="oDaily" hidden></p>
+      <div class="scoreline"><span class="big" id="oScore">0</span><span class="sl-end"><span class="newbest" id="oNew" data-t="newBest" hidden>New best</span><button class="btn small" id="btnShare" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3.5"/><path d="M7.5 8L12 3.5 16.5 8"/><path d="M5 12.5v6A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5v-6"/></svg><span data-t="share">Share</span></button></span></div>
+      <p class="dim small" id="shareMsg" aria-live="polite" hidden></p>
       <dl class="stats">
         <div><dt data-t="distance">Distance</dt><dd id="oDist">0 mi</dd></div>
         <div><dt data-t="cells">Cells</dt><dd id="oCells">0</dd></div>
@@ -449,10 +461,11 @@ html[dir="rtl"] .bar b{inset:0 0 0 auto}
 const TAU = Math.PI * 2;
 const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
 const lerp = (a, b, t) => a + (b - a) * t;
-const rand = (a = 0, b = 1) => a + Math.random() * (b - a);
-const randi = (a, b) => Math.floor(a + Math.random() * (b - a + 1));
-const chance = p => Math.random() < p;
-const pick = a => a[Math.floor(Math.random() * a.length)];
+let RNG = Math.random;   // the course builder swaps in a seeded generator for the daily challenge
+const rand = (a = 0, b = 1) => a + RNG() * (b - a);
+const randi = (a, b) => Math.floor(a + RNG() * (b - a + 1));
+const chance = p => RNG() < p;
+const pick = a => a[Math.floor(RNG() * a.length)];
 const hex2rgb = h => { const n = parseInt(h.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; };
 const rgbStr = (c, a = 1) => a >= 1 ? `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})` : `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${a})`;
 const mixC = (a, b, t) => [lerp(a[0], b[0], t), lerp(a[1], b[1], t), lerp(a[2], b[2], t)];
@@ -470,7 +483,7 @@ const defaultSave = () => ({
   up: { battery: 0, thrust: 0, coil: 0, plaid: 0 },
   paints: ['pearl'], paint: 'pearl', muted: false,
   rank: 0, done: 0, missions: null, seen: {}, music: true, toot: false,
-  diff: 'normal', lang: null, world: 'saudi'
+  diff: 'normal', lang: null, world: 'saudi', daily: null
 });
 let save = defaultSave();
 try {
@@ -503,6 +516,11 @@ const STR = {
     langBtn: 'ع', langAria: 'التبديل إلى العربية',
     tagline: coarse => `${coarse ? 'Hold anywhere' : 'Hold Space or the mouse button'} to fire the cold-gas thrusters. Dodge zappers and missiles, stomp the monsters, beat the bosses and make it to Mars.`,
     install: 'Install app', installTip: 'Tap the Share button, then Add to Home Screen.',
+    daily: 'Daily', dailyAria: (w, s, b, due) => `Daily challenge: ${w}${s ? `, ${s}-day streak` : ''}${b ? `, today's best ${b}` : ''}${due ? ', not played yet today' : ''}`,
+    dailyStart: w => `Daily challenge in ${w}: the same course for everyone today`,
+    dailyOver: (b, s, r) => `Daily challenge · Today's best ${b} · ${s}-day streak${r ? ` · +${r} cells` : ''}`,
+    share: 'Share', shareText: s => `I scored ${s} in Roadster: Fly Mode. Can you beat it?`, shareSaved: 'Image saved and the link copied. Post them together.',
+    scoreLbl: 'Score', topSpeed: 'Top speed', beatIt: 'Can you beat it?', dailyTitle: 'Daily challenge',
     drive: 'Drive', parked: 'Parked', garage: 'Garage', missions: 'Missions', best: 'Best', cells: 'Cells', rank: 'Rank',
     fine: 'Unofficial fan game. Not affiliated with Tesla, Inc.',
     world: 'World', saudi: 'Saudi Arabia', texas: 'Texas', difficulty: 'Difficulty', easy: 'Easy', normal: 'Normal', hard: 'Hard',
@@ -538,6 +556,12 @@ const STR = {
     hLoop: 'Fan grip on: the Roadster sticks to the track', hBoss: 'Grab the blue coil orbs to zap the boss',
     hMissile: 'Missile! Move away from its height before it locks on', hMonster: 'Land on monsters or blast them with your thrusters',
     hWorm: 'Sandworm! Fly high over it', hZapper: 'Zapper! Steer clear of the electric arc',
+    // vehicles
+    ride_truck: 'Cybertruck', ride_bot: 'Optimus', ride_ship: 'Starship', ejected: 'EJECTED', quake: 'SHOCKWAVE',
+    hRide_truck: 'Cybertruck! Press to jump. It smashes through cars, drones and monsters.',
+    hRide_bot: 'Optimus! Press to jump, then press again in the air to double jump.',
+    hRide_ship: 'Starship! Press to flip between the road and the sky.',
+    m_rides: n => `Ride ${n} vehicle${n > 1 ? 's' : ''} in one run`,
     // bosses
     boss_smog: 'Smog King', boss_dust: 'Dust King', boss_mother: 'Mothership',
     // paints
@@ -590,6 +614,11 @@ const STR = {
     langBtn: 'EN', langAria: 'Switch to English',
     tagline: coarse => `${coarse ? 'اضغط على الشاشة مطوّلًا' : 'اضغط مطوّلًا على المسافة أو زر الفأرة'} لتشغيل دافعات الغاز البارد. تفادَ الصواعق والصواريخ، وادعس الوحوش، واهزم الزعماء، واوصل إلى المريخ.`,
     install: 'ثبّت اللعبة', installTip: 'اضغط زر المشاركة، ثم «إضافة إلى الشاشة الرئيسية».',
+    daily: 'اليومي', dailyAria: (w, s, b, due) => `التحدي اليومي: ${w}${s ? `، سلسلة ${nAr(s, ['يوم واحد', 'يومين', 'أيام', 'يومًا'])}` : ''}${b ? `، أفضل نتيجة اليوم ${b}` : ''}${due ? '، لم تلعبه اليوم بعد' : ''}`,
+    dailyStart: w => `التحدي اليومي في ${w}: المسار نفسه للجميع اليوم`,
+    dailyOver: (b, s, r) => `التحدي اليومي · أفضل نتيجة اليوم ${b} · سلسلة ${nAr(s, ['يوم واحد', 'يومين', 'أيام', 'يومًا'])}${r ? ` · +${r} خلية` : ''}`,
+    share: 'مشاركة', shareText: s => `سجّلت ${s} نقطة في رودستر: وضع الطيران. تقدر تتفوّق عليّ؟`, shareSaved: 'حُفظت الصورة ونُسخ الرابط. انشرهما معًا.',
+    scoreLbl: 'النقاط', topSpeed: 'أعلى سرعة', beatIt: 'تقدر تتفوّق عليّ؟', dailyTitle: 'التحدي اليومي',
     drive: 'انطلق', parked: 'متوقفة', garage: 'الكراج', missions: 'المهام', best: 'الأفضل', cells: 'الخلايا', rank: 'الرتبة',
     fine: 'لعبة غير رسمية من المعجبين، ولا علاقة لها بشركة تسلا.',
     world: 'العالم', saudi: 'السعودية', texas: 'تكساس', difficulty: 'الصعوبة', easy: 'سهل', normal: 'عادي', hard: 'صعب',
@@ -622,6 +651,11 @@ const STR = {
     hLoop: 'قبضة المراوح شغّالة: الرودستر ملتصق بالمسار', hBoss: 'التقط الكرات الزرقاء لتصعق الزعيم',
     hMissile: 'صاروخ! غيّر ارتفاعك قبل أن يثبّت عليك', hMonster: 'اهبط على الوحوش أو فجّرها بدافعاتك',
     hWorm: 'دودة الرمال! حلّق عاليًا فوقها', hZapper: 'صاعق! ابتعد عن القوس الكهربائي',
+    ride_truck: 'سايبرترك', ride_bot: 'أوبتيمس', ride_ship: 'ستارشيب', ejected: 'انقذفت!', quake: 'موجة صادمة',
+    hRide_truck: 'سايبرترك! اضغط للقفز، وهو يحطّم السيارات والدرونات والوحوش.',
+    hRide_bot: 'أوبتيمس! اضغط للقفز، ثم اضغط مرة ثانية في الهواء لقفزة مزدوجة.',
+    hRide_ship: 'ستارشيب! اضغط لتنقلب بين الطريق والسماء.',
+    m_rides: n => `اركب ${nAr(n, ['مركبة واحدة', 'مركبتين', 'مركبات', 'مركبة'])} في جولة واحدة`,
     boss_smog: 'ملك الدخان', boss_dust: 'ملك العجاج', boss_mother: 'السفينة الأم',
     paint_pearl: 'أبيض لؤلؤي', paint_red: 'أحمر فائق', paint_blue: 'أزرق عميق', paint_silver: 'فضّي لامع', paint_grey: 'رمادي خفي',
     paint_green: 'أخضر سعودي', paint_cherry: 'كرزي ليلي', paint_black: 'أسود ماسي',
@@ -675,7 +709,29 @@ const STR = {
   }
 };
 function t(k, ...a) { const v = STR[LANG][k] !== undefined ? STR[LANG][k] : STR.en[k]; return typeof v === 'function' ? v(...a) : v; }
-const SAUDI = () => save.world !== 'texas';
+// the daily challenge: one course a day for everyone, on that day's world at Normal difficulty
+const DAILY = { on: false, day: '', world: 'saudi', rng: null };
+const worldNow = () => DAILY.on ? DAILY.world : save.world;
+const SAUDI = () => worldNow() !== 'texas';
+const DAY_MS = 86400000, dayKey = ms => new Date(ms).toISOString().slice(0, 10);
+// today's challenge (days run on UTC, so everyone shares one course): its date, world and course seed
+function dailyToday() {
+  const n = Math.floor(Date.now() / DAY_MS);
+  return { day: dayKey(n * DAY_MS), world: n % 2 ? 'texas' : 'saudi', seed: Math.imul(n, 2654435761) >>> 0 };
+}
+// the daily record, with today's best cleared when the date changes
+function dailyRec() {
+  let d = save.daily;
+  if (!d || typeof d !== 'object') d = save.daily = { day: '', best: 0, streak: 0, last: '' };
+  const today = dailyToday().day;
+  if (d.day !== today) { d.day = today; d.best = 0; }
+  return d;
+}
+// the streak still counts if the last daily was today or yesterday
+function dailyStreak() {
+  const d = dailyRec(), today = dailyToday().day;
+  return d.last === today || d.last === dayKey(Date.parse(today) - DAY_MS) ? d.streak : 0;
+}
 
 /* =========================================================
    Art data: paints, vehicles, power-ups and cell formations
@@ -1068,13 +1124,13 @@ const PX2MPH = 0.682, CELL_CHARGE = 0.4, DAY_LEN = 150, REVIVE_COST = 250;
 // the car's hitboxes: lower body and canopy (forgiving, a few px inside the sprite)
 const CAR_BOXES = [{ dx: 3, w: 54, b: 1, t: 10 }, { dx: 16, w: 26, b: 10, t: 15 }];
 let mode = 'attract', paused = false;
-const W = { dist: 0, speed: 0, scroll: 0, time: 0, ents: [], spawnX: 0, last: '', script: [], nextCharger: 0, nextLoop: 0, nextPower: 0,
+const W = { dist: 0, speed: 0, scroll: 0, time: 0, ents: [], spawnX: 0, last: '', script: [], nextCharger: 0, nextLoop: 0, nextPower: 0, nextRide: 0,
   shake: 0, flash: 0, hitstop: 0, dayT: 0, startPhase: 0, rocketT: 0, rocket: null, starlinkT: 0, starlink: null, tunnelT: 0, tunnel: null,
   fx: [], boss: null, bossWarn: 0, bossKind: '', bossCount: 0, nextBoss: Infinity, zone: 0, marsMix: 0, zoneDelay: 0, warpT: 0, zap: null,
   space: null, spaceT: 30, booster: null, missileT: 0 };
 const P = { alt: 0, vy: 0, onGround: true, gas: 1.4, gasMax: 1.4, battery: 100, thrusting: false, tilt: 0, invuln: 0,
   plaid: 0, plaidMax: 1, coil: 0, coilMax: 1, fly: 0, flyMax: 5, shield: false, riding: null, loop: null, wheelRot: 0,
-  boost: 0, boostV: 0, wreck: null, lowWarn: 0, charging: false, ghostT: 0, ghosts: [], flame: 0, flameMax: 5, tootT: 0, sq: 0, sqV: 0, dustT: 0 };
+  boost: 0, boostV: 0, wreck: null, lowWarn: 0, charging: false, ghostT: 0, ghosts: [], flame: 0, flameMax: 5, tootT: 0, sq: 0, sqV: 0, dustT: 0, ride: null };
 const RUN = { score: 0, cells: 0, banked: 0, chain: 0, chainT: 0, stats: {}, revived: false, cause: '', overT: 0, startDist: 0,
   tips: {}, time: 0, live: 0, t060: 0, t060Show: 0, newBest: false, counted: false, speedAtCrash: 0, missionT: 0, lowShown: false, mult: 1, multT: 0, stompChain: 0, ludi: false, funded: false, bump: 0 };
 const L = { t: 0, greenAt: 0, lights: 0, green: false, done: false };
@@ -1096,7 +1152,7 @@ const DIFFS = {
   normal: { speed: 1, ramp: 1, gap: 1, drain: 1, missileAt: 2600, missile: 1, volley: true, zap: 1, boss: 0, score: 1 },
   hard: { speed: 1.12, ramp: 1.45, gap: 0.82, drain: 1.25, missileAt: 1500, missile: 0.65, volley: true, zap: 1.4, boss: 2, score: 1.5 }
 };
-const DF = () => mode === 'attract' ? DIFFS.normal : (DIFFS[save.diff] || DIFFS.normal);
+const DF = () => mode === 'attract' || DAILY.on ? DIFFS.normal : (DIFFS[save.diff] || DIFFS.normal);
 const diff = () => mode === 'attract' ? 0.1 : clamp(runDist() / 48000 * DF().ramp, 0, 1);
 function targetSpeed() { return mode === 'attract' ? 175 : (160 + 180 * (1 - Math.exp(-runDist() / 30000))) * DF().speed; }
 const plaidDur = () => 4 + save.up.plaid;
@@ -1104,18 +1160,18 @@ const coilDur = () => 6 + 2 * save.up.coil;
 
 function resetPlayer() {
   Object.assign(P, { alt: 0, vy: 0, onGround: true, thrusting: false, tilt: 0, invuln: 0, plaid: 0, coil: 0, fly: 0, shield: false,
-    riding: null, loop: null, wheelRot: 0, boost: 0, boostV: 0, wreck: null, lowWarn: 0, charging: false, battery: 100, ghostT: 0, ghosts: [], flame: 0, tootT: 0, sq: 0, sqV: 0, dustT: 0 });
+    riding: null, loop: null, wheelRot: 0, boost: 0, boostV: 0, wreck: null, lowWarn: 0, charging: false, battery: 100, ghostT: 0, ghosts: [], flame: 0, tootT: 0, sq: 0, sqV: 0, dustT: 0, ride: null });
   P.gasMax = 1.4 + 0.3 * save.up.thrust; P.gas = P.gasMax;
 }
 function resetRun() {
   Object.assign(RUN, { score: 0, cells: 0, banked: 0, chain: 0, chainT: 0, revived: false, cause: '', overT: 0, startDist: 0, tips: {},
-    time: 0, live: 0, t060: 0, t060Show: 0, newBest: false, counted: false, speedAtCrash: 0, missionT: 0, lowShown: false, mult: 1, multT: 0, stompChain: 0, ludi: false, funded: false, bump: 0 });
+    time: 0, live: 0, t060: 0, t060Show: 0, newBest: false, counted: false, speedAtCrash: 0, missionT: 0, lowShown: false, mult: 1, multT: 0, stompChain: 0, ludi: false, funded: false, bump: 0, dailyReward: 0, dailyBest: false });
   RUN.stats = { cells: 0, hops: 0, roofs: 0, loops: 0, supers: 0, smash: 0, close: 0, air: 0, mph: 0, chain: 0, perfect: 0, powers: 0,
-    stomps: 0, blasts: 0, monsters: 0, bosses: 0, mars: 0, mult: 1, zaps: 0, flames: 0, spotted: 0, ludi: 0, dodged: 0 };
+    stomps: 0, blasts: 0, monsters: 0, bosses: 0, mars: 0, mult: 1, zaps: 0, flames: 0, spotted: 0, ludi: 0, dodged: 0, rides: 0 };
 }
 function newWorld(attract) {
   W.dist = 0; W.speed = attract ? 175 : 0; W.scroll = 0; W.ents = []; W.spawnX = attract ? 300 : 560; W.last = '';
-  W.nextCharger = attract ? 1700 : 4600; W.nextLoop = attract ? 950 : 6200; W.nextPower = attract ? Infinity : 2300;
+  W.nextCharger = attract ? 1700 : 4600; W.nextLoop = attract ? 950 : 6200; W.nextPower = attract ? Infinity : 2300; W.nextRide = attract ? Infinity : 4400;
   W.script = (!attract && save.runs < 2) ? ['ribbon', 'cones', 'smoglings', 'sedan', 'ribbon', 'bats', 'pickup'] : ['smoglings'];
   W.shake = 0; W.flash = 0; W.hitstop = 0;
   W.fx = []; W.boss = null; W.bossWarn = 0; W.bossCount = 0; W.nextBoss = attract ? Infinity : 7600;
@@ -1443,7 +1499,7 @@ function pickChunk(d) {
   const list = (W.zone === 1 ? CHUNK_LIST_MARS : CHUNK_LIST).filter(c => d >= c.min && c.k !== W.last);
   const wt = c => c.w * (c.min > 0.2 ? 1 + d : 1) * (c.k.startsWith('zap') ? DF().zap : 1);
   let tot = 0; for (const c of list) tot += wt(c);
-  let r = Math.random() * tot;
+  let r = RNG() * tot;
   for (const c of list) { r -= wt(c); if (r <= 0) return c.k; }
   return list[list.length - 1].k;
 }
@@ -1470,7 +1526,117 @@ function chunkPower(x) {
   W.nextPower = x + rand(2600, 4200);
   return 30;
 }
+/* ---------- vehicles: a token turns the Roadster into something else until it takes a hit or time runs out ---------- */
+const RIDE_TIME = 16;
+// col: token and timer colour; smash: drives through anything breakable; speed: cruising boost; boxes: hitboxes like CAR_BOXES
+const RIDES = {
+  truck: { col: '#c7d0dc', smash: true, speed: 1.1, boxes: [{ dx: 0, w: 64, b: 1, t: 13 }, { dx: 14, w: 36, b: 13, t: 20 }] },
+  bot: { col: '#7d9eff', smash: false, speed: 1, boxes: [{ dx: 23, w: 13, b: 0, t: 37 }] },
+  ship: { col: '#ff9a3d', smash: true, speed: 1.15, boxes: [{ dx: 0, w: 64, b: 2, t: 14 }] }
+};
+const carBoxes = () => P.ride ? RIDES[P.ride.k].boxes : CAR_BOXES;
+function chunkRide(x) {
+  const alt = randi(20, Math.max(22, Math.min(70, maxAlt - 30)));
+  cArc(x - 48, 46, 6, Math.max(4, alt - 12), 5);
+  addEnt({ type: 'ride', x: x + 4, w: 16, alt, kind: pick(['truck', 'bot', 'ship']), ph: 0 });
+  W.nextRide = x + rand(6500, 9500);
+  return 30;
+}
+function startRide(k) {
+  const cx = carX + 30, cy = groundY - P.alt - 10;
+  sparks(cx, cy, 22, [RIDES[k].col, '#ffffff', '#ffd23f'], 240);
+  smoke(cx, cy, 10, { sx: 26, sy: 8, col: '#eceaf2', a: 0.6, vx0: -80, vx1: 80, vy0: -60, vy1: 20, r2a: 6, r2b: 11 });
+  if (mode !== 'run') return;
+  // prev starts held, so a finger already down does not fire the first jump or flip
+  P.ride = { k, t: RIDE_TIME, max: RIDE_TIME, jumps: 0, g: P.alt > maxAlt / 2 ? 1 : -1, o: P.alt > maxAlt / 2 ? -1 : 1, prev: true };
+  P.thrusting = false; P.fly = 0; P.gas = P.gasMax; P.riding = null;
+  if (k === 'bot') P.alt = Math.min(P.alt, maxAlt - 22);
+  if (k !== 'ship' && P.alt > 0.5) P.onGround = false;
+  RUN.stats.rides++; addScore(100);
+  banner(t('ride_' + k), k === 'truck' ? '#ffd23f' : RIDES[k].col, 1.6);
+  hint2('ride_' + k, t('hRide_' + k));
+  SFX.power(); W.shake = Math.max(W.shake, reduceMotion ? 0 : 3);
+}
+// hit: the vehicle is wrecked and throws the Roadster clear; otherwise it simply runs out
+function endRide(hitBy) {
+  const r = P.ride; if (!r) return;
+  P.ride = null; P.gas = P.gasMax; P.tilt = 0; P.riding = null;
+  const cx = carX + 30, cy = groundY - Math.max(0, P.alt) - 10;
+  if (hitBy) {
+    boom(cx, cy, 1.1);
+    for (let i = 0; i < 8; i++) addPart({ x: cx + rand(-24, 24), y: cy + rand(-6, 6), vx: rand(-80, 220), vy: rand(-260, -80), life: rand(1, 1.5), max: 1.5, kind: 'debris', s: rand(0.9, 1.8), col: pick([RIDES[r.k].col, '#3d424b', '#ffffff']), rot: rand(0, TAU), vr: rand(-14, 14), grav: 700, floor: true, world: true, front: true });
+    SFX.smash(); W.shake = Math.max(W.shake, reduceMotion ? 0 : 6);
+    P.invuln = 1.6; P.vy = Math.max(P.vy, 240); P.onGround = false;
+    floatText(t('ejected'), cx, cy - 16, '#ff6b7a');
+  } else {
+    smoke(cx, cy, 12, { sx: 26, sy: 8, col: '#eceaf2', a: 0.6, vx0: -80, vx1: 80, vy0: -60, vy1: 20, r2a: 6, r2b: 11 });
+    P.invuln = Math.max(P.invuln, 0.8);
+    if (P.alt > 0.5) P.onGround = false;
+  }
+}
+function stepRide(dt) {
+  const r = P.ride, k = r.k, down = holding && !latch, press = down && !r.prev;
+  r.prev = down;
+  P.thrusting = false;
+  if (k === 'ship') {
+    // a tap flips gravity: the ship falls to the road or up to the sky, turning over on the way
+    if (press) { r.g = -r.g; P.onGround = false; P.vy = r.g * 60; SFX.hop(); }
+    r.o += clamp(-r.g - r.o, -7 * dt, 7 * dt);
+    P.vy = clamp(P.vy + r.g * 1500 * dt, -460, 460);
+    P.alt += P.vy * dt;
+    if (P.alt <= 3) { P.alt = 3; P.vy = 0; P.onGround = true; } else P.onGround = false;
+    if (P.alt >= maxAlt) { P.alt = maxAlt; P.vy = 0; }
+    if (Math.random() < 0.6) addPart({ x: carX - 4, y: groundY - P.alt - 8 + rand(-3, 3), vx: -rand(60, 140), vy: rand(-20, 20), life: rand(0.25, 0.45), max: 0.45, kind: 'smoke', r: 1.5, r2: rand(3, 6), col: '#ffd9b0', a: 0.45, drag: 1.2, world: true });
+    return;
+  }
+  if (P.onGround) {
+    const sf = surfaceUnder();
+    if (sf.alt < P.alt - 0.5) { P.onGround = false; P.riding = null; } else { P.alt = sf.alt; P.riding = sf.ent; }
+  }
+  if (press) {
+    if (P.onGround) { P.vy = k === 'truck' ? 380 : 360; P.onGround = false; P.riding = null; r.jumps = 1; takeoff(); }
+    else if (k === 'bot' && r.jumps < 2) {   // Optimus double-jumps
+      P.vy = 340; r.jumps = 2; SFX.hop();
+      smoke(carX + 29, groundY - P.alt, 6, { sx: 6, col: '#dfe8ff', a: 0.6, vx0: -60, vx1: 60, vy0: 10, vy1: 60, r2a: 3, r2b: 6 });
+    }
+  }
+  if (!P.onGround) {
+    // holding on through the rise gives a higher jump
+    P.vy = clamp(P.vy - GRAV * 1.15 * (down && P.vy > 0 ? 0.6 : 1) * dt, -MAX_FALL, 600);
+    P.alt += P.vy * dt;
+    const top = maxAlt - (k === 'bot' ? 22 : 6);
+    if (P.alt > top) { P.alt = top; if (P.vy > 0) P.vy = 0; }
+    if (P.vy <= 0) {
+      const sf = surfaceUnder();
+      if (sf.alt > -100 && P.alt <= sf.alt) {
+        const impact = -P.vy, dbl = r.jumps === 2;
+        land(sf); r.jumps = 0;
+        if (k === 'bot' && dbl && impact > 250) shockwave();
+        else if (k === 'truck' && impact > 300) W.shake = Math.max(W.shake, reduceMotion ? 0 : 3);
+      }
+    }
+  }
+  // dropping into a trench wrecks the vehicle; the Roadster bounces back out
+  if (P.alt < -3) endRide(true);
+}
+// Optimus landing from a double jump: a shockwave that flattens ground monsters and cones nearby
+function shockwave() {
+  const cx = W.dist + carX + 29;
+  smoke(carX + 29, groundY - P.alt - 1, 14, { sx: 30, col: '#dfe8ff', a: 0.55, vx0: -160, vx1: 160, vy0: -40, vy1: -6, r2a: 4, r2b: 9 });
+  W.shake = Math.max(W.shake, reduceMotion ? 0 : 5); SFX.land();
+  for (const e of W.ents) {
+    if (e.dead || Math.abs(e.x + (e.w || 10) / 2 - cx) > 90) continue;
+    if (e.type === 'mon' && (e.alt || 0) < 20 && !['worm', 'ufo', 'bat'].includes(e.kind)) killMon(e, 'quake');
+    else if (e.type === 'cone') smash(e);
+  }
+}
+// in the daily challenge the course comes from the day's seed, so every player meets the same obstacles
 function spawnContent() {
+  if (!DAILY.on || mode === 'attract') { spawnChunks(); return; }
+  RNG = DAILY.rng;
+  try { spawnChunks(); } finally { RNG = Math.random; }
+}
+function spawnChunks() {
   const ahead = W.dist + IW + 260;
   if (W.boss || W.bossWarn > 0 || W.zoneDelay > 0) { W.spawnX = Math.max(W.spawnX, ahead); return; }
   let guard = 0;
@@ -1478,6 +1644,7 @@ function spawnContent() {
     const x = W.spawnX, d = diff(); let len;
     if (x >= W.nextCharger) len = chunkCharger(x);
     else if (x >= W.nextLoop) len = chunkLoop(x);
+    else if (mode !== 'attract' && x >= W.nextRide) len = chunkRide(x);
     else if (mode !== 'attract' && x >= W.nextPower) len = chunkPower(x);
     else {
       let k;
@@ -1520,6 +1687,7 @@ function stepWorld(dt) {
   if (!P.loop) {
     let tgt = targetSpeed();
     if (P.plaid > 0) tgt *= 1.3;
+    if (P.ride) tgt *= RIDES[P.ride.k].speed;
     if (P.boost > 0) { tgt += P.boostV; P.boost -= dt; }
     const a = W.speed < tgt ? (W.speed < 110 ? 560 : 260) : 180;
     W.speed = W.speed < tgt ? Math.min(tgt, W.speed + a * dt) : Math.max(tgt, W.speed - a * dt);
@@ -1568,7 +1736,7 @@ function stepEnts(dt) {
         if (mode === 'run' && e.x - (W.dist + carX) < IW * 0.7 && e.x > W.dist + carX) hint2('zapper', t('hZapper'));
         break;
       case 'cell': if (e.mag) magnetPull(e, dt); break;
-      case 'power': e.ph += dt; break;
+      case 'power': case 'ride': e.ph += dt; break;
       case 'charger': if (e.glowT > 0) e.glowT -= dt; break;
       case 'mon': stepMon(e, dt); break;
       case 'fire': e.life -= dt; if (e.life <= 0) e.dead = true; break;
@@ -1606,7 +1774,7 @@ function surfaceUnder() {
 // distance from a point to the nearest of the car's hitboxes
 function carDist(x, a) {
   const cx = W.dist + carX; let d = 99;
-  for (const cb of CAR_BOXES) {
+  for (const cb of carBoxes()) {
     const x0 = cx + cb.dx, x1 = x0 + cb.w, b0 = P.alt + cb.b, b1 = P.alt + cb.t;
     d = Math.min(d, Math.hypot(Math.max(x0 - x, 0, x - x1), Math.max(b0 - a, 0, a - b1)));
   }
@@ -1615,7 +1783,7 @@ function carDist(x, a) {
 function overlapCar(x, w, a0, a1, pad) {
   pad = pad || 0;
   const cx = W.dist + carX;
-  for (const cb of CAR_BOXES) {
+  for (const cb of carBoxes()) {
     const x0 = cx + cb.dx - pad, x1 = x0 + cb.w + pad * 2, b0 = P.alt + cb.b - pad, b1 = P.alt + cb.t + pad;
     if (x < x1 && x + w > x0 && a0 < b1 && a1 > b0) return true;
   }
@@ -1639,6 +1807,7 @@ function autopilot() {
 }
 
 function stepPlayer(dt) {
+  if (P.ride) { stepRide(dt); return; }
   const att = mode === 'attract';
   P.thrusting = holding && !latch && (att || P.fly > 0 || P.gas > 0.01);
   if (P.onGround) {
@@ -1715,6 +1884,9 @@ function collide() {
       case 'power':
         if (overlapCar(e.x - 1, 15, e.alt - 1, e.alt + 14, 2)) { e.dead = true; activatePower(e.kind); }
         break;
+      case 'ride':
+        if (overlapCar(e.x - 1, 18, e.alt - 2, e.alt + 15, 2)) { e.dead = true; startRide(e.kind); }
+        break;
       case 'gas': case 'barrier': {
         if (e.x > carR + 4 || e.x + e.w < carL - 4) { if (!e.passed && e.x + e.w < carL) passEval(e); break; }
         let topOver = -1;
@@ -1768,7 +1940,7 @@ function collide() {
         if (!e.done) {
           const c = cxw + 30;
           if (c >= e.x && c < e.x + 40) {
-            if (P.onGround && P.alt < 1 && !P.riding) startLoop(e);
+            if (P.onGround && P.alt < 1 && !P.riding && !P.ride) startLoop(e);
             else e.done = true;
           }
         }
@@ -1815,6 +1987,8 @@ function hit(e) {
   if (mode !== 'run') return;
   if (P.plaid > 0) { if (e.smash) smash(e); return; }
   if (P.invuln > 0) return;
+  // a vehicle takes the hit: the Cybertruck and Starship smash what can be smashed, anything else wrecks the ride
+  if (P.ride) { if (RIDES[P.ride.k].smash && e.smash) smash(e); else endRide(true); return; }
   if (P.shield) {
     P.shield = false; P.invuln = 1.2; W.shake = Math.max(W.shake, 5);
     sparks(carX + 30, groundY - P.alt - 8, 22, ['#43f08a', '#d9ffe9', '#ffffff'], 260); SFX.shield();
@@ -1833,7 +2007,7 @@ function smash(e) {
   W.shake = Math.max(W.shake, 3);
 }
 function coneHit(e) {
-  if (mode === 'run' && P.plaid > 0) { smash(e); return; }
+  if (mode === 'run' && (P.plaid > 0 || P.ride)) { smash(e); return; }
   e.orig = 'cone'; e.type = 'wreck'; e.alt = 0; e.vx = W.speed * 0.3 + 70; e.vy = rand(150, 220); e.vr = rand(-12, 12); e.rot = 0; e.life = 1.6;
   if (mode !== 'run' || P.invuln > 0) return;
   P.battery = Math.max(0, P.battery - 6); RUN.chain = 0;
@@ -1921,6 +2095,7 @@ function stepTimers(dt) {
   if (P.plaid > 0) { P.plaid -= dt; if (P.plaid <= 0) { P.plaid = 0; P.invuln = Math.max(P.invuln, 1.0); } }
   if (P.coil > 0) P.coil = Math.max(0, P.coil - dt);
   if (P.fly > 0) P.fly = Math.max(0, P.fly - dt);
+  if (P.ride) { P.ride.t -= dt; if (P.ride.t <= 0) endRide(false); }
   if (P.flame > 0) { P.flame = Math.max(0, P.flame - dt); if (mode === 'run') flameBurn(); }
   if (RUN.chainT > 0) { RUN.chainT -= dt; if (RUN.chainT <= 0) RUN.chain = 0; }
   P.sqV += (-P.sq * 260 - P.sqV * 14) * dt; P.sq = clamp(P.sq + P.sqV * dt, -0.3, 0.3);
@@ -1955,7 +2130,7 @@ function stepTimers(dt) {
   if (!RUN.funded && RUN.cells >= 100) { RUN.funded = true; banner(t('funded'), '#43f08a', 1.8); addScore(500); SFX.funding(); }
   if (!P.onGround && !P.loop) RUN.stats.air += dt;
   const drain = DF().drain * (1 - 0.1 * save.up.battery) * (P.plaid > 0 ? 1.4 : 1) * (W.boss ? 0.5 : 1);
-  if (!P.charging && !P.loop) P.battery -= drain * dt;
+  if (!P.charging && !P.loop && !P.ride) P.battery -= drain * dt;
   if (P.battery < 25) {
     P.lowWarn -= dt; if (P.lowWarn <= 0) { SFX.low(); P.lowWarn = 1.5; }
     if (!RUN.lowShown) { RUN.lowShown = true; banner(t('lowBattery'), '#ff3149'); hint('battery', t('hBattery')); }
@@ -2227,7 +2402,10 @@ function collideMon(e) {
   const d = MON[e.kind], boxes = monBoxes(e);
   if (!boxes.length) return;
   const cx = W.dist + carX;
-  if (d.stomp && !P.onGround && P.vy <= 60) {
+  if (P.ride && RIDES[P.ride.k].smash && mode === 'run' && P.invuln <= 0) {
+    for (const b of boxes) if (overlapCar(b.x, b.w, b.b, b.t, -1)) { if (e.kind === 'worm') hit({ type: 'mon:worm', smash: false }); else killMon(e, 'plaid'); return; }
+  }
+  if (d.stomp && !P.onGround && P.vy <= 60 && !(P.ride && P.ride.k === 'ship')) {
     for (const b of boxes) if (b.top && b.x < cx + 52 && b.x + b.w > cx + 8 && P.alt <= b.t + 3 && P.alt >= b.t - 9) { stompMon(e); return; }
   }
   if (d.blast && P.thrusting && !P.onGround) {
@@ -2276,7 +2454,7 @@ function killMon(e, how) {
   if (e.kind === 'truck') { W.shake = Math.max(W.shake, reduceMotion ? 0 : 6); W.flash = Math.max(W.flash, 0.35); }
   if (mode !== 'run') return;
   const chain = how === 'stomp' ? Math.max(1, RUN.stompChain) : 1;
-  const label = how === 'stomp' ? (chain > 1 ? t('stompN', chain) : t('stomp')) : how === 'blast' ? t('blast') : how === 'plaid' ? t('smash') : how === 'flame' ? t('torched') : t('pop');
+  const label = how === 'stomp' ? (chain > 1 ? t('stompN', chain) : t('stomp')) : how === 'blast' ? t('blast') : how === 'plaid' ? t('smash') : how === 'flame' ? t('torched') : how === 'quake' ? t('quake') : t('pop');
   addMult();
   addScore((d.pts || 100) * chain, label, '#ffd23f');
   RUN.stats.monsters++;
@@ -2638,7 +2816,7 @@ function makeClouds() {
   CLOUDS.sort((a, b) => a.s - b.s);
 }
 function drawSky(sky) {
-  const key = Math.round(W.dayT * 400) + '|' + Math.round(W.marsMix * 30) + '|' + groundY + '|' + save.world;
+  const key = Math.round(W.dayT * 400) + '|' + Math.round(W.marsMix * 30) + '|' + groundY + '|' + worldNow();
   if (key !== skyKey || !skyBands) {
     skyKey = key; skyBands = [];
     for (let i = 0; i < 64; i++) { const t = (i + 0.5) / 64; skyBands.push(rgbStr(t < 0.58 ? mixC(sky.top, sky.mid, t / 0.58) : mixC(sky.mid, sky.hor, (t - 0.58) / 0.42))); }
@@ -3449,6 +3627,7 @@ function drawPlayer(N) {
     const h = P.alt - surf, sw = Math.max(12, 54 - h * 0.25);
     g.globalAlpha = clamp(0.4 - h / 340, 0.08, 0.4); ell(g, cx, groundY - surf + 0.2, sw / 2, 1.6 - Math.min(0.8, h / 200)); g.fillStyle = '#05030c'; g.fill(); g.globalAlpha = 1;
   }
+  if (P.ride) { drawRide(N); return; }
   // Plaid afterimages and speed streaks
   if (P.ghosts.length) {
     for (let i = 0; i < P.ghosts.length; i++) {
@@ -3509,6 +3688,160 @@ function drawPlayer(N) {
     const bw = 28, bh = 2.6, bx = carX + 16, byy = sy - 6 - bh, f = P.gas / P.gasMax;
     rrect(g, bx - 0.8, byy - 0.8, bw + 1.6, bh + 1.6, (bh + 1.6) / 2); g.fillStyle = 'rgba(16,12,36,0.85)'; g.fill();
     if (f > 0.02) { rrect(g, bx, byy, bw * f, bh, bh / 2); g.fillStyle = f < 0.25 ? '#ff6b7a' : '#7fd8ff'; g.fill(); }
+  }
+}
+
+/* ---------- vehicles ---------- */
+// the Cybertruck, origin at the rear of its footprint on the road: flat stainless panels under one roof peak,
+// angular wheel arches and light bars at both ends
+function truckBody(x) {
+  x.lineJoin = 'round';
+  const body = [0, -5.5, 0, -13.6, 37, -22.2, 62, -12.6, 64.4, -10.2, 63.6, -5.5];
+  poly(x, [1, -3.4, 1, -7, 63, -7, 63, -3.4]); ink(x, '#3d424b', LW * 0.9);
+  poly(x, body); x.fillStyle = vgrad(x, -22, -5, ['#f6f8fa', '#cdd2da', '#9aa1ab']); x.fill();
+  x.save(); poly(x, body); x.clip();
+  x.fillStyle = 'rgba(255,255,255,0.35)'; poly(x, [0, -13.6, 37, -22.2, 62, -12.6, 62, -11.4, 37, -20.6, 0, -12.4]); x.fill();
+  x.strokeStyle = 'rgba(60,66,76,0.35)'; x.lineWidth = 0.45; x.beginPath(); x.moveTo(1, -9.2); x.lineTo(63, -8.8); x.moveTo(25.5, -16.4); x.lineTo(25, -5.5); x.moveTo(44, -17.2); x.lineTo(44.5, -5.5); x.stroke();
+  x.restore();
+  poly(x, [17, -14.9, 37, -20.6, 54.5, -13.6, 51, -13.1, 20, -13.9]); x.fillStyle = vgrad(x, -20.6, -13.1, ['#6f8fbc', '#1d2740']); x.fill();
+  x.strokeStyle = '#aab1bb'; x.lineWidth = 0.7; x.beginPath(); x.moveTo(36.2, -20.2); x.lineTo(36.6, -13.6); x.stroke();
+  for (const wx of [13, 51]) { poly(x, [wx - 8.6, -5.2, wx - 6.2, -11.6, wx + 6.2, -11.6, wx + 8.6, -5.2]); x.fillStyle = '#23262d'; x.fill(); }
+  poly(x, body); ink(x, null, LW);
+  rrect(x, 48, -13.4, 16, 1.2, 0.6); x.fillStyle = '#ffffff'; x.fill();
+  rrect(x, -0.5, -13.6, 1.3, 5, 0.6); x.fillStyle = '#ff2a3d'; x.fill();
+}
+function truckWheels(x, rot) {
+  for (const wx of [13, 51]) {
+    circ(x, wx, -5.3, 5.4); ink(x, '#1b1d23', LW);
+    x.save(); x.translate(wx, -5.3); x.rotate(rot);
+    const hx = []; for (let i = 0; i < 6; i++) { const a = i / 6 * TAU; hx.push(Math.cos(a) * 3.5, Math.sin(a) * 3.5); }
+    poly(x, hx); x.fillStyle = '#9097a1'; x.fill(); x.lineWidth = 0.5; x.strokeStyle = '#3d424b'; x.stroke();
+    x.strokeStyle = 'rgba(40,44,52,0.6)'; x.lineWidth = 0.4; x.beginPath(); for (let i = 0; i < 3; i++) { const a = i / 3 * Math.PI; x.moveTo(Math.cos(a) * 3.3, Math.sin(a) * 3.3); x.lineTo(-Math.cos(a) * 3.3, -Math.sin(a) * 3.3); } x.stroke();
+    circ(x, 0, 0, 1.1); x.fillStyle = '#3d424b'; x.fill();
+    x.restore();
+  }
+}
+// Optimus, origin between its feet: ph is the running stride, air tucks the legs for a jump
+function botBody(x, ph, air) {
+  x.lineCap = 'round'; x.lineJoin = 'round';
+  const hip = -17, shoulder = -29.5;
+  const limb = (pts, w, col) => {
+    x.beginPath(); x.moveTo(pts[0], pts[1]); for (let i = 2; i < pts.length; i += 2) x.lineTo(pts[i], pts[i + 1]);
+    x.strokeStyle = INK; x.lineWidth = w + LW * 1.4; x.stroke(); x.strokeStyle = col; x.lineWidth = w; x.stroke();
+  };
+  // angles are measured from straight down, positive leaning forward
+  const leg = (front, col) => {
+    const p = front ? ph : ph + Math.PI;
+    const a1 = air ? (front ? 1.15 : -0.45) : Math.sin(p) * 0.7, a2 = air ? a1 - (front ? 2 : 0.5) : a1 - 0.25 - 0.9 * Math.max(0, Math.cos(p));
+    const kx = Math.sin(a1) * 8.6, ky = hip + Math.cos(a1) * 8.6, fx = kx + Math.sin(a2) * 8.4, fy = ky + Math.cos(a2) * 8.4;
+    limb([0, hip, kx, ky, fx, fy], 3.6, col);
+    circ(x, kx, ky, 1.2); x.fillStyle = '#22252b'; x.fill();
+    rrect(x, fx - 1.6, fy - 1.3, 5, 2.2, 1); ink(x, '#22252b', LW * 0.7);
+  };
+  const arm = (front, col) => {
+    const p = front ? ph : ph + Math.PI;
+    const a1 = air ? (front ? 2.5 : -0.9) : -Math.sin(p) * 0.6, a2 = air ? a1 + (front ? -0.25 : 0.35) : a1 + 0.7;
+    const ex = Math.sin(a1) * 6.4, ey = shoulder + Math.cos(a1) * 6.4, hx = ex + Math.sin(a2) * 6, hy = ey + Math.cos(a2) * 6;
+    limb([0, shoulder, ex, ey, hx, hy], 2.8, col);
+    circ(x, hx, hy, 1.5); ink(x, '#22252b', LW * 0.6);
+  };
+  arm(false, '#c9ced6'); leg(false, '#c9ced6');
+  rrect(x, -1.6, -32.4, 3.2, 3, 1); x.fillStyle = '#22252b'; x.fill();
+  // torso: white shell over a black waist
+  rrect(x, -5.6, -31, 11.2, 13.6, 4); ink(x, vgrad(x, -31, -17.4, ['#ffffff', '#e4e8ee', '#c3c9d2']), LW);
+  rrect(x, -5, -20.4, 10, 3.4, 1.4); x.fillStyle = '#22252b'; x.fill();
+  x.strokeStyle = 'rgba(30,34,42,0.35)'; x.lineWidth = 0.5; x.beginPath(); x.moveTo(0, -30); x.lineTo(0, -21.5); x.stroke();
+  leg(true, '#f2f4f7');
+  // head: a white helmet with a black visor facing forward
+  rrect(x, -4.4, -40, 8.8, 8, 3.6); ink(x, '#f2f4f7', LW);
+  rrect(x, -0.8, -38.4, 5.4, 5.2, 2.2); x.fillStyle = '#16181d'; x.fill();
+  shine(x, 0.4, -37.6, 2.6, 0.8, 0.5);
+  arm(true, '#f2f4f7');
+}
+// Starship lying on its belly, nose forward, origin at the tail on the line under the hull
+function shipBody(x) {
+  x.lineJoin = 'round';
+  const cy = -8, R = 6.2;
+  const flaps = (pts) => { poly(x, pts); ink(x, '#3a3e46', LW * 0.9); };
+  flaps([4, cy - R + 0.6, 6.5, cy - R - 5.6, 15, cy - R - 5.6, 18, cy - R + 0.6]);
+  flaps([4, cy + R - 0.6, 6.5, cy + R + 4.8, 15, cy + R + 4.8, 18, cy + R - 0.6]);
+  flaps([44, cy - R + 0.6, 46, cy - R - 3.8, 51, cy - R - 3, 52, cy - R + 0.6]);
+  flaps([44, cy + R - 0.6, 46, cy + R + 3.2, 51, cy + R + 2.6, 52, cy + R - 0.6]);
+  const hull = () => { x.beginPath(); x.moveTo(3, cy - R); x.lineTo(50, cy - R); x.bezierCurveTo(58, cy - R, 64, cy - 2.4, 66, cy + 0.4); x.bezierCurveTo(64, cy + 3, 58, cy + R, 50, cy + R); x.lineTo(3, cy + R); x.closePath(); };
+  hull(); x.fillStyle = vgrad(x, cy - R, cy + R, ['#f7f9fb', '#d6dbe2', '#a3abb6']); x.fill();
+  // the belly: black heat-shield tiles
+  x.save(); hull(); x.clip();
+  x.fillStyle = '#1d2026'; x.fillRect(0, cy + 0.8, 70, 10);
+  x.fillStyle = 'rgba(255,255,255,0.08)';
+  for (let i = 0; i < 22; i++) for (let j = 0; j < 2; j++) { circ(x, 4 + i * 2.9 + (j ? 1.45 : 0), cy + 2.4 + j * 2.2, 0.7); x.fill(); }
+  x.fillStyle = 'rgba(255,255,255,0.4)'; x.fillRect(0, cy - R + 1, 70, 0.9);
+  x.strokeStyle = 'rgba(80,88,100,0.35)'; x.lineWidth = 0.4; x.beginPath(); for (const sx of [14, 26, 38]) { x.moveTo(sx, cy - R); x.lineTo(sx, cy + 0.8); } x.stroke();
+  x.restore();
+  hull(); ink(x, null, LW);
+  rrect(x, 0.6, cy - 4.6, 2.8, 9.2, 1); ink(x, '#3a3e46', LW * 0.8);
+}
+// three Raptor plumes out of the tail, at (x0, cy)
+function shipFlames(x0, cy) {
+  additive(() => {
+    for (const dy of [-3.4, 0, 3.4]) {
+      const L = 13 + Math.random() * 6;
+      const gr = g.createLinearGradient(x0, 0, x0 - L, 0);
+      gr.addColorStop(0, '#ffffff'); gr.addColorStop(0.25, '#ffd9a8'); gr.addColorStop(0.6, 'rgba(255,140,60,0.7)'); gr.addColorStop(1, 'rgba(255,90,40,0)');
+      g.beginPath(); g.moveTo(x0, cy + dy - 1.6); g.quadraticCurveTo(x0 - L * 0.45, cy + dy - 2.6, x0 - L, cy + dy); g.quadraticCurveTo(x0 - L * 0.45, cy + dy + 2.6, x0, cy + dy + 1.6); g.closePath();
+      g.fillStyle = gr; g.fill();
+    }
+  });
+}
+// a small silhouette of each vehicle, about 12 units across, for the token and the HUD timer
+function rideIcon(x, k) {
+  x.lineJoin = 'round'; x.lineCap = 'round';
+  if (k === 'truck') {
+    poly(x, [-6, 1.6, -6, -1.2, 1.2, -4.6, 6, -0.9, 6, 1.6]); ink(x, '#dfe3e8', 0.6);
+    for (const wx of [-3.4, 3.4]) { circ(x, wx, 2, 1.6); ink(x, '#2a2d33', 0.5); }
+    rrect(x, 2.6, -1.4, 3.4, 0.5, 0.25); x.fillStyle = '#ffffff'; x.fill();
+  } else if (k === 'bot') {
+    x.strokeStyle = INK; x.lineWidth = 2.2; x.beginPath(); x.moveTo(-1, 1); x.lineTo(-1.8, 5.2); x.moveTo(1, 1); x.lineTo(2, 5.2); x.stroke();
+    x.strokeStyle = '#f2f4f7'; x.lineWidth = 1.3; x.stroke();
+    rrect(x, -2.6, -2.6, 5.2, 4.4, 1.4); ink(x, '#f2f4f7', 0.6);
+    rrect(x, -2, -6, 4, 3.2, 1.4); ink(x, '#f2f4f7', 0.6);
+    rrect(x, -0.2, -5.4, 2.2, 2, 0.8); x.fillStyle = '#16181d'; x.fill();
+  } else {
+    x.beginPath(); x.moveTo(-5, -1.8); x.lineTo(2.6, -1.8); x.quadraticCurveTo(5.6, -1.8, 6.4, 0); x.quadraticCurveTo(5.6, 1.8, 2.6, 1.8); x.lineTo(-5, 1.8); x.closePath(); ink(x, '#dfe3e8', 0.6);
+    rrect(x, -4.4, 0.2, 9, 1.4, 0.6); x.fillStyle = '#1d2026'; x.fill();
+    poly(x, [-5, -1.6, -4, -4, -1.6, -4, -1, -1.6]); ink(x, '#3a3e46', 0.5);
+    poly(x, [-5.6, -1, -8.4, 0, -5.6, 1]); x.fillStyle = '#ff9a3d'; x.fill();
+  }
+}
+function drawRideToken(e, sx) {
+  const col = RIDES[e.kind].col, bob = Math.sin(e.ph * 3) * 2, cx = sx + 8, cy = groundY - e.alt - 7 + bob;
+  glowAt(cx, cy, 20, 'rgba(' + hex2rgb(col).join(',') + ',0.7)', 0.6 + 0.3 * Math.sin(e.ph * 6));
+  blit(bake('ride:tok:' + e.kind, -10, -10, 10, 10, x => {
+    rrect(x, -8.4, -8.4, 16.8, 16.8, 4.6); x.fillStyle = 'rgba(16,12,36,0.82)'; x.fill(); x.lineWidth = 1.5; x.strokeStyle = col; x.stroke();
+    rrect(x, -9.2, -9.2, 18.4, 18.4, 5.2); x.lineWidth = 0.7; x.strokeStyle = INK; x.stroke();
+    rideIcon(x, e.kind);
+    x.beginPath(); x.moveTo(-6, -7); x.lineTo(-1, -7); x.lineWidth = 1; x.strokeStyle = 'rgba(255,255,255,0.7)'; x.stroke();
+  }), cx, cy);
+}
+function drawRide(N) {
+  const r = P.ride, by = groundY - P.alt;
+  if (P.invuln > 0 && Math.floor(W.time * 14) % 2 === 0) return;
+  if (r.k === 'truck') {
+    g.save(); g.translate(carX - 2, by);
+    if (P.tilt) { g.translate(32, -10); g.rotate(P.tilt); g.translate(-32, 10); }
+    blit(bake('ride:truck', -1.5, -24, 66, 0.5, x => truckBody(x)), 0, 0);
+    truckWheels(g, P.wheelRot * TAU / 13);
+    if (N > 0.15) { glowAt(62, -12.8, 9, 'rgba(230,245,255,0.9)'); glowAt(0, -11, 7, 'rgba(255,42,61,0.8)'); }
+    g.restore();
+  } else if (r.k === 'bot') {
+    g.save(); g.translate(carX + 29, by);
+    botBody(g, W.dist * 0.075, !P.onGround);
+    if (N > 0.15) glowAt(2, -35.8, 6, 'rgba(160,210,255,0.8)');
+    g.restore();
+  } else {
+    g.save(); g.translate(carX - 2, by - 8); g.scale(1, r.o); g.translate(0, 8);
+    shipFlames(0.6, -8);
+    blit(bake('ride:ship', -1.5, -21, 67.5, 4, x => shipBody(x)), 0, 0);
+    g.restore();
   }
 }
 
@@ -4068,6 +4401,7 @@ function drawEnts(N) {
       case 'truss': drawTruss(e, sx, N); break;
       case 'cell': drawCell(e, sx, N); break;
       case 'power': drawPower(e, sx); break;
+      case 'ride': drawRideToken(e, sx); break;
       case 'wreck': drawWreck(e, sx); break;
     }
   }
@@ -4207,6 +4541,13 @@ function hudTheme(N) {
   const want = HT.dark ? 'dark' : 'light';
   if (app.dataset.hud !== want) app.dataset.hud = want;
 }
+// a card the car (or its vehicle) flies behind fades out of the way, easing back once it has passed
+const HF = {};
+function cardAlpha(key, x, y, w, h) {
+  const top = P.ride ? (P.ride.k === 'bot' ? 40 : 24) : 22, x0 = carX - 4, x1 = carX + 66, y0 = groundY - P.alt - top, y1 = groundY - P.alt + 2;
+  const over = mode === 'run' && x0 < x + w && x1 > x && y0 < y + h && y1 > y, k = HF[key] === undefined ? 1 : HF[key];
+  return (HF[key] = lerp(k, over ? 0.28 : 1, 0.2));
+}
 // a dashboard card: a faint drop shadow, then the panel
 function card(x, y, w, h, r) {
   r = r === undefined ? U(12) : r;
@@ -4283,16 +4624,18 @@ function drawCluster(x, y) {
   const foot = charging ? t('charging') : t('toCharge', (nextChargerFt() / 5280 * (kmh ? 1.609 : 1)).toFixed(1));
   const fw = measure(foot, U(11), 500) + U(15), pctW = measure('100%', U(12), 600);
   const w = Math.max(U(17) * 4 + U(14) + pctW + U(32), measure('888', ss, 500) + U(48), fw) + pad * 2, h = U(118);
+  const A = cardAlpha('cluster', x, y, w, h);
+  g.globalAlpha = A;
   card(x, y, w, h);
   // the gear selector: parked on the line, in drive once launched
   const gear = mode === 'run' ? 'D' : 'P', gy = y + U(19);
   let gx = x + pad;
   for (const ch of 'PRND') {
     const on = ch === gear;
-    g.globalAlpha = on ? 1 : 0.5;
+    g.globalAlpha = A * (on ? 1 : 0.5);
     gx += txt(ch, gx, gy, U(12), on ? ink : dim, 'left', { w: on ? 700 : 500, base: 'middle' }) + U(9);
   }
-  g.globalAlpha = 1;
+  g.globalAlpha = A;
   // battery: the icon, then the charge
   const low = P.battery < 25, flash = low && !charging && Math.floor(W.time * 4) % 2 === 0, right = x + w - pad;
   const pw = txt(Math.max(0, Math.ceil(P.battery)) + '%', right, gy, U(12), low ? redH() : ink, 'right', { w: 600, base: 'middle' });
@@ -4310,6 +4653,7 @@ function drawCluster(x, y) {
   const fy = y + U(106);
   boltIcon(x + pad + U(4), fy, U(0.95), greenH());
   txt(foot, x + pad + U(15), fy, U(11), charging ? greenH() : dim, 'left', { w: 500, base: 'middle' });
+  g.globalAlpha = 1;
   return { w, h };
 }
 // score card: the score with any multiplier, then cells and best
@@ -4321,6 +4665,7 @@ function scoreSize() {
 }
 function drawScore(x, y, S) {
   const ink = inkH(), dim = dimH(), cx = x + S.w / 2, top = S.sw + (S.mw ? S.mw + U(8) : 0);
+  g.globalAlpha = cardAlpha('score', x, y, S.w, S.h);
   card(x, y, S.w, S.h);
   const sx = cx - top / 2;
   txt(fmt(RUN.score), sx, y + U(28), U(24), ink, 'left', { w: 600, base: 'alphabetic' });
@@ -4341,6 +4686,7 @@ function drawScore(x, y, S) {
   circ(g, lx + U(8), ly, U(1.3)); g.fillStyle = dim; g.fill();
   lx += U(16);
   txt(S.bestS, isAr() ? lx + measure(S.bestS, U(11), 500) : lx, ly, U(11), dim, isAr() ? 'right' : 'left', { w: 500, base: 'middle' });
+  g.globalAlpha = 1;
 }
 function drawHUD(N) {
   if (!(mode === 'run' || mode === 'launch' || mode === 'crash')) return;
@@ -4350,13 +4696,15 @@ function drawHUD(N) {
   // power-ups under the driver's card: icons with a ring that runs down
   let px = ml;
   const py = cBottom + U(8), pr = U(15);
-  for (const [k, v, mx] of [['plaid', P.plaid, P.plaidMax], ['coil', P.coil, P.coilMax], ['fly', P.fly, P.flyMax], ['flame', P.flame, P.flameMax], ['shield', P.shield ? 1 : 0, 1]]) {
+  for (const [k, v, mx] of [['ride', P.ride ? P.ride.t : 0, RIDE_TIME], ['plaid', P.plaid, P.plaidMax], ['coil', P.coil, P.coilMax], ['fly', P.fly, P.flyMax], ['flame', P.flame, P.flameMax], ['shield', P.shield ? 1 : 0, 1]]) {
     if (v <= 0) continue;
-    const cxp = px + pr, cyp = py + pr, f = clamp(v / mx, 0, 1);
+    const cxp = px + pr, cyp = py + pr, f = clamp(v / mx, 0, 1), ride = k === 'ride';
+    g.globalAlpha = cardAlpha('pw' + k, px, py, pr * 2, pr * 2);
     card(px, py, pr * 2, pr * 2, pr);
     g.beginPath(); g.arc(cxp, cyp, pr - U(2), 0, TAU); g.strokeStyle = hc('#e3e4e6', '#3a3c42'); g.lineWidth = U(2.5); g.stroke();
-    g.beginPath(); g.arc(cxp, cyp, pr - U(2), -Math.PI / 2, -Math.PI / 2 + TAU * f); g.strokeStyle = POWER[k].col; g.lineCap = 'round'; g.stroke();
-    g.save(); g.translate(cxp, cyp); g.scale(U(14) / 9, U(14) / 9); powerIcon(g, k); g.restore();
+    g.beginPath(); g.arc(cxp, cyp, pr - U(2), -Math.PI / 2, -Math.PI / 2 + TAU * f); g.strokeStyle = ride ? accent(RIDES[P.ride.k].col) : POWER[k].col; g.lineCap = 'round'; g.stroke();
+    g.save(); g.translate(cxp, cyp); g.scale(U(14) / 9, U(14) / 9); if (ride) rideIcon(g, P.ride.k); else powerIcon(g, k); g.restore();
+    g.globalAlpha = 1;
     px += pr * 2 + U(8);
   }
   // the score sits top centre when there is room, otherwise under the buttons on the right
@@ -4458,6 +4806,7 @@ function render() {
   drawWarpAndWarning();
   camera();
   if (W.flash > 0 && !reduceMotion) { g.fillStyle = `rgba(255,255,255,${(W.flash * 0.75).toFixed(3)})`; g.fillRect(-12, -12, IW + 24, IH + 24); }
+  if (mode === 'run' && !paused && W.time - SNAP.t > 1.2 && P.invuln <= 0) takeSnap();
   drawHUD(N);
   drawPrompt();
 }
@@ -4488,7 +4837,8 @@ const MT = {
   flames: { b: 3, s: 2 },
   spotted: { b: 1, s: 0, max: 1 },
   ludi: { b: 1, s: 0, max: 1 },
-  dodged: { b: 2, s: 1 }
+  dodged: { b: 2, s: 1 },
+  rides: { b: 1, s: 0.25, max: 3 }
 };
 const missionText = m => t('m_' + m.k, m.n);
 function rankName(r) { const R = t('ranks'); return r < R.length ? R[r] : t('rankMore', r - R.length + 2); }
@@ -4535,7 +4885,20 @@ function bankRun() {
   const sc = Math.floor(RUN.score);
   if (sc > save.best) { save.best = sc; RUN.newBest = true; }
   if (!RUN.counted) { save.runs++; RUN.counted = true; }
+  if (DAILY.on) finishDaily();
   persist();
+}
+// the first daily of a day extends the streak (or starts a new one) and pays 100 cells per day of it, up to 700
+function finishDaily() {
+  const d = dailyRec();
+  if (d.day !== DAILY.day) return;   // the date changed mid-run
+  if (d.last !== DAILY.day) {
+    d.streak = d.last === dayKey(Date.parse(DAILY.day) - DAY_MS) ? d.streak + 1 : 1;
+    d.last = DAILY.day;
+    RUN.dailyReward = 100 * Math.min(d.streak, 7); save.bank += RUN.dailyReward;
+  }
+  const sc = Math.floor(RUN.score);
+  if (sc > d.best) { d.best = sc; RUN.dailyBest = true; }
 }
 
 /* =========================================================
@@ -4578,26 +4941,37 @@ function refreshTitle() {
   $('tBest').textContent = fmt(save.best);
   $('tBank').textContent = fmt(save.bank);
   $('tRank').textContent = rankName(save.rank);
+  // the daily tile: a dot until today's is played, and the streak once there is one
+  const d = dailyRec(), streak = dailyStreak(), due = d.last !== d.day, badge = $('dailyBadge'), dt = dailyToday();
+  badge.hidden = !due && !streak;
+  badge.textContent = streak ? String(streak) : '';
+  badge.className = 'badge' + (due ? ' due' : '') + (streak ? '' : ' dot');
+  $('btnDaily').setAttribute('aria-label', t('dailyAria', t(dt.world), streak, d.best, due));
 }
 function goTitle() {
   finalizeMissions();
   mode = 'attract'; paused = false; holding = false; latch = false; keys.clear(); pointers.clear();
+  DAILY.on = false;
   resetPlayer(); resetRun(); newWorld(true);
   btnPause.hidden = true;
   refreshTitle(); syncOpts();
   btnLang.hidden = false; HT.set = false; delete app.dataset.hud;
   show('scrTitle');
 }
-function startRun() {
+function startRun(daily) {
   Sound.init();
   finalizeMissions();
   hideAll();
+  const dt = dailyToday();
+  SNAP.ok = false; SNAP.t = -9;
+  DAILY.on = !!daily; DAILY.day = dt.day; DAILY.world = dt.world; DAILY.rng = mulberry32(dt.seed);
   resetPlayer(); resetRun(); newWorld(false);
   mode = 'launch'; paused = false; holding = false; latch = false; keys.clear(); pointers.clear();
   L.t = 0; L.greenAt = 1.65 + rand(0.1, 0.8); L.lights = 0; L.green = false; L.done = false;
   btnPause.hidden = false; btnLang.hidden = true; HT.set = false;
   if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
   if (save.runs < 2) hint('launch', t('hLaunch', coarse));
+  if (DAILY.on) toast(t('dailyStart', t(DAILY.world)), '#7d9eff');
 }
 function pause() {
   if (paused || !(mode === 'run' || mode === 'launch')) return;
@@ -4609,6 +4983,103 @@ function resume() {
   if (!paused) return;
   paused = false; hideAll(); holding = false; latch = false; lastT = performance.now();
   if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+}
+/* ---------- share card ---------- */
+const GAME_URL = 'https://osdroidi.github.io/roadster-fly-mode/';
+// a copy of the road without the HUD, refreshed every second or so, so the card shows the run just before it ended
+const SNAP = { c: null, ok: false, t: -9, cx: 0, cy: 0 };
+function takeSnap() {
+  const w = 960, h = Math.max(1, Math.round(960 * cv.height / cv.width));
+  if (!SNAP.c || SNAP.c.width !== w || SNAP.c.height !== h) SNAP.c = makeCanvas(w, h);
+  SNAP.c.getContext('2d').drawImage(cv, 0, 0, w, h);
+  SNAP.ok = true; SNAP.t = W.time; SNAP.cx = (carX + 30) / IW; SNAP.cy = (groundY - P.alt - 10) / IH;
+}
+// the card: the photo on top, then the score and the run's numbers on a Tesla-dark panel (1080 x 1350, a 4:5 post)
+function shareCard() {
+  const CW = 1080, CH = 1350, c = makeCanvas(CW, CH), x = c.getContext('2d'), ar = isAr(), PH = 820, L = 72, R = CW - 72;
+  const F = (s, w) => `${w} ${s}px ${HUDF}`, bg = '#0d0e11', ink = '#f2f2f2', dim = '#a2a3a5';
+  x.fillStyle = bg; x.fillRect(0, 0, CW, CH);
+  if (SNAP.ok) {
+    const s = SNAP.c, asp = CW / PH;
+    let sw = s.width, sh = sw / asp;
+    if (sh > s.height) { sh = s.height; sw = sh * asp; }
+    const sx = clamp(SNAP.cx * s.width - sw * 0.35, 0, s.width - sw), sy = clamp(SNAP.cy * s.height - sh * 0.55, 0, s.height - sh);
+    x.drawImage(s, sx, sy, sw, sh, 0, 0, CW, PH);
+  } else {
+    // no photo yet: the Roadster on its plumes against the night sky, as on the app icon
+    x.fillStyle = vgrad(x, 0, PH, ['#1b2350', '#0b1028']); x.fillRect(0, 0, CW, PH);
+    x.save(); x.translate(CW / 2, PH * 0.5); x.rotate(-0.12); x.scale(11, 11); x.translate(-30, -8);
+    carBody(x, paintOf(save.paint)); roadsterWheels(0.4, x);
+    x.restore();
+  }
+  const fade = x.createLinearGradient(0, PH - 280, 0, PH);
+  fade.addColorStop(0, 'rgba(13,14,17,0)'); fade.addColorStop(1, bg);
+  x.fillStyle = fade; x.fillRect(0, PH - 280, CW, 280);
+  x.direction = ar ? 'rtl' : 'ltr'; x.textBaseline = 'alphabetic';
+  const al = ar ? 'right' : 'left', ax = ar ? R : L;
+  // the game's name in a frosted pill over the photo
+  const name = t('logoWord') + ' · ' + t('logoSub');
+  x.font = F(34, 600); const pw = x.measureText(name).width + 56, px = ar ? R + 8 - pw : L - 8;
+  rrect(x, px, 56, pw, 72, 36); x.fillStyle = 'rgba(13,14,17,0.72)'; x.fill();
+  x.fillStyle = ink; x.textAlign = al; x.fillText(name, ar ? px + pw - 28 : px + 28, 104);
+  // score
+  x.textAlign = al; x.fillStyle = dim; x.font = F(36, 500); x.fillText(t('scoreLbl'), ax, 900);
+  x.fillStyle = ink; x.font = F(150, 500); x.fillText(fmt(RUN.score), ax, 1040);
+  if (RUN.newBest) {
+    const sw = x.measureText(fmt(RUN.score)).width, lab = t('newBest');
+    x.font = F(32, 500); const lw = x.measureText(lab).width + 44, bx = ar ? R - sw - 32 - lw : L + sw + 32;
+    rrect(x, bx, 978, lw, 62, 8); x.fillStyle = '#3e6ae1'; x.fill();
+    x.fillStyle = '#ffffff'; x.textAlign = 'center'; x.fillText(lab, bx + lw / 2, 1020);
+  }
+  // distance, cells and top speed, like Tesla's spec row
+  const km = isAr(), mi = runDist() / 5280, top = RUN.stats.mph * (km ? 1.609 : 1);
+  const specs = [[(km ? mi * 1.609 : mi).toFixed(2) + ' ' + t('distUnit'), t('distance')], [fmt(RUN.cells), t('cells')], [Math.round(top) + ' ' + t('unit'), t('topSpeed')]];
+  const colW = (R - L) / 3;
+  specs.forEach(([v, lab], i) => {
+    const cx = ar ? R - i * colW : L + i * colW;
+    x.textAlign = al; x.fillStyle = ink; x.font = F(54, 500); x.fillText(v, cx, 1150);
+    x.fillStyle = dim; x.font = F(30, 500); x.fillText(lab, cx, 1192);
+  });
+  // world and mode, then the invitation and the link
+  x.fillStyle = 'rgba(255,255,255,0.12)'; x.fillRect(L, 1226, R - L, 2);
+  x.textAlign = al; x.fillStyle = dim; x.font = F(30, 500);
+  x.fillText(t(worldNow() === 'texas' ? 'texas' : 'saudi') + ' · ' + (DAILY.on ? t('dailyTitle') : t(DIFFS[save.diff] ? save.diff : 'normal')), ax, 1278);
+  x.fillStyle = '#7d9eff'; x.font = F(30, 600);
+  x.fillText(t('beatIt') + '  ' + GAME_URL.replace(/^https:\/\//, '').replace(/\/$/, ''), ax, 1318);
+  return c;
+}
+const SHARE = { file: null, blob: null };
+// renders the card as soon as the run is over, so the Share tap can open the share sheet straight away
+function prepareShare() {
+  SHARE.file = SHARE.blob = null;
+  try {
+    shareCard().toBlob(b => {
+      if (!b) return;
+      SHARE.blob = b;
+      try { SHARE.file = new File([b], 'roadster-fly-mode.png', { type: 'image/png' }); } catch (e) { SHARE.file = null; }
+    }, 'image/png');
+  } catch (e) { /* a blocked canvas: sharing falls back to text */ }
+}
+function saveImage(blob) {
+  const a = document.createElement('a'), u = URL.createObjectURL(blob);
+  a.href = u; a.download = 'roadster-fly-mode.png'; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(u), 4000);
+}
+async function shareRun() {
+  SFX.click();
+  const msg = $('shareMsg'), url = /^https?:$/.test(location.protocol) ? location.origin + location.pathname : GAME_URL;
+  const text = t('shareText', fmt(RUN.score)) + ' ' + url;
+  msg.hidden = true;
+  try {
+    if (SHARE.file && navigator.canShare && navigator.canShare({ files: [SHARE.file] })) await navigator.share({ files: [SHARE.file], text, title: document.title });
+    else if (SHARE.blob) {
+      saveImage(SHARE.blob);
+      msg.textContent = t('shareSaved'); msg.hidden = false;
+      if (navigator.clipboard) navigator.clipboard.writeText(text).catch(() => { /* no clipboard: the image is enough */ });
+    } else if (navigator.share) await navigator.share({ text, title: document.title });
+  } catch (e) {
+    if (!e || e.name !== 'AbortError') { if (SHARE.blob) { saveImage(SHARE.blob); msg.textContent = t('shareSaved'); msg.hidden = false; } }
+  }
 }
 let countRAF = 0;
 function countUp(el, to) {
@@ -4630,6 +5101,11 @@ function showOver() {
   $('oCause').textContent = (SAUDI() && W.zone === 0 && C[RUN.cause + '@sa']) || C[RUN.cause] || t('crashed');
   countUp($('oScore'), Math.floor(RUN.score));
   $('oNew').hidden = !RUN.newBest;
+  const od = $('oDaily');
+  od.hidden = !DAILY.on;
+  if (DAILY.on) od.textContent = t('dailyOver', fmt(dailyRec().best), dailyStreak(), RUN.dailyReward || 0);
+  $('shareMsg').hidden = true;
+  setTimeout(prepareShare, 60);
   const mi = runDist() / 5280;
   $('oDist').textContent = (isAr() ? mi * 1.609 : mi).toFixed(2) + ' ' + t('distUnit');
   $('oCells').textContent = fmt(RUN.cells);
@@ -4653,7 +5129,7 @@ function revive() {
   const hazard = new Set(['gas', 'cone', 'barrier', 'drone', 'truss', 'trench', 'wreck', 'mon', 'fire', 'zap']);
   W.fx = W.fx.filter(f => f.k === 'orb');
   W.ents = W.ents.filter(e => !(hazard.has(e.type) && e.x + (e.w || 10) > cx - 120 && e.x < cx + IW + 320));
-  P.wreck = null; P.loop = null; P.riding = null; P.alt = 30; P.vy = 160; P.onGround = false; P.tilt = 0;
+  P.wreck = null; P.loop = null; P.riding = null; P.ride = null; P.alt = 30; P.vy = 160; P.onGround = false; P.tilt = 0;
   P.invuln = 2.6; P.battery = Math.max(P.battery, 45); P.gas = P.gasMax;
   W.speed = Math.max(150, RUN.speedAtCrash * 0.85);
   mode = 'run'; holding = false; latch = false; keys.clear(); pointers.clear();
@@ -4826,16 +5302,18 @@ window.addEventListener('blur', () => {
 });
 document.addEventListener('visibilitychange', () => { if (document.hidden && (mode === 'run' || mode === 'launch')) pause(); });
 
-$('btnDrive').addEventListener('click', () => { SFX.click(); startRun(); });
+$('btnDrive').addEventListener('click', () => { SFX.click(); startRun(false); });
+$('btnDaily').addEventListener('click', () => { SFX.click(); startRun(true); });
 $('btnGarage').addEventListener('click', () => { Sound.init(); SFX.click(); openGarage('scrTitle'); });
 $('btnMissions').addEventListener('click', () => { Sound.init(); SFX.click(); openMissions('scrTitle'); });
 $('btnResume').addEventListener('click', () => { SFX.click(); resume(); });
-$('btnRestart').addEventListener('click', () => { SFX.click(); paused = false; bankRun(); startRun(); });
+$('btnRestart').addEventListener('click', () => { SFX.click(); paused = false; bankRun(); startRun(DAILY.on); });
 $('btnQuit').addEventListener('click', () => { SFX.click(); paused = false; bankRun(); goTitle(); });
-$('btnAgain').addEventListener('click', () => { SFX.click(); startRun(); });
+$('btnAgain').addEventListener('click', () => { SFX.click(); startRun(DAILY.on); });
 $('btnOverGarage').addEventListener('click', () => { SFX.click(); openGarage('scrOver'); });
 $('btnHome').addEventListener('click', () => { SFX.click(); goTitle(); });
 $('btnRevive').addEventListener('click', () => revive());
+$('btnShare').addEventListener('click', () => { shareRun(); });
 btnPause.addEventListener('click', () => { Sound.init(); pause(); });
 btnMute.addEventListener('click', () => { Sound.init(); toggleMute(); });
 btnMusic.addEventListener('click', () => { Sound.init(); toggleMusic(); });
